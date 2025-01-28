@@ -49,6 +49,7 @@ export default function RetroImageLoader() {
       }}
     >
       <div
+        data-testid="retro-image-container"
         style={{
           position: "relative",
           width: "80vw",
