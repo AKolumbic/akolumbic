@@ -19,3 +19,16 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Tailwind Base Layer */
+@layer base {
+  h1,
+  h2,
+  h3 {
+    @apply font-sans;
+  }
+
+  p {
+    @apply font-serif;
+  }
+}
