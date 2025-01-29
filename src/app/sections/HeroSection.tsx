@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 export default function HeroSection() {
-  // Mouse position state
-  const [mouseX, setMouseX] = useState(0);
-  const [mouseY, setMouseY] = useState(0);
+  const name = "Andrew Kolumbic";
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   // Load font dynamically (Only on the client side)
   useEffect(() => {
@@ -17,41 +16,44 @@ export default function HeroSection() {
     }
   }, []);
 
-  // Update mouse position on move
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMouseX((e.clientX / window.innerWidth - 0.5) * 50);
-      setMouseY((e.clientY / window.innerHeight - 0.5) * 50);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  // Handle touch movement for mobile
-  useEffect(() => {
-    const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length > 0) {
-        const touch = e.touches[0];
-        setMouseX((touch.clientX / window.innerWidth - 0.5) * 50);
-        setMouseY((touch.clientY / window.innerHeight - 0.5) * 50);
-      }
-    };
-
-    window.addEventListener("touchmove", handleTouchMove);
-    return () => window.removeEventListener("touchmove", handleTouchMove);
-  }, []);
+  // Define animation variants for letters
+  const letterVariants = {
+    initial: {
+      y: "-100vh", // Letters start falling from above
+      opacity: 0,
+    },
+    fallIn: (i: number) => ({
+      y: 0,
+      opacity: 1,
+      transition: {
+        delay: i * 0.05, // Stagger effect on fall
+        type: "spring",
+        stiffness: 150,
+        damping: 20,
+      },
+    }),
+    default: {
+      y: 0,
+      scale: 1,
+      letterSpacing: "2px",
+      transition: { duration: 0.2 },
+    },
+    hover: {
+      y: -10,
+      scale: 1.3,
+      letterSpacing: "6px",
+      transition: { type: "spring", stiffness: 200, damping: 12 },
+    },
+    adjacent: {
+      y: -5,
+      scale: 1.15,
+      letterSpacing: "4px",
+      transition: { type: "spring", stiffness: 180, damping: 14 },
+    },
+  };
 
   return (
     <motion.section
-      initial={{ opacity: 0, scale: 0.8, y: -50 }}
-      animate={{ opacity: 1, scale: 1.05, y: 0 }}
-      transition={{
-        duration: 1,
-        ease: "easeOut",
-        type: "spring",
-        stiffness: 120,
-      }}
       style={{
         minHeight: "100vh",
         display: "flex",
@@ -61,23 +63,41 @@ export default function HeroSection() {
         backgroundColor: "#000",
       }}
     >
-      <motion.h1
+      <motion.div
         style={{
-          fontSize: "5rem",
-          fontWeight: "bold",
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          alignItems: "center",
+          maxWidth: "90vw",
           textAlign: "center",
-          margin: 0,
-          textTransform: "uppercase",
-          //   color: "#00FF00",
-          fontFamily: "'Michroma', sans-serif",
-          letterSpacing: "4px",
-          //   textShadow: "0px 0px 10px #00FF00, 0px 0px 20px #007700",
+          gap: hoveredIndex !== null ? "8px" : "4px",
         }}
-        animate={{ x: mouseX, y: mouseY }}
-        transition={{ type: "spring", stiffness: 80, damping: 8 }}
       >
-        Andrew Kolumbic
-      </motion.h1>
+        {name.split("").map((char, i) => (
+          <motion.span
+            key={i}
+            custom={i}
+            initial="initial"
+            animate="fallIn"
+            whileHover="hover"
+            variants={letterVariants}
+            onMouseEnter={() => setHoveredIndex(i)}
+            onMouseLeave={() => setHoveredIndex(null)}
+            style={{
+              fontSize: "min(10vw, 5rem)",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              fontFamily: "'Michroma', sans-serif",
+              color: "#FFF",
+              display: "inline-block",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {char === " " ? "\u00A0" : char}
+          </motion.span>
+        ))}
+      </motion.div>
     </motion.section>
   );
 }
