@@ -42,7 +42,7 @@ export default function AboutMe() {
             margin: "0 auto",
           }}
         >
-          “Crafting immersive experiences with code, creativity, and precision.”
+          “Do or do not, there is no try.”
         </p>
       </div>
 
@@ -65,21 +65,36 @@ export default function AboutMe() {
         <div
           style={{
             flex: 1,
-            minWidth: "280px", // ✅ Adjusted for better mobile responsiveness
+            minWidth: "280px",
             textAlign: "justify",
             lineHeight: "1.8",
           }}
         >
           <p>
-            <strong>San Pedro, CA.</strong> A results-driven **Senior Software
-            Engineer** with nearly six years of experience in **TypeScript,
-            React, and Angular**. Passionate about **modernizing applications,
-            enhancing user experiences, and pushing the boundaries of the web**.
+            <strong>San Pedro, CA.</strong> I’m Andrew Kolumbic, a{" "}
+            <strong>Software Engineer </strong>
+            with six years of experience in{" "}
+            <strong>TypeScript, React, and Angular</strong>. I don’t just write
+            code—I deliver results. I take a structured, disciplined approach to
+            software development, treating every project with the precision and
+            dedication it demands. Whether it’s modernizing applications,
+            optimizing performance, or leading development teams under tight
+            deadlines, I ensure the work gets done—and gets done well.
+          </p>
+          <div style={{ height: "15px" }} />
+          <p>
+            I believe in efficiency, clarity, and continuous improvement. I stay
+            ahead of the curve by leveraging cutting-edge tools and AI-driven
+            development like <strong>ChatGPT</strong> and
+            <strong>GitHub Copilot</strong>, not as crutches, but as force
+            multipliers to refine and accelerate workflows. Every project I take
+            on is met with a commitment to excellence, ensuring that what I
+            build is not just functional, but scalable, maintainable, and
+            impactful.
           </p>
           <p>
-            A proven track record of **leading development teams**, delivering
-            projects under tight deadlines, and leveraging **Generative AI tools
-            like ChatGPT and GitHub Copilot** to drive innovation.
+            I approach every challenge with a focus on execution, ensuring that
+            ideas don’t just stay ideas—they become reality.
           </p>
         </div>
 

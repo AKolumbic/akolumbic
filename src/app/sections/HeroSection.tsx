@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 
 export default function HeroSection() {
   const name = "Andrew Kolumbic";
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  // Load font dynamically (Only on the client side)
   useEffect(() => {
     if (typeof document !== "undefined") {
       const fontLink = document.createElement("link");
@@ -16,39 +14,54 @@ export default function HeroSection() {
     }
   }, []);
 
+  // Shuffle function to randomize animation order
+  const shuffleArray = (array: number[]) => {
+    return array
+      .map((value) => ({ value, sort: Math.random() })) // Assign a random sort key
+      .sort((a, b) => a.sort - b.sort) // Sort by random key
+      .map(({ value }) => value);
+  };
+
+  // Generate randomized order only once per render
+  const randomizedOrder = useMemo(
+    () => shuffleArray([...Array(name.length).keys()]),
+    [name]
+  );
+
   // Define animation variants for letters
   const letterVariants = {
     initial: {
-      y: "-100vh", // Letters start falling from above
+      y: "-120vh", // Start even higher for a longer fall
       opacity: 0,
     },
     fallIn: (i: number) => ({
-      y: 0,
-      opacity: 1,
+      y: [0, -6, 2, 0], // Gentle bouncing effect on landing
+      opacity: [0, 0.2, 0.6, 1], // Extended fade-in
       transition: {
-        delay: i * 0.05, // Stagger effect on fall
+        delay: randomizedOrder[i] * 0.12, // Increased delay for even slower stagger
         type: "spring",
-        stiffness: 150,
-        damping: 20,
+        stiffness: 80, // Lower stiffness for slower movement
+        damping: 22, // More controlled stop
+        duration: 2, // Longer duration for slower descent
       },
     }),
     default: {
       y: 0,
       scale: 1,
       letterSpacing: "2px",
-      transition: { duration: 0.2 },
+      transition: { duration: 0.5, ease: "easeOut" },
     },
     hover: {
-      y: -10,
-      scale: 1.3,
-      letterSpacing: "6px",
-      transition: { type: "spring", stiffness: 200, damping: 12 },
+      y: -8,
+      scale: 1.2,
+      letterSpacing: "5px",
+      transition: { type: "spring", stiffness: 160, damping: 14 },
     },
     adjacent: {
-      y: -5,
-      scale: 1.15,
-      letterSpacing: "4px",
-      transition: { type: "spring", stiffness: 180, damping: 14 },
+      y: -4,
+      scale: 1.1,
+      letterSpacing: "3px",
+      transition: { type: "spring", stiffness: 140, damping: 16 },
     },
   };
 
@@ -66,12 +79,11 @@ export default function HeroSection() {
       <motion.div
         style={{
           display: "flex",
-          flexWrap: "wrap",
           justifyContent: "center",
           alignItems: "center",
           maxWidth: "90vw",
           textAlign: "center",
-          gap: hoveredIndex !== null ? "8px" : "4px",
+          gap: "4px", // Prevents letters from looking too cramped
         }}
       >
         {name.split("").map((char, i) => (
@@ -82,8 +94,6 @@ export default function HeroSection() {
             animate="fallIn"
             whileHover="hover"
             variants={letterVariants}
-            onMouseEnter={() => setHoveredIndex(i)}
-            onMouseLeave={() => setHoveredIndex(null)}
             style={{
               fontSize: "min(10vw, 5rem)",
               fontWeight: "bold",
