@@ -4,25 +4,32 @@ import { motion } from "framer-motion";
 export default function HeroSection() {
   const name = "Andrew Kolumbic";
 
+  /**
+   * Load Michroma font dynamically on the client-side.
+   * Ensures the font is added only once per page load.
+   */
   useEffect(() => {
-    if (typeof document !== "undefined") {
-      const fontLink = document.createElement("link");
-      fontLink.href =
-        "https://fonts.googleapis.com/css2?family=Michroma&display=swap";
-      fontLink.rel = "stylesheet";
-      document.head.appendChild(fontLink);
-    }
+    if (document.head.querySelector("link[href*='Michroma']")) return; // Prevents duplicate font injection
+
+    const fontLink = document.createElement("link");
+    fontLink.href =
+      "https://fonts.googleapis.com/css2?family=Michroma&display=swap";
+    fontLink.rel = "stylesheet";
+    document.head.appendChild(fontLink);
   }, []);
 
-  // Shuffle function to randomize animation order
+  /**
+   * Generates a shuffled array of indices to randomize letter animation order.
+   * Uses structuredClone to avoid modifying the original array.
+   */
   const shuffleArray = (array: number[]) => {
-    return array
-      .map((value) => ({ value, sort: Math.random() })) // Assign a random sort key
-      .sort((a, b) => a.sort - b.sort) // Sort by random key
+    return structuredClone(array)
+      .map((value) => ({ value, sort: Math.random() })) // Assign random sort key
+      .sort((a, b) => a.sort - b.sort) // Sort by key
       .map(({ value }) => value);
   };
 
-  // Generate randomized order only once per render
+  // Generate a random order for letter animations (memoized for stability)
   const randomizedOrder = useMemo(
     () => shuffleArray([...Array(name.length).keys()]),
     [name]
@@ -30,33 +37,58 @@ export default function HeroSection() {
 
   // Define animation variants for letters
   const letterVariants = {
+    /**
+     * Initial state: Letters start off-screen above the viewport
+     * with zero opacity.
+     */
     initial: {
-      y: "-120vh", // Start even higher for a longer fall
+      y: "-120vh",
       opacity: 0,
     },
+
+    /**
+     * Fall-in animation: Letters fall with a slight bounce and
+     * gradually fade in. Each letter has a randomized delay for a
+     * non-uniform appearance.
+     */
     fallIn: (i: number) => ({
-      y: [0, -6, 2, 0], // Gentle bouncing effect on landing
-      opacity: [0, 0.2, 0.6, 1], // Extended fade-in
+      y: [0, -6, 2, 0], // Adds subtle bounce effect
+      opacity: [0, 0.2, 0.6, 1], // Gradual fade-in
       transition: {
-        delay: randomizedOrder[i] * 0.12, // Increased delay for even slower stagger
+        delay: randomizedOrder[i] * 0.12, // Randomized stagger effect
         type: "spring",
-        stiffness: 80, // Lower stiffness for slower movement
-        damping: 22, // More controlled stop
-        duration: 2, // Longer duration for slower descent
+        stiffness: 80, // Lower stiffness = smoother movement
+        damping: 22, // Higher damping = more controlled stop
+        duration: 2, // Slow descent
       },
     }),
+
+    /**
+     * Default (idle) state: Letters return to normal when
+     * not hovered over.
+     */
     default: {
       y: 0,
       scale: 1,
       letterSpacing: "2px",
       transition: { duration: 0.5, ease: "easeOut" },
     },
+
+    /**
+     * Hover effect: Letters rise slightly and increase in size,
+     * while spacing expands for a fluid motion.
+     */
     hover: {
       y: -8,
       scale: 1.2,
       letterSpacing: "5px",
       transition: { type: "spring", stiffness: 160, damping: 14 },
     },
+
+    /**
+     * Adjacent letter effect: Slight movement when a nearby
+     * letter is hovered over.
+     */
     adjacent: {
       y: -4,
       scale: 1.1,
