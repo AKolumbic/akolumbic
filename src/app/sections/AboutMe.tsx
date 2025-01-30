@@ -1,6 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 export default function AboutMe() {
+  // Load Michroma font dynamically (if not already loaded)
+  useEffect(() => {
+    if (document.head.querySelector("link[href*='Michroma']")) return;
+
+    const fontLink = document.createElement("link");
+    fontLink.href =
+      "https://fonts.googleapis.com/css2?family=Michroma&display=swap";
+    fontLink.rel = "stylesheet";
+    document.head.appendChild(fontLink);
+  }, []);
+
   return (
     <section
       style={{
@@ -31,7 +42,15 @@ export default function AboutMe() {
             marginBottom: "0.5rem",
           }}
         >
-          About Andrew Kolumbic
+          About{" "}
+          <span
+            style={{
+              fontFamily: "'Michroma', sans-serif", // ✅ Michroma font applied here
+              fontWeight: "normal",
+            }}
+          >
+            Andrew Kolumbic
+          </span>
         </h2>
         <p
           style={{
