@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import HeroSection from "./sections/HeroSection";
 import AboutMe from "./sections/AboutMe";
-// import HorizontalCarousel from "./sections/HorizontalCarousel";
+import Portfolio from "./sections/Portfolio";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
@@ -29,10 +29,8 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Hero fills the first viewport */}
       <HeroSection />
 
-      {/* Standard vertical scrolling reveals “About Me” in both directions */}
       <motion.div
         ref={aboutMeRef}
         initial="hidden"
@@ -45,8 +43,7 @@ export default function HomePage() {
         <AboutMe />
       </motion.div>
 
-      {/* Horizontal scrolling “carousel” style section */}
-      {/* <HorizontalCarousel /> */}
+      <Portfolio />
     </>
   );
 }
