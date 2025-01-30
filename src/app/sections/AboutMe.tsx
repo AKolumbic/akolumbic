@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { motion } from "framer-motion";
 
 export default function AboutMe() {
   // Load Michroma font dynamically (if not already loaded)
@@ -12,127 +13,129 @@ export default function AboutMe() {
     document.head.appendChild(fontLink);
   }, []);
 
+  // Animation Variants
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 40 },
+    visible: (delay = 0) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay, duration: 0.8, ease: "easeOut" },
+    }),
+  };
+
   return (
-    <section
+    <motion.section
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
       style={{
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        padding: "4rem 2rem",
+        alignItems: "center",
+        padding: "5rem 2rem",
         fontFamily: "'Times New Roman', serif",
         backgroundColor: "#fff",
         color: "#000",
-        borderTop: "8px solid #000", // Thick top border for contrast
+        borderTop: "8px solid #000",
+        textAlign: "center",
+        overflow: "hidden",
       }}
     >
-      {/* Title Section */}
-      <div
+      {/* Large Centered Quote */}
+      <motion.p
+        variants={fadeInUp}
+        custom={0.2}
         style={{
-          textAlign: "center",
+          fontSize: "3rem",
+          fontWeight: "bold",
+          fontStyle: "italic",
+          color: "#111",
+          maxWidth: "900px",
           marginBottom: "3rem",
+          lineHeight: "1.4",
         }}
       >
-        <h2
-          style={{
-            fontSize: "2.8rem",
-            textTransform: "uppercase",
-            fontWeight: "bold",
-            letterSpacing: "2px",
-            marginBottom: "0.5rem",
-          }}
-        >
-          About{" "}
-          <span
-            style={{
-              fontFamily: "'Michroma', sans-serif", // ✅ Michroma font applied here
-              fontWeight: "normal",
-            }}
-          >
-            Andrew Kolumbic
-          </span>
-        </h2>
-        <p
-          style={{
-            fontSize: "1.2rem",
-            fontStyle: "italic",
-            color: "#333",
-            maxWidth: "700px",
-            margin: "0 auto",
-          }}
-        >
-          “Do or do not, there is no try.”
-        </p>
-      </div>
+        “Do or do not, there is no try.”
+      </motion.p>
 
       {/* Two-column layout */}
-      <div
+      <motion.div
+        variants={fadeInUp}
+        custom={0.4}
         style={{
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "flex-start",
           gap: "3rem",
-          maxWidth: "1000px",
+          maxWidth: "1100px",
           margin: "0 auto",
           padding: "1rem",
           borderTop: "2px solid #000",
-          flexWrap: "wrap", // ✅ Ensures it wraps on smaller screens
+          flexWrap: "wrap",
+          textAlign: "justify",
         }}
       >
         {/* Left Column - Bio */}
-        <div
+        <motion.div
+          variants={fadeInUp}
+          custom={0.6}
           style={{
             flex: 1,
-            minWidth: "280px",
-            textAlign: "justify",
+            minWidth: "320px",
             lineHeight: "1.8",
+            fontSize: "1.1rem",
           }}
         >
           <p>
-            <strong>San Pedro, CA.</strong> I’m Andrew Kolumbic, a{" "}
+            I’m <strong>Andrew Kolumbic</strong>, a{" "}
             <strong>Software Engineer </strong>
-            with six years of experience in{" "}
-            <strong>TypeScript, React, and Angular</strong>. I don’t just write
-            code—I deliver results. I take a structured, disciplined approach to
-            software development, treating every project with the precision and
-            dedication it demands. Whether it’s modernizing applications,
-            optimizing performance, or leading development teams under tight
-            deadlines, I ensure the work gets done—and gets done well.
+            with several years of experience in{" "}
+            <strong>TypeScript, React, Angular, and Vue</strong>. I don’t just
+            write code—I deliver results. I take a structured, disciplined
+            approach to software development, treating every project with the
+            precision and dedication it demands. Whether it’s modernizing
+            applications, optimizing performance, or leading development teams
+            under tight deadlines, I ensure the work gets done—and gets done
+            well.
           </p>
-          <div style={{ height: "15px" }} />
+          <div style={{ height: "20px" }} />
           <p>
             I believe in efficiency, clarity, and continuous improvement. I stay
             ahead of the curve by leveraging cutting-edge tools and AI-driven
-            development like <strong>ChatGPT</strong> and
+            development like <strong>ChatGPT</strong> and{" "}
             <strong>GitHub Copilot</strong>, not as crutches, but as force
             multipliers to refine and accelerate workflows. Every project I take
             on is met with a commitment to excellence, ensuring that what I
             build is not just functional, but scalable, maintainable, and
             impactful.
           </p>
+          <div style={{ height: "20px" }} />
           <p>
             I approach every challenge with a focus on execution, ensuring that
             ideas don’t just stay ideas—they become reality.
           </p>
-        </div>
+        </motion.div>
 
         {/* Right Column - Skills */}
-        <div
+        <motion.div
+          variants={fadeInUp}
+          custom={0.8}
           style={{
             flex: 1,
-            minWidth: "280px", // ✅ Prevents text from getting cut off
-            textAlign: "justify",
+            minWidth: "320px",
             lineHeight: "1.8",
           }}
         >
           <h3
             style={{
-              fontSize: "1.5rem",
+              fontSize: "1.6rem",
               fontWeight: "bold",
-              marginBottom: "0.8rem",
-              borderBottom: "1px solid #000",
-              paddingBottom: "0.3rem",
+              marginBottom: "1rem",
+              borderBottom: "2px solid #000",
+              paddingBottom: "0.4rem",
               textAlign: "center",
             }}
           >
@@ -143,9 +146,9 @@ export default function AboutMe() {
               listStyleType: "none",
               padding: 0,
               margin: "0 auto",
-              fontSize: "1rem",
-              lineHeight: "1.7",
-              maxWidth: "90%", // ✅ Ensures the list stays inside the column
+              fontSize: "1.1rem",
+              lineHeight: "1.8",
+              maxWidth: "90%",
             }}
           >
             <li>• TypeScript, JavaScript (ES6+), Python</li>
@@ -156,8 +159,8 @@ export default function AboutMe() {
             <li>• Generative AI: ChatGPT, GitHub Copilot</li>
             <li>• Agile, Scrum, Kanban</li>
           </ul>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Responsive behavior - Single column on smaller screens */}
       <style>
@@ -169,12 +172,12 @@ export default function AboutMe() {
               padding: 1rem;
             }
             ul {
-              text-align: left; // ✅ Keeps list readable
+              text-align: left;
               margin: 0 auto;
             }
           }
         `}
       </style>
-    </section>
+    </motion.section>
   );
 }

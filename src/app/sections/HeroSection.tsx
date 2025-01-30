@@ -15,12 +15,11 @@ export default function HeroSection() {
   }, []);
 
   // Shuffle function to randomize animation order
-  const shuffleArray = (array: number[]) => {
-    return array
+  const shuffleArray = (array: number[]) =>
+    array
       .map((value) => ({ value, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
       .map(({ value }) => value);
-  };
 
   // Generate randomized order only once per render
   const randomizedOrder = useMemo(
@@ -30,18 +29,15 @@ export default function HeroSection() {
 
   // Define animation variants for letters
   const letterVariants = {
-    initial: {
-      y: "-100vh",
-      opacity: 0,
-    },
+    initial: { y: "-100vh", opacity: 0 },
     fallIn: (i: number) => ({
       y: [0, -8, 3, 0], // Subtle bounce effect
       opacity: 1,
       transition: {
-        delay: randomizedOrder[i] * 0.05,
+        delay: randomizedOrder[i] * 0.06, // Slightly slower stagger effect
         type: "spring",
-        stiffness: 120,
-        damping: 18,
+        stiffness: 110,
+        damping: 20,
       },
     }),
   };
@@ -103,6 +99,7 @@ export default function HeroSection() {
           margin: "1rem auto",
           transformOrigin: "center",
         }}
+        className="underline"
       />
 
       {/* Subtext: Software Engineer | San Pedro, CA */}
@@ -113,13 +110,25 @@ export default function HeroSection() {
         style={{
           fontSize: "min(4vw, 1.2rem)",
           fontFamily: "'Michroma', sans-serif",
-          color: "rgba(255, 255, 255, 0.7)", // Soft contrast
+          color: "rgba(255, 255, 255, 0.8)", // Slightly brighter for better readability
           textAlign: "center",
-          letterSpacing: "2px",
+          letterSpacing: "1.5px",
+          marginTop: "0.5rem",
+          padding: "0 1rem", // Prevents text from being too wide on large screens
         }}
       >
         Software Engineer | San Pedro, CA
       </motion.p>
+
+      <style>
+        {`
+          @media (max-width: 600px) {
+            .underline {
+              display: none !important; /* ✅ Ensures it's fully removed */
+            }
+          }
+        `}
+      </style>
     </motion.section>
   );
 }
