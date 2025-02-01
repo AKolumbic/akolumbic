@@ -1,46 +1,39 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 
-export default function HeroSection() {
+// Utility: Shuffle function moved outside the component.
+function shuffleArray(array: number[]): number[] {
+  return array
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+}
+
+const HeroSection: React.FC = () => {
   const name = "Andrew Kolumbic";
 
-  useEffect(() => {
-    if (typeof document !== "undefined") {
-      const fontLink = document.createElement("link");
-      fontLink.href =
-        "https://fonts.googleapis.com/css2?family=Michroma&display=swap";
-      fontLink.rel = "stylesheet";
-      document.head.appendChild(fontLink);
-    }
-  }, []);
+  // Compute the randomized order once using a ref.
+  const randomizedOrder = useRef(
+    shuffleArray([...Array(name.length).keys()])
+  ).current;
 
-  // Shuffle function to randomize animation order
-  const shuffleArray = (array: number[]) =>
-    array
-      .map((value) => ({ value, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
-      .map(({ value }) => value);
-
-  // Generate randomized order only once per render
-  const randomizedOrder = useMemo(
-    () => shuffleArray([...Array(name.length).keys()]),
-    [name]
-  );
-
-  // Define animation variants for letters
-  const letterVariants = {
-    initial: { y: "-100vh", opacity: 0 },
-    fallIn: (i: number) => ({
-      y: [0, -8, 3, 0], // Subtle bounce effect
-      opacity: 1,
-      transition: {
-        delay: randomizedOrder[i] * 0.06, // Slightly slower stagger effect
-        type: "spring",
-        stiffness: 110,
-        damping: 20,
-      },
+  // Memoize the animation variants to avoid recalculations.
+  const letterVariants = useMemo(
+    () => ({
+      initial: { y: "-100vh", opacity: 0 },
+      fallIn: (i: number) => ({
+        y: [0, -8, 3, 0], // Subtle bounce effect
+        opacity: 1,
+        transition: {
+          delay: randomizedOrder[i] * 0.06, // Slightly slower stagger effect
+          type: "spring",
+          stiffness: 110,
+          damping: 20,
+        },
+      }),
     }),
-  };
+    [] // No dependencies needed because randomizedOrder is fixed.
+  );
 
   return (
     <motion.section
@@ -110,25 +103,28 @@ export default function HeroSection() {
         style={{
           fontSize: "min(4vw, 1.2rem)",
           fontFamily: "'Michroma', sans-serif",
-          color: "rgba(255, 255, 255, 0.8)", // Slightly brighter for better readability
+          color: "rgba(255, 255, 255, 0.8)",
           textAlign: "center",
           letterSpacing: "1.5px",
           marginTop: "0.5rem",
-          padding: "0 1rem", // Prevents text from being too wide on large screens
+          padding: "0 1rem",
         }}
       >
         Software Engineer | San Pedro, CA
       </motion.p>
 
+      {/* Media Query to hide the underline on small screens */}
       <style>
         {`
           @media (max-width: 600px) {
             .underline {
-              display: none !important; /* ✅ Ensures it's fully removed */
+              display: none !important;
             }
           }
         `}
       </style>
     </motion.section>
   );
-}
+};
+
+export default React.memo(HeroSection);

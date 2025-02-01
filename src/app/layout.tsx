@@ -13,6 +13,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <Head>
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Michroma&display=swap"
+          rel="stylesheet"
+        />
       </Head>
       <body
         style={{
