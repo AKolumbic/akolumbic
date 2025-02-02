@@ -1,12 +1,5 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { motion } from "framer-motion";
-
-// 🔹 Floating Animation for Side Project Cards Only
-export const floatAnimation = keyframes`
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-`;
 
 // 🔹 Background Animation
 export const AnimatedBackground = styled.div`
@@ -31,7 +24,7 @@ export const AnimatedBackground = styled.div`
 export const Card = styled(motion.div)<{ image?: string }>`
   position: relative;
   backdrop-filter: blur(10px);
-  background: rgba(0, 0, 0, 0.5); /* ✅ Dark overlay for readability */
+  background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   padding: 1.5rem;
@@ -60,7 +53,7 @@ export const Card = styled(motion.div)<{ image?: string }>`
     height: 100%;
     background: ${({ image }) => (image ? `url(${image})` : "none")}
       center/cover no-repeat;
-    opacity: 0.3; /* ✅ Reduces opacity to improve readability */
+    opacity: 0.3;
     z-index: -1;
     border-radius: 12px;
   }
@@ -69,13 +62,13 @@ export const Card = styled(motion.div)<{ image?: string }>`
     font-size: 1.3rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* ✅ Better contrast */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
   }
 
   p {
     font-size: 1rem;
     margin-bottom: 0.5rem;
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7); /* ✅ Improve readability */
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
   }
 
   div {
@@ -85,9 +78,8 @@ export const Card = styled(motion.div)<{ image?: string }>`
   }
 `;
 
-// 🔹 Side Project Cards (Floating Effect & Clickable)
-export const FloatingCard = styled(motion.a)<{ delay: number; image?: string }>`
-  animation: ${floatAnimation} ${({ delay }) => 4 + delay}s ease-in-out infinite;
+// 🔹 Side Project Cards (Clickable, NO BOUNCING)
+export const FloatingCard = styled(motion.a)<{ image?: string }>`
   backdrop-filter: blur(10px);
   background: ${({ image }) =>
     image ? `url(${image})` : "rgba(255, 255, 255, 0.12)"};
@@ -113,7 +105,7 @@ export const FloatingCard = styled(motion.a)<{ delay: number; image?: string }>`
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6); /* Increased opacity for better contrast */
+    background: rgba(0, 0, 0, 0.6);
     z-index: 0;
     border-radius: inherit;
   }

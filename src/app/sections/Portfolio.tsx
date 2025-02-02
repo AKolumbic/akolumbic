@@ -102,7 +102,6 @@ export default function Portfolio() {
                     backgroundPosition: "center", // Centers the background image
                     backgroundRepeat: "no-repeat", // Prevents image tiling
                   }}
-                  delay={0} // Add the required delay property
                   whileHover={{
                     transform: "scale(1.05)",
                     boxShadow: "0px 5px 15px rgba(255, 255, 255, 0.3)",
