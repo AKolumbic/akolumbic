@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Andrew Kolumbic - Portfolio Website 🚀
 
-## Getting Started
+Welcome to the source code for my personal portfolio website! This project is built with Next.js, React, TypeScript, and Framer Motion, showcasing my professional work, side projects, and technical expertise in web development.
 
-First, run the development server:
+🔹 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
+🖥️ Modern Tech Stack
+• Next.js 14 – Optimized for performance and server-side rendering.
+• React & TypeScript – Strongly-typed, scalable, and maintainable.
+• Framer Motion – Smooth animations and micro-interactions.
+• Styled Components – Modular and reusable styling with theming support.
+
+🎨 UI & Animations
+• Dynamic page transitions for a seamless user experience.
+• Floating & parallax animations for side projects.
+• Dark-themed UI with smooth gradient backgrounds.
+• Interactive hover effects for project cards.
+
+📂 Content
+• Hero Section – Introduces my work philosophy.
+• About Me – Details my experience and development approach.
+• Portfolio – Showcases both professional projects and side projects, with an interactive tab-based UI.
+
+📸 Screenshots
+
+Professional Work Side Projects
+
+🚀 Installation & Running Locally
+
+🔧 Prerequisites
+• Node.js >= 16
+• Package manager: pnpm (or use npm/yarn)
+
+📥 Clone the Repository
+
+git clone https://github.com/AKolumbic/akolumbic.git
+cd akolumbic
+
+📦 Install Dependencies
+
+pnpm install
+
+# OR
+
+npm install
+
+🛠️ Start the Dev Server
+
 pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# OR
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+npm run dev
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The site will be live at http://localhost:3000.
 
-## Learn More
+🛠️ Technologies Used
+• Frontend: Next.js, React, TypeScript
+• Animations: Framer Motion
+• Styling: Styled Components
+• Version Control: Git & GitHub
 
-To learn more about Next.js, take a look at the following resources:
+📌 Roadmap / Future Improvements
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+✅ Floating animations for side projects
+✅ Improved hover effects on all project cards
+✅ Clickable side project cards that open GitHub repos
+⬜ Add blog section for writing about development experiences
+⬜ Implement light/dark theme toggle
+⬜ Optimize accessibility (a11y) and keyboard navigation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+📜 License
 
-## Deploy on Vercel
+This project is open-source and available under the MIT License.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+📬 Contact
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+If you have any questions, feedback, or collaboration ideas, feel free to reach out!
+
+📧 Email: andrewkolumbic@gmail.com
+🔗 Portfolio: andrewkolumbic.com
+🐙 GitHub: AKolumbic
+
+🔹 Built with code, precision, and a love for great UI. ✨🚀
