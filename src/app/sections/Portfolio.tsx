@@ -77,10 +77,6 @@ export default function Portfolio() {
                   />
                   <div style={{ position: "relative", zIndex: 1 }}>
                     <h3>{project.title}</h3>
-                    <p>
-                      <strong>{project.company}</strong>
-                    </p>
-                    <p>{project.impact}</p>
                     <div>{project.tech.join(" • ")}</div>
                   </div>
                 </Card>
