@@ -5,6 +5,7 @@ import { useInView } from "react-intersection-observer";
 import HeroSection from "./sections/HeroSection";
 import AboutMe from "./sections/AboutMe";
 import Portfolio from "./sections/Portfolio";
+import Contact from "./sections/Contact";
 
 // Define AboutMe animation variants
 const aboutMeVariants = {
@@ -78,6 +79,8 @@ export default function HomePage() {
       >
         <Portfolio />
       </motion.div>
+
+      <Contact />
     </>
   );
 }
