@@ -1,24 +1,24 @@
 "use client";
 import React, { useEffect } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { motion, useAnimation, Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import HeroSection from "./sections/HeroSection";
-import AboutMe from "./sections/AboutMe";
-import CareerTimeline from "./sections/CareerTimeline"; // ✅ Import CareerTimeline
-import Portfolio from "./sections/Portfolio";
-import Contact from "./sections/Contact";
+import {
+  HeroSection,
+  AboutMe,
+  CareerTimeline,
+  Portfolio,
+  Contact,
+} from "./sections"; // ✅ Cleaner import
 
-// Define animation variants
-const fadeInVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 1, ease: "easeOut" },
-  },
-};
+import {
+  // slideInFromLeftVariants,
+  // slideInFromRightVariants,
+  // fadeUpVariants,
+  smoothSlideUpVariants,
+} from "./data/variantsData";
 
 export default function HomePage() {
+  // Disable scroll restoration and scroll to top on mount
   useEffect(() => {
     if (typeof window !== "undefined" && window.history.scrollRestoration) {
       window.history.scrollRestoration = "manual";
@@ -26,67 +26,55 @@ export default function HomePage() {
     window.scrollTo(0, 0);
   }, []);
 
-  // Animation hooks for each section
-  const aboutMeControls = useAnimation();
-  const { ref: aboutMeRef, inView: aboutMeInView } = useInView({
-    threshold: 0.35,
-    rootMargin: "-10% 0% -10% 0%",
-  });
+  // Generic Hook for Animations
+  const useAnimatedSection = (variants: Variants) => {
+    const controls = useAnimation();
+    const { ref, inView } = useInView({
+      threshold: 0.35,
+      rootMargin: "-10% 0% -10% 0%",
+    });
 
-  useEffect(() => {
-    aboutMeControls.start(aboutMeInView ? "visible" : "hidden");
-  }, [aboutMeInView, aboutMeControls]);
+    useEffect(() => {
+      controls.start(inView ? "visible" : "hidden");
+    }, [inView, controls]);
 
-  const careerControls = useAnimation();
-  const { ref: careerRef, inView: careerInView } = useInView({
-    threshold: 0.35,
-    rootMargin: "-10% 0% -10% 0%",
-  });
+    return { ref, controls, variants };
+  };
 
-  useEffect(() => {
-    careerControls.start(careerInView ? "visible" : "hidden");
-  }, [careerInView, careerControls]);
-
-  const portfolioControls = useAnimation();
-  const { ref: portfolioRef, inView: portfolioInView } = useInView({
-    threshold: 0.35,
-    rootMargin: "-10% 0% -10% 0%",
-  });
-
-  useEffect(() => {
-    portfolioControls.start(portfolioInView ? "visible" : "hidden");
-  }, [portfolioInView, portfolioControls]);
+  const aboutMeAnim = useAnimatedSection(smoothSlideUpVariants);
+  const careerAnim = useAnimatedSection(smoothSlideUpVariants);
+  const portfolioAnim = useAnimatedSection(smoothSlideUpVariants);
 
   return (
     <>
       <HeroSection />
 
-      <motion.div
-        ref={aboutMeRef}
+      <motion.section
+        ref={aboutMeAnim.ref}
         initial="hidden"
-        animate={aboutMeControls}
-        variants={fadeInVariants}
+        animate={aboutMeAnim.controls}
+        variants={aboutMeAnim.variants}
       >
         <AboutMe />
-      </motion.div>
+      </motion.section>
 
-      <motion.div
-        ref={careerRef}
+      <motion.section
+        ref={careerAnim.ref}
         initial="hidden"
-        animate={careerControls}
-        variants={fadeInVariants}
+        animate={careerAnim.controls}
+        variants={careerAnim.variants}
       >
         <CareerTimeline />
-      </motion.div>
+      </motion.section>
 
-      <motion.div
-        ref={portfolioRef}
+      <motion.section
+        ref={portfolioAnim.ref}
         initial="hidden"
-        animate={portfolioControls}
-        variants={fadeInVariants}
+        animate={portfolioAnim.controls}
+        variants={portfolioAnim.variants}
       >
         <Portfolio />
-      </motion.div>
+      </motion.section>
 
       <Contact />
     </>
