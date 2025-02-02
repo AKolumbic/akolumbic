@@ -29,18 +29,18 @@ const AnimatedBackground = styled.div`
 
 // 🔹 Styled Floating Card
 const FloatingCard = styled(motion.a)`
-  background: rgba(255, 255, 255, 0.1);
+  animation: ${floatAnimation} 4s ease-in-out infinite;
   backdrop-filter: blur(10px);
-  padding: 1.5rem;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: inherit;
+  display: block;
+  padding: 1.5rem;
+  position: relative;
   text-align: left;
   text-decoration: none;
-  color: inherit;
   transition: all 0.3s ease;
-  display: block;
-  position: relative;
-  animation: ${floatAnimation} 4s ease-in-out infinite;
   &:hover {
     transform: scale(1.1) rotate(1deg);
     box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.5);
@@ -74,6 +74,12 @@ const projects = [
     tech: ["TypeScript"],
     link: "https://github.com/AKolumbic/warcraft",
   },
+  {
+    title: "Vue Calculator",
+    description: "A calculator built with Vue.js.",
+    tech: ["Vue.js", "JavaScript"],
+    link: "https://github.com/AKolumbic/vue-calc",
+  },
 ];
 
 export default function Portfolio() {
@@ -88,13 +94,13 @@ export default function Portfolio() {
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
         style={{
-          minHeight: "100vh",
+          alignItems: "center",
+          color: "#FFF",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          alignItems: "center",
+          minHeight: "100vh",
           padding: "5rem 2rem",
-          color: "#FFF",
           textAlign: "center",
         }}
       >
@@ -107,8 +113,8 @@ export default function Portfolio() {
             fontSize: "2.5rem",
             fontWeight: "bold",
             marginBottom: "2rem",
-            textTransform: "uppercase",
             textShadow: "0px 0px 10px rgba(255, 255, 255, 0.6)",
+            textTransform: "uppercase",
           }}
         >
           My Side Projects
@@ -118,23 +124,27 @@ export default function Portfolio() {
         <motion.div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
             gap: "2rem",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
             maxWidth: "1100px",
-            width: "100%",
             padding: "1rem",
+            width: "100%",
           }}
         >
           {projects.map((project, i) => (
             <FloatingCard
-              key={project.title}
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: i * 0.2 }}
+              whileHover={{
+                y: -10,
+                transition: { duration: 0.3, ease: "easeOut" },
+              }}
+              href={project.link}
+              initial={{ opacity: 0, y: 50 }}
+              key={project.title}
+              rel="noopener noreferrer"
               style={{ y: parallaxY }} // 🔹 Parallax effect
+              target="_blank"
+              transition={{ delay: i * 0.2, duration: 0.8, ease: "easeOut" }}
             >
               <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>
                 {project.title}
@@ -144,26 +154,26 @@ export default function Portfolio() {
               </p>
               <div
                 style={{
+                  color: "#BBB",
                   display: "flex",
                   flexWrap: "wrap",
-                  gap: "8px",
                   fontSize: "0.9rem",
-                  color: "#BBB",
+                  gap: "8px",
                 }}
               >
                 {project.tech.map((tech) => (
                   <motion.span
                     key={tech}
+                    style={{
+                      background: "#FFF",
+                      borderRadius: "5px",
+                      color: "#000",
+                      fontWeight: "bold",
+                      padding: "5px 10px",
+                    }}
                     whileHover={{
                       scale: 1.1,
                       boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.8)",
-                    }}
-                    style={{
-                      background: "#FFF",
-                      color: "#000",
-                      padding: "5px 10px",
-                      borderRadius: "5px",
-                      fontWeight: "bold",
                     }}
                   >
                     {tech}
