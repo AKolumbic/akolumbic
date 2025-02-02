@@ -8,14 +8,9 @@ import {
   CareerTimeline,
   Portfolio,
   Contact,
-} from "./sections"; // ✅ Cleaner import
+} from "./sections";
 
-import {
-  // slideInFromLeftVariants,
-  // slideInFromRightVariants,
-  // fadeUpVariants,
-  smoothSlideUpVariants,
-} from "./data/variantsData";
+import { smoothSlideUpVariants } from "./data/variantsData";
 
 export default function HomePage() {
   // Disable scroll restoration and scroll to top on mount
