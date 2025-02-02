@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { motion, Variants } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 
 // Project data
 const projects = [
@@ -30,37 +30,7 @@ const projects = [
   },
 ];
 
-// Function to generate floating movement animation
-const getRandomMovement = (): Variants => ({
-  animate: {
-    x: Math.random() * 20 - 10,
-    y: Math.random() * 20 - 10,
-    transition: {
-      duration: 4,
-      ease: "easeInOut",
-      repeat: Infinity,
-      repeatType: "mirror" as const, // ✅ Explicitly set type
-    },
-  },
-});
-
 export default function Portfolio() {
-  const [floatingAnimations, setFloatingAnimations] = useState(
-    projects.map(() => getRandomMovement())
-  );
-
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setFloatingAnimations(projects.map(() => getRandomMovement()));
-    }, 4000);
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, []);
-
   return (
     <motion.section
       initial={{ opacity: 0 }}
@@ -73,9 +43,8 @@ export default function Portfolio() {
         justifyContent: "center",
         alignItems: "center",
         padding: "5rem 2rem",
-        backgroundColor: "#fff",
-        color: "#000",
-        borderTop: "8px solid #000",
+        backgroundColor: "#000", // ✅ Set background to black
+        color: "#FFF", // ✅ Adjust text color for contrast
         textAlign: "center",
       }}
     >
@@ -105,28 +74,27 @@ export default function Portfolio() {
           padding: "1rem",
         }}
       >
-        {projects.map((project, i) => (
+        {projects.map((project) => (
           <motion.a
-            key={project.title} // ✅ Stable key
+            key={project.title}
             href={project.link}
             target="_blank"
             rel="noopener noreferrer"
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }} // ✅ Use correct Framer Motion variants
-            variants={floatingAnimations[i]} // ✅ Assign animation variants
+            animate={{ opacity: 1, y: 0 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
             style={{
-              background: "#f8f8f8",
+              background: "#1A1A1A", // ✅ Darker gray for contrast against black
               padding: "1.5rem",
               borderRadius: "8px",
-              boxShadow: "0 5px 15px rgba(0, 0, 0, 0.1)",
+              boxShadow: "0 5px 15px rgba(255, 255, 255, 0.1)", // ✅ White glow effect
               textAlign: "left",
               textDecoration: "none",
               color: "inherit",
               transition: "all 0.3s ease",
-              position: "relative",
               display: "block",
+              border: "1px solid rgba(255, 255, 255, 0.2)", // ✅ Subtle border
             }}
           >
             <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>
@@ -141,15 +109,15 @@ export default function Portfolio() {
                 flexWrap: "wrap",
                 gap: "8px",
                 fontSize: "0.9rem",
-                color: "#555",
+                color: "#BBB",
               }}
             >
               {project.tech.map((tech) => (
                 <span
                   key={tech}
                   style={{
-                    background: "#000",
-                    color: "#fff",
+                    background: "#FFF",
+                    color: "#000",
                     padding: "5px 10px",
                     borderRadius: "5px",
                     fontWeight: "bold",

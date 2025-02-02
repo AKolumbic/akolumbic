@@ -38,7 +38,6 @@ export default function AboutMe() {
         fontFamily: "'Times New Roman', serif",
         backgroundColor: "#fff",
         color: "#000",
-        borderTop: "8px solid #000",
         textAlign: "center",
         overflow: "hidden",
       }}
@@ -73,7 +72,6 @@ export default function AboutMe() {
           maxWidth: "1100px",
           margin: "0 auto",
           padding: "1rem",
-          borderTop: "2px solid #000",
           flexWrap: "wrap",
           textAlign: "justify",
         }}

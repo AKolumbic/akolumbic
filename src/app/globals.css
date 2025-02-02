@@ -34,3 +34,17 @@ body {
     @apply font-serif;
   }
 }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000; /* Ensures no extra space */
+  color: #fff;
+}
