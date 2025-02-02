@@ -9,18 +9,18 @@ export interface ProfessionalProject {
 
 export const professionalProjects: ProfessionalProject[] = [
   {
-    title: "Enterprise Software Modernization",
-    company: "The Home Depot",
-    impact:
-      "Optimized workflows for 10,000+ users, improving load times by 30% and user engagement by 25%.",
-    tech: ["React", "Angular", "TypeScript", "Ionic"],
-  },
-  {
     title: "Public Sector App Modernization",
     company: "Florida Department of Corrections",
     impact:
       "Led front-end team in building a modern Angular app, reducing onboarding time by 85% and delivering the project 100% on time.",
     tech: ["Angular", "TypeScript", "Material UI"],
+  },
+  {
+    title: "Enterprise Software Modernization",
+    company: "The Home Depot",
+    impact:
+      "Optimized workflows for 10,000+ users, improving load times by 30% and user engagement by 25%.",
+    tech: ["React", "Angular", "TypeScript", "Ionic"],
   },
   {
     title: "iPad App Development",
@@ -40,7 +40,7 @@ export interface SideProject {
 
 export const sideProjects: SideProject[] = [
   {
-    title: "Literally This Website",
+    title: "This Website",
     description: "The codebase for my personal portfolio site.",
     tech: ["Next.js", "React", "TypeScript", "Framer Motion"],
     link: "https://github.com/AKolumbic/akolumbic",
