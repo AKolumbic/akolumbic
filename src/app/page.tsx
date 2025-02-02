@@ -4,11 +4,12 @@ import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import HeroSection from "./sections/HeroSection";
 import AboutMe from "./sections/AboutMe";
+import CareerTimeline from "./sections/CareerTimeline"; // ✅ Import CareerTimeline
 import Portfolio from "./sections/Portfolio";
 import Contact from "./sections/Contact";
 
-// Define AboutMe animation variants
-const aboutMeVariants = {
+// Define animation variants
+const fadeInVariants = {
   hidden: { opacity: 0, y: 50 },
   visible: {
     opacity: 1,
@@ -17,18 +18,7 @@ const aboutMeVariants = {
   },
 };
 
-// Define Portfolio animation variants with a slight delay for a smoother transition
-const portfolioVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 1, ease: "easeOut", delay: 0.2 },
-  },
-};
-
 export default function HomePage() {
-  // Ensure the page always starts at the top by disabling browser scroll restoration
   useEffect(() => {
     if (typeof window !== "undefined" && window.history.scrollRestoration) {
       window.history.scrollRestoration = "manual";
@@ -36,7 +26,7 @@ export default function HomePage() {
     window.scrollTo(0, 0);
   }, []);
 
-  // Animation controls and intersection observer for the About Me section
+  // Animation hooks for each section
   const aboutMeControls = useAnimation();
   const { ref: aboutMeRef, inView: aboutMeInView } = useInView({
     threshold: 0.35,
@@ -47,7 +37,16 @@ export default function HomePage() {
     aboutMeControls.start(aboutMeInView ? "visible" : "hidden");
   }, [aboutMeInView, aboutMeControls]);
 
-  // Animation controls and intersection observer for the Portfolio section
+  const careerControls = useAnimation();
+  const { ref: careerRef, inView: careerInView } = useInView({
+    threshold: 0.35,
+    rootMargin: "-10% 0% -10% 0%",
+  });
+
+  useEffect(() => {
+    careerControls.start(careerInView ? "visible" : "hidden");
+  }, [careerInView, careerControls]);
+
   const portfolioControls = useAnimation();
   const { ref: portfolioRef, inView: portfolioInView } = useInView({
     threshold: 0.35,
@@ -66,16 +65,25 @@ export default function HomePage() {
         ref={aboutMeRef}
         initial="hidden"
         animate={aboutMeControls}
-        variants={aboutMeVariants}
+        variants={fadeInVariants}
       >
         <AboutMe />
+      </motion.div>
+
+      <motion.div
+        ref={careerRef}
+        initial="hidden"
+        animate={careerControls}
+        variants={fadeInVariants}
+      >
+        <CareerTimeline />
       </motion.div>
 
       <motion.div
         ref={portfolioRef}
         initial="hidden"
         animate={portfolioControls}
-        variants={portfolioVariants}
+        variants={fadeInVariants}
       >
         <Portfolio />
       </motion.div>
