@@ -45,12 +45,27 @@ const Card = styled(motion.div)`
   }
 `;
 
-// 🔹 Side Project Cards (With Floating Effect & Hover Effect)
-const FloatingCard = styled(Card)<{ delay: number }>`
+// 🔹 Side Project Cards (Floating Effect & Clickable)
+const FloatingCard = styled(motion.a)<{ delay: number }>`
+  display: block;
+  text-decoration: none;
+  color: inherit;
   animation: ${floatAnimation} ${({ delay }) => 4 + delay}s ease-in-out infinite;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: left;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 5px 20px rgba(255, 255, 255, 0.3);
+  }
 `;
 
-// 🔹 Tab Navigation Styles (Fixed Active Prop Issue)
+// 🔹 Tab Navigation Styles
 const Tabs = styled.div`
   display: flex;
   justify-content: center;
@@ -98,7 +113,7 @@ const professionalProjects = [
   },
 ];
 
-// 🔹 Side Projects Data
+// 🔹 Side Projects Data (Now Clickable)
 const sideProjects = [
   {
     title: "Literally This Website",
@@ -201,7 +216,7 @@ export default function Portfolio() {
           </motion.div>
         )}
 
-        {/* 🔹 Side Projects Section (With Floating Animation & Hover Effect) */}
+        {/* 🔹 Side Projects Section (Now Clickable) */}
         {activeTab === "side" && (
           <motion.div
             style={{
@@ -213,7 +228,13 @@ export default function Portfolio() {
             }}
           >
             {sideProjects.map((project, i) => (
-              <FloatingCard key={project.title} delay={i * 0.2}>
+              <FloatingCard
+                key={project.title}
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                delay={i * 0.2}
+              >
                 <h3>{project.title}</h3>
                 <p>{project.description}</p>
                 <div>{project.tech.join(" • ")}</div>
