@@ -1,8 +1,8 @@
-import React from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import styled, { keyframes } from "styled-components";
 
-// 🔹 Floating Animation (Fix)
+// 🔹 Floating Animation for Side Project Cards Only
 const floatAnimation = keyframes`
   0% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
@@ -11,9 +11,10 @@ const floatAnimation = keyframes`
 
 // 🔹 Background Animation
 const AnimatedBackground = styled.div`
-  background: linear-gradient(-45deg, #000000, #1a1a1a, #333333);
-  background-size: 400% 400%;
-  animation: gradientShift 10s ease infinite;
+  background: linear-gradient(-45deg, #000000, #1a1a1a, #333333, #222);
+  background-size: 300% 300%;
+  animation: gradientShift 8s ease infinite;
+
   @keyframes gradientShift {
     0% {
       background-position: 0% 50%;
@@ -27,49 +28,105 @@ const AnimatedBackground = styled.div`
   }
 `;
 
-// 🔹 Styled Floating Card
-const FloatingCard = styled(motion.a)`
-  animation: ${floatAnimation} 4s ease-in-out infinite;
+// 🔹 Shared Card Styling (Professional & Side Projects)
+const Card = styled(motion.div)`
   backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  color: inherit;
-  display: block;
   padding: 1.5rem;
-  position: relative;
   text-align: left;
-  text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-in-out;
+  color: #fff;
+
   &:hover {
-    transform: scale(1.1) rotate(1deg);
-    box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+    box-shadow: 0px 5px 20px rgba(255, 255, 255, 0.3);
   }
 `;
 
-// 🔹 Project Data
-const projects = [
+// 🔹 Side Project Cards (With Floating Effect & Hover Effect)
+const FloatingCard = styled(Card)<{ delay: number }>`
+  animation: ${floatAnimation} ${({ delay }) => 4 + delay}s ease-in-out infinite;
+`;
+
+// 🔹 Tab Navigation Styles (Fixed Active Prop Issue)
+const Tabs = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+`;
+
+const TabButton = styled.button<{ $active: boolean }>`
+  background: none;
+  border: none;
+  color: ${({ $active }) => ($active ? "#FFF" : "#777")};
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0.8rem 2rem;
+  cursor: pointer;
+  border-bottom: ${({ $active }) => ($active ? "3px solid #FFF" : "none")};
+  transition: color 0.3s ease, border-bottom 0.3s ease;
+
+  &:hover {
+    color: #fff;
+  }
+`;
+
+// 🔹 Professional Work Data
+const professionalProjects = [
   {
-    title: "BATMAN-Streets-of-Gotham",
+    title: "Enterprise Software Modernization",
+    company: "The Home Depot",
+    impact:
+      "Optimized workflows for 10,000+ users, improving load times by 30% and user engagement by 25%.",
+    tech: ["React", "Angular", "TypeScript", "Ionic"],
+  },
+  {
+    title: "Public Sector App Modernization",
+    company: "Florida Department of Corrections",
+    impact:
+      "Led front-end team in building a modern Angular app, reducing onboarding time by 85% and delivering the project 100% on time.",
+    tech: ["Angular", "TypeScript", "Material UI"],
+  },
+  {
+    title: "iPad App Development",
+    company: "Southern California Edison",
+    impact:
+      "Designed React Native iPad app with offline functionality, reducing report submission delays by 40%.",
+    tech: ["React Native", "Node.js", "FeathersJS"],
+  },
+];
+
+// 🔹 Side Projects Data
+const sideProjects = [
+  {
+    title: "Literally This Website",
+    description: "The codebase for my personal portfolio site.",
+    tech: ["Next.js", "React", "TypeScript", "Framer Motion"],
+    link: "https://github.com/AKolumbic/akolumbic",
+  },
+  {
+    title: "BATMAN: Streets of Gotham",
     description:
       "A 2D Batman Platformer using Phaser 3, TypeScript, and Rollup.",
     tech: ["Phaser 3", "TypeScript", "Rollup"],
     link: "https://github.com/AKolumbic/BATMAN-Streets-of-Gotham",
   },
   {
-    title: "twitchbot",
+    title: "Twitchbot",
     description: "A bot for my Twitch channel.",
     tech: ["TypeScript"],
     link: "https://github.com/AKolumbic/twitchbot",
   },
   {
-    title: "dndStuff",
+    title: "D&D Stuff",
     description: "D&D-themed React practice.",
     tech: ["React", "TypeScript"],
     link: "https://github.com/AKolumbic/dndStuff",
   },
   {
-    title: "warcraft",
+    title: "Warcraft Stuff",
     description: "Warcraft-themed coding experiments.",
     tech: ["TypeScript"],
     link: "https://github.com/AKolumbic/warcraft",
@@ -83,9 +140,9 @@ const projects = [
 ];
 
 export default function Portfolio() {
-  // 🔹 Parallax Effect for Scrolling
-  const { scrollYProgress } = useScroll();
-  const parallaxY = useTransform(scrollYProgress, [0, 1], ["0px", "-50px"]);
+  const [activeTab, setActiveTab] = useState<"professional" | "side">(
+    "professional"
+  );
 
   return (
     <AnimatedBackground>
@@ -104,85 +161,66 @@ export default function Portfolio() {
           textAlign: "center",
         }}
       >
-        {/* 🔹 Section Title with Glow Effect */}
-        <motion.h2
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          style={{
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-            marginBottom: "2rem",
-            textShadow: "0px 0px 10px rgba(255, 255, 255, 0.6)",
-            textTransform: "uppercase",
-          }}
-        >
-          My Side Projects
-        </motion.h2>
+        {/* 🔹 Tab Navigation */}
+        <Tabs>
+          <TabButton
+            $active={activeTab === "professional"}
+            onClick={() => setActiveTab("professional")}
+          >
+            Professional Work
+          </TabButton>
+          <TabButton
+            $active={activeTab === "side"}
+            onClick={() => setActiveTab("side")}
+          >
+            Side Projects
+          </TabButton>
+        </Tabs>
 
-        {/* 🔹 Project Grid with Parallax */}
-        <motion.div
-          style={{
-            display: "grid",
-            gap: "2rem",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            maxWidth: "1100px",
-            padding: "1rem",
-            width: "100%",
-          }}
-        >
-          {projects.map((project, i) => (
-            <FloatingCard
-              animate={{ opacity: 1, y: 0 }}
-              whileHover={{
-                y: -10,
-                transition: { duration: 0.3, ease: "easeOut" },
-              }}
-              href={project.link}
-              initial={{ opacity: 0, y: 50 }}
-              key={project.title}
-              rel="noopener noreferrer"
-              style={{ y: parallaxY }} // 🔹 Parallax effect
-              target="_blank"
-              transition={{ delay: i * 0.2, duration: 0.8, ease: "easeOut" }}
-            >
-              <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>
-                {project.title}
-              </h3>
-              <p style={{ fontSize: "1rem", marginBottom: "1rem" }}>
-                {project.description}
-              </p>
-              <div
-                style={{
-                  color: "#BBB",
-                  display: "flex",
-                  flexWrap: "wrap",
-                  fontSize: "0.9rem",
-                  gap: "8px",
-                }}
-              >
-                {project.tech.map((tech) => (
-                  <motion.span
-                    key={tech}
-                    style={{
-                      background: "#FFF",
-                      borderRadius: "5px",
-                      color: "#000",
-                      fontWeight: "bold",
-                      padding: "5px 10px",
-                    }}
-                    whileHover={{
-                      scale: 1.1,
-                      boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.8)",
-                    }}
-                  >
-                    {tech}
-                  </motion.span>
-                ))}
-              </div>
-            </FloatingCard>
-          ))}
-        </motion.div>
+        {/* 🔹 Professional Work Section (No Floating Animation) */}
+        {activeTab === "professional" && (
+          <motion.div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+              gap: "2rem",
+              maxWidth: "1100px",
+              width: "100%",
+            }}
+          >
+            {professionalProjects.map((project) => (
+              <Card key={project.title}>
+                <h3>{project.title}</h3>
+                <p>
+                  <strong>{project.company}</strong>
+                </p>
+                <p>{project.impact}</p>
+                <div>{project.tech.join(" • ")}</div>
+              </Card>
+            ))}
+          </motion.div>
+        )}
+
+        {/* 🔹 Side Projects Section (With Floating Animation & Hover Effect) */}
+        {activeTab === "side" && (
+          <motion.div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+              gap: "2rem",
+              maxWidth: "1100px",
+              width: "100%",
+            }}
+          >
+            {sideProjects.map((project, i) => (
+              <FloatingCard key={project.title} delay={i * 0.2}>
+                <h3>{project.title}</h3>
+                <p>{project.description}</p>
+                <div>{project.tech.join(" • ")}</div>
+              </FloatingCard>
+            ))}
+          </motion.div>
+        )}
       </motion.section>
     </AnimatedBackground>
   );
