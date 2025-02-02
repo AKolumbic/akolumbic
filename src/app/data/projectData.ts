@@ -1,10 +1,9 @@
-// src/app/data/projectsData.ts
-
 export interface ProfessionalProject {
   title: string;
   company: string;
   impact: string;
   tech: string[];
+  image: string; // 🔹 New property for background image
 }
 
 export const professionalProjects: ProfessionalProject[] = [
@@ -14,6 +13,7 @@ export const professionalProjects: ProfessionalProject[] = [
     impact:
       "Led front-end team in building a modern Angular app, reducing onboarding time by 85% and delivering the project 100% on time.",
     tech: ["Angular", "TypeScript", "Material UI"],
+    image: "/fdoc.png", // ✅ Corrected path
   },
   {
     title: "Enterprise Software Modernization",
@@ -21,6 +21,7 @@ export const professionalProjects: ProfessionalProject[] = [
     impact:
       "Optimized workflows for 10,000+ users, improving load times by 30% and user engagement by 25%.",
     tech: ["React", "Angular", "TypeScript", "Ionic"],
+    image: "/thd.jpg", // ✅ Corrected path
   },
   {
     title: "iPad App Development",
@@ -28,6 +29,7 @@ export const professionalProjects: ProfessionalProject[] = [
     impact:
       "Designed React Native iPad app with offline functionality, reducing report submission delays by 40%.",
     tech: ["React Native", "Node.js", "FeathersJS"],
+    image: "/sce.svg", // ✅ Corrected path
   },
 ];
 

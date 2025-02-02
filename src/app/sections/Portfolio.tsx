@@ -1,11 +1,9 @@
-// src/app/sections/Portfolio.tsx
-
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
   AnimatedBackground,
-  Card,
   FloatingCard,
+  Card,
   GridContainer,
   TabButton,
   Tabs,
@@ -50,35 +48,63 @@ export default function Portfolio() {
           </TabButton>
         </Tabs>
 
-        {/* 🔹 Professional Work Section (No Floating Animation) */}
+        {/* 🔹 Professional Work Section with Background Images */}
         {activeTab === "professional" && (
           <motion.div>
             <GridContainer>
               {professionalProjects.map((project) => (
-                <Card key={project.title}>
-                  <h3>{project.title}</h3>
-                  <p>
-                    <strong>{project.company}</strong>
-                  </p>
-                  <p>{project.impact}</p>
-                  <div>{project.tech.join(" • ")}</div>
+                <Card
+                  key={project.title}
+                  image={project.image}
+                  style={{
+                    backgroundImage: `url(${project.image})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    position: "relative",
+                  }}
+                >
+                  {/* Overlay for better text readability */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      backgroundColor: "rgba(0, 0, 0, 0.6)",
+                      borderRadius: "inherit",
+                    }}
+                  />
+                  <div style={{ position: "relative", zIndex: 1 }}>
+                    <h3>{project.title}</h3>
+                    <p>
+                      <strong>{project.company}</strong>
+                    </p>
+                    <p>{project.impact}</p>
+                    <div>{project.tech.join(" • ")}</div>
+                  </div>
                 </Card>
               ))}
             </GridContainer>
           </motion.div>
         )}
 
-        {/* 🔹 Side Projects Section (Now Clickable) */}
+        {/* 🔹 Side Projects Section with Floating Animation */}
         {activeTab === "side" && (
           <motion.div>
             <GridContainer>
-              {sideProjects.map((project, i) => (
+              {sideProjects.map((project) => (
                 <FloatingCard
                   key={project.title}
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  delay={i * 0.2}
+                  style={{ transition: "transform 0.3s ease-in-out" }}
+                  delay={0} // Add the required delay property
+                  whileHover={{
+                    transform: "scale(1.05)",
+                    boxShadow: "0px 5px 15px rgba(255, 255, 255, 0.3)",
+                  }}
                 >
                   <h3>{project.title}</h3>
                   <p>{project.description}</p>

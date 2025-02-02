@@ -28,19 +28,57 @@ export const AnimatedBackground = styled.div`
 `;
 
 // 🔹 Shared Card Styling (Professional & Side Projects)
-export const Card = styled(motion.div)`
+export const Card = styled(motion.div)<{ image: string }>`
+  position: relative;
   backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.5); /* ✅ Dark overlay for readability */
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   padding: 1.5rem;
   text-align: left;
   transition: all 0.3s ease-in-out;
   color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 200px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0px 5px 20px rgba(255, 255, 255, 0.3);
+    box-shadow: 0px 8px 25px rgba(255, 255, 255, 0.3);
+  }
+
+  /* ✅ Background Image */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url(${(props) => props.image}) center/cover no-repeat;
+    opacity: 0.3; /* ✅ Reduces opacity to improve readability */
+    z-index: -1;
+    border-radius: 12px;
+  }
+
+  h3 {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8); /* ✅ Better contrast */
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7); /* ✅ Improve readability */
+  }
+
+  div {
+    font-size: 0.9rem;
+    font-weight: bold;
   }
 `;
 
