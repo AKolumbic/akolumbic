@@ -38,6 +38,7 @@ export interface SideProject {
   description: string;
   tech: string[];
   link: string;
+  image: string;
 }
 
 export const sideProjects: SideProject[] = [
@@ -46,6 +47,7 @@ export const sideProjects: SideProject[] = [
     description: "The codebase for my personal portfolio site.",
     tech: ["Next.js", "React", "TypeScript", "Framer Motion"],
     link: "https://github.com/AKolumbic/akolumbic",
+    image: "/ak.png",
   },
   {
     title: "BATMAN: Streets of Gotham",
@@ -53,29 +55,34 @@ export const sideProjects: SideProject[] = [
       "A 2D Batman Platformer using Phaser 3, TypeScript, and Rollup.",
     tech: ["Phaser 3", "TypeScript", "Rollup"],
     link: "https://github.com/AKolumbic/BATMAN-Streets-of-Gotham",
+    image: "/batman.jpg",
   },
   {
     title: "Twitchbot",
     description: "A bot for my Twitch channel.",
     tech: ["TypeScript"],
     link: "https://github.com/AKolumbic/twitchbot",
+    image: "/twitch.png",
   },
   {
     title: "D&D Stuff",
     description: "D&D-themed React practice.",
     tech: ["React", "TypeScript"],
     link: "https://github.com/AKolumbic/dndStuff",
+    image: "/d&d.png",
   },
   {
     title: "Warcraft Stuff",
     description: "Warcraft-themed coding experiments.",
     tech: ["TypeScript"],
     link: "https://github.com/AKolumbic/warcraft",
+    image: "/wow.png",
   },
   {
     title: "Vue Calculator",
     description: "A calculator built with Vue.js.",
     tech: ["Vue.js", "JavaScript"],
     link: "https://github.com/AKolumbic/vue-calc",
+    image: "/vue.svg",
   },
 ];

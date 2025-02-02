@@ -28,7 +28,7 @@ export const AnimatedBackground = styled.div`
 `;
 
 // 🔹 Shared Card Styling (Professional & Side Projects)
-export const Card = styled(motion.div)<{ image: string }>`
+export const Card = styled(motion.div)<{ image?: string }>`
   position: relative;
   backdrop-filter: blur(10px);
   background: rgba(0, 0, 0, 0.5); /* ✅ Dark overlay for readability */
@@ -43,6 +43,7 @@ export const Card = styled(motion.div)<{ image: string }>`
   justify-content: space-between;
   min-height: 200px;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
 
   &:hover {
     transform: scale(1.05);
@@ -57,7 +58,8 @@ export const Card = styled(motion.div)<{ image: string }>`
     left: 0;
     width: 100%;
     height: 100%;
-    background: url(${(props) => props.image}) center/cover no-repeat;
+    background: ${({ image }) => (image ? `url(${image})` : "none")}
+      center/cover no-repeat;
     opacity: 0.3; /* ✅ Reduces opacity to improve readability */
     z-index: -1;
     border-radius: 12px;
@@ -67,26 +69,31 @@ export const Card = styled(motion.div)<{ image: string }>`
     font-size: 1.3rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8); /* ✅ Better contrast */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* ✅ Better contrast */
   }
 
   p {
     font-size: 1rem;
     margin-bottom: 0.5rem;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7); /* ✅ Improve readability */
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7); /* ✅ Improve readability */
   }
 
   div {
     font-size: 0.9rem;
     font-weight: bold;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
   }
 `;
 
 // 🔹 Side Project Cards (Floating Effect & Clickable)
-export const FloatingCard = styled(motion.a)<{ delay: number }>`
+export const FloatingCard = styled(motion.a)<{ delay: number; image?: string }>`
   animation: ${floatAnimation} ${({ delay }) => 4 + delay}s ease-in-out infinite;
   backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.12);
+  background: ${({ image }) =>
+    image ? `url(${image})` : "rgba(255, 255, 255, 0.12)"};
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   display: block;
@@ -95,6 +102,30 @@ export const FloatingCard = styled(motion.a)<{ delay: number }>`
   text-decoration: none;
   transition: all 0.3s ease-in-out;
   color: inherit;
+  position: relative;
+  overflow: hidden;
+
+  /* ✅ Darker overlay for better text contrast */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Increased opacity for better contrast */
+    z-index: 0;
+    border-radius: inherit;
+  }
+
+  /* ✅ Ensuring text is above overlay */
+  h3,
+  p,
+  div {
+    position: relative;
+    z-index: 1;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  }
 
   &:hover {
     transform: scale(1.05);

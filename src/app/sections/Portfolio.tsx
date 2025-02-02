@@ -95,7 +95,13 @@ export default function Portfolio() {
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ transition: "transform 0.3s ease-in-out" }}
+                  style={{
+                    transition: "transform 0.3s ease-in-out",
+                    backgroundImage: `url(${project.image})`,
+                    backgroundSize: "cover", // Ensures the image fully covers the card
+                    backgroundPosition: "center", // Centers the background image
+                    backgroundRepeat: "no-repeat", // Prevents image tiling
+                  }}
                   delay={0} // Add the required delay property
                   whileHover={{
                     transform: "scale(1.05)",
