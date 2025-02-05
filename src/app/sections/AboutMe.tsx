@@ -150,7 +150,7 @@ export default function AboutMe() {
             }}
           >
             <li>• TypeScript, JavaScript (ES6+), Python</li>
-            <li>• React, Angular, Vue</li>
+            <li>• React, Angular, Vue, Next.js</li>
             <li>• Node.js, Express.js</li>
             <li>• React Native, Ionic Framework</li>
             <li>• Jest, Mocha, Playwright</li>

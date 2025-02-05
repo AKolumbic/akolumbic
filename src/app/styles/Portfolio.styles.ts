@@ -6,7 +6,6 @@ export const AnimatedBackground = styled.div`
   background: linear-gradient(-45deg, #000000, #1a1a1a, #333333, #222);
   background-size: 300% 300%;
   animation: gradientShift 8s ease infinite;
-  padding-bottom: 3rem; /* Prevents bottom cutoff */
 
   @keyframes gradientShift {
     0% {
@@ -21,21 +20,39 @@ export const AnimatedBackground = styled.div`
   }
 `;
 
-// 🔹 Card Styling
+// 🔹 Container for Professional & Side Projects
+export const SectionContainer = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  margin: 4rem auto;
+  text-align: center;
+`;
+
+// 🔹 Grid Container for Projects
+export const GridContainer = styled.div`
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  max-width: 1100px;
+  width: 100%;
+  padding: 1rem;
+`;
+
+// 🔹 Shared Card Styling (Professional & Side Projects)
 export const Card = styled(motion.div)<{ image?: string }>`
   position: relative;
   backdrop-filter: blur(10px);
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  padding: 1.2rem;
+  padding: 1.5rem;
   text-align: left;
   transition: all 0.3s ease-in-out;
   color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 220px;
+  min-height: 200px;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 
@@ -44,7 +61,6 @@ export const Card = styled(motion.div)<{ image?: string }>`
     box-shadow: 0px 8px 25px rgba(255, 255, 255, 0.3);
   }
 
-  /* ✅ Background Image */
   &::before {
     content: "";
     position: absolute;
@@ -58,28 +74,9 @@ export const Card = styled(motion.div)<{ image?: string }>`
     z-index: -1;
     border-radius: 12px;
   }
-
-  h3 {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
-  }
-
-  p {
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
-  }
-
-  div {
-    font-size: 0.85rem;
-    font-weight: bold;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
-  }
 `;
 
-// 🔹 Side Project Cards
+// 🔹 Floating Cards (Side Projects)
 export const FloatingCard = styled(motion.a)<{ image?: string }>`
   backdrop-filter: blur(10px);
   background: ${({ image }) =>
@@ -89,40 +86,13 @@ export const FloatingCard = styled(motion.a)<{ image?: string }>`
   background-repeat: no-repeat;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  display: block;
-  padding: 1.2rem;
+  padding: 1.5rem;
   text-align: left;
   text-decoration: none;
   transition: all 0.3s ease-in-out;
   color: inherit;
   position: relative;
   overflow: hidden;
-
-  /* ✅ Darker overlay for better text contrast */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* ✅ Reduced opacity so images show */
-    z-index: 0;
-    border-radius: inherit;
-  }
-
-  h3,
-  p,
-  div {
-    position: relative;
-    z-index: 1;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
-  }
-
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 5px 20px rgba(255, 255, 255, 0.3);
-  }
 `;
 
 // 🔹 Tab Navigation
@@ -150,19 +120,5 @@ export const TabButton = styled.button<{ $active: boolean }>`
 
   &:hover {
     color: #fff;
-  }
-`;
-
-// 🔹 Responsive Grid Container
-export const GridContainer = styled.div`
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  max-width: 1100px;
-  width: 100%;
-  padding: 1rem;
-
-  @media (max-width: 600px) {
-    grid-template-columns: 1fr; /* ✅ Single column on small screens */
   }
 `;

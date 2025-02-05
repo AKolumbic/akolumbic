@@ -7,6 +7,7 @@ import {
   FaTwitter,
   FaEnvelope,
 } from "react-icons/fa";
+import { GiDiceTwentyFacesTwenty, GiDeathStar } from "react-icons/gi";
 import {
   Footer,
   IconContainer,
@@ -59,6 +60,20 @@ export default function Contact() {
           aria-label="Twitter"
         >
           <FaTwitter />
+        </IconLink>
+        <IconLink
+          href="https://drosshole.com"
+          target="_blank"
+          aria-label="Drosshole"
+        >
+          <GiDeathStar />
+        </IconLink>
+        <IconLink
+          href="https://falstera.com"
+          target="_blank"
+          aria-label="Falstera"
+        >
+          <GiDiceTwentyFacesTwenty />
         </IconLink>
       </IconContainer>
 

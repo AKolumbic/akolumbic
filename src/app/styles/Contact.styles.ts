@@ -1,36 +1,45 @@
 import styled from "styled-components";
 
-// 🔹 Styled Footer Container
 export const Footer = styled.footer`
-  background-color: #000;
-  padding: 2rem;
+  width: 100%;
+  padding: 2rem 1rem;
+  background: #000;
+  color: #fff;
   text-align: center;
+  position: relative;
+  bottom: 0;
 `;
 
-// 🔹 Icon Container with Hover Effects
 export const IconContainer = styled.div`
   display: flex;
   justify-content: center;
   gap: 1.5rem;
-  margin-bottom: 1rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 icons per row */
+    gap: 1rem;
+    max-width: 350px;
+    margin: 0 auto;
+  }
 `;
 
-// 🔹 Individual Icon Styling
 export const IconLink = styled.a`
   color: #fff;
-  font-size: 1.8rem;
-  transition: all 0.3s ease-in-out;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
 
   &:hover {
-    color: #fff;
-    text-shadow: 0px 0px 12px rgba(255, 255, 255, 0.8); /* ✅ White glow effect */
     transform: scale(1.2);
   }
 `;
 
-// 🔹 Copyright Text
 export const Copyright = styled.p`
-  color: #aaa;
   font-size: 0.9rem;
+  opacity: 0.7;
   margin-top: 1rem;
 `;

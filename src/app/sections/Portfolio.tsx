@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   AnimatedBackground,
@@ -7,6 +7,7 @@ import {
   GridContainer,
   TabButton,
   Tabs,
+  SectionContainer,
 } from "../styles/Portfolio.styles";
 import { professionalProjects, sideProjects } from "../data/projectData";
 
@@ -14,6 +15,17 @@ export default function Portfolio() {
   const [activeTab, setActiveTab] = useState<"professional" | "side">(
     "professional"
   );
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024); // Adjust breakpoint if needed
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <AnimatedBackground>
@@ -32,58 +44,97 @@ export default function Portfolio() {
           margin: "0 auto",
         }}
       >
-        {/* 🔹 Tab Navigation */}
-        <Tabs>
-          <TabButton
-            $active={activeTab === "professional"}
-            onClick={() => setActiveTab("professional")}
-          >
-            Professional Work
-          </TabButton>
-          <TabButton
-            $active={activeTab === "side"}
-            onClick={() => setActiveTab("side")}
-          >
-            Side Projects
-          </TabButton>
-        </Tabs>
+        {/* 🔹 Desktop: Show Both Sections | Mobile: Tab Navigation */}
+        {!isDesktop ? (
+          <>
+            <Tabs>
+              <TabButton
+                $active={activeTab === "professional"}
+                onClick={() => setActiveTab("professional")}
+              >
+                Professional Work
+              </TabButton>
+              <TabButton
+                $active={activeTab === "side"}
+                onClick={() => setActiveTab("side")}
+              >
+                Side Projects
+              </TabButton>
+            </Tabs>
 
-        {/* 🔹 Professional Work */}
-        {activeTab === "professional" && (
-          <motion.div>
-            <GridContainer>
-              {professionalProjects.map((project) => (
-                <Card key={project.title} image={project.image}>
-                  <div className="overlay" />
-                  <div style={{ position: "relative", zIndex: 1 }}>
+            {activeTab === "professional" && (
+              <motion.div>
+                <GridContainer>
+                  {professionalProjects.map((project) => (
+                    <Card key={project.title} image={project.image}>
+                      <div className="overlay" />
+                      <div style={{ position: "relative", zIndex: 1 }}>
+                        <h3>{project.title}</h3>
+                        <div>{project.tech.join(" • ")}</div>
+                      </div>
+                    </Card>
+                  ))}
+                </GridContainer>
+              </motion.div>
+            )}
+
+            {activeTab === "side" && (
+              <motion.div>
+                <GridContainer>
+                  {sideProjects.map((project) => (
+                    <FloatingCard
+                      key={project.title}
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      image={project.image}
+                    >
+                      <h3>{project.title}</h3>
+                      <p>{project.description}</p>
+                      <div>{project.tech.join(" • ")}</div>
+                    </FloatingCard>
+                  ))}
+                </GridContainer>
+              </motion.div>
+            )}
+          </>
+        ) : (
+          <>
+            {/* 🔹 Desktop Layout: Show Both Sections Stacked */}
+            <SectionContainer>
+              <h2>Professional Work</h2>
+              <GridContainer>
+                {professionalProjects.map((project) => (
+                  <Card key={project.title} image={project.image}>
+                    <div className="overlay" />
+                    <div style={{ position: "relative", zIndex: 1 }}>
+                      <h3>{project.title}</h3>
+                      <div>{project.tech.join(" • ")}</div>
+                    </div>
+                  </Card>
+                ))}
+              </GridContainer>
+            </SectionContainer>
+
+            <SectionContainer>
+              <h2>Side Projects</h2>
+              <GridContainer>
+                {sideProjects.map((project) => (
+                  <FloatingCard
+                    key={project.title}
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    image={project.image}
+                  >
                     <h3>{project.title}</h3>
+                    <p>{project.description}</p>
                     <div>{project.tech.join(" • ")}</div>
-                  </div>
-                </Card>
-              ))}
-            </GridContainer>
-          </motion.div>
-        )}
-
-        {/* 🔹 Side Projects */}
-        {activeTab === "side" && (
-          <motion.div>
-            <GridContainer>
-              {sideProjects.map((project) => (
-                <FloatingCard
-                  key={project.title}
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  image={project.image} // ✅ Pass the image prop here!
-                >
-                  <h3>{project.title}</h3>
-                  <p>{project.description}</p>
-                  <div>{project.tech.join(" • ")}</div>
-                </FloatingCard>
-              ))}
-            </GridContainer>
-          </motion.div>
+                  </FloatingCard>
+                ))}
+              </GridContainer>
+            </SectionContainer>
+          </>
         )}
       </motion.section>
     </AnimatedBackground>
