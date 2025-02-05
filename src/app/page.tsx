@@ -5,7 +5,7 @@ import { useInView } from "react-intersection-observer";
 import {
   HeroSection,
   AboutMe,
-  CareerTimeline,
+  // CareerTimeline,
   Portfolio,
   Contact,
 } from "./sections";
@@ -37,7 +37,7 @@ export default function HomePage() {
   };
 
   const aboutMeAnim = useAnimatedSection(smoothSlideUpVariants);
-  const careerAnim = useAnimatedSection(smoothSlideUpVariants);
+  // const careerAnim = useAnimatedSection(smoothSlideUpVariants);
   const portfolioAnim = useAnimatedSection(smoothSlideUpVariants);
 
   return (
@@ -53,14 +53,14 @@ export default function HomePage() {
         <AboutMe />
       </motion.section>
 
-      <motion.section
+      {/* <motion.section
         ref={careerAnim.ref}
         initial="hidden"
         animate={careerAnim.controls}
         variants={careerAnim.variants}
       >
         <CareerTimeline />
-      </motion.section>
+      </motion.section> */}
 
       <motion.section
         ref={portfolioAnim.ref}
