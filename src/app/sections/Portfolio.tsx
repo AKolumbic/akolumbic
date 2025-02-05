@@ -26,10 +26,10 @@ export default function Portfolio() {
           color: "#FFF",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          minHeight: "100vh",
-          padding: "5rem 2rem",
+          padding: "3rem 1.5rem",
           textAlign: "center",
+          maxWidth: "1200px",
+          margin: "0 auto",
         }}
       >
         {/* 🔹 Tab Navigation */}
@@ -48,33 +48,13 @@ export default function Portfolio() {
           </TabButton>
         </Tabs>
 
-        {/* 🔹 Professional Work Section with Background Images */}
+        {/* 🔹 Professional Work */}
         {activeTab === "professional" && (
           <motion.div>
             <GridContainer>
               {professionalProjects.map((project) => (
-                <Card
-                  key={project.title}
-                  image={project.image}
-                  style={{
-                    backgroundImage: `url(${project.image})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    position: "relative",
-                  }}
-                >
-                  {/* Overlay for better text readability */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      width: "100%",
-                      height: "100%",
-                      backgroundColor: "rgba(0, 0, 0, 0.6)",
-                      borderRadius: "inherit",
-                    }}
-                  />
+                <Card key={project.title} image={project.image}>
+                  <div className="overlay" />
                   <div style={{ position: "relative", zIndex: 1 }}>
                     <h3>{project.title}</h3>
                     <div>{project.tech.join(" • ")}</div>
@@ -85,7 +65,7 @@ export default function Portfolio() {
           </motion.div>
         )}
 
-        {/* 🔹 Side Projects Section with Floating Animation */}
+        {/* 🔹 Side Projects */}
         {activeTab === "side" && (
           <motion.div>
             <GridContainer>
@@ -95,17 +75,7 @@ export default function Portfolio() {
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{
-                    transition: "transform 0.3s ease-in-out",
-                    backgroundImage: `url(${project.image})`,
-                    backgroundSize: "cover", // Ensures the image fully covers the card
-                    backgroundPosition: "center", // Centers the background image
-                    backgroundRepeat: "no-repeat", // Prevents image tiling
-                  }}
-                  whileHover={{
-                    transform: "scale(1.05)",
-                    boxShadow: "0px 5px 15px rgba(255, 255, 255, 0.3)",
-                  }}
+                  image={project.image} // ✅ Pass the image prop here!
                 >
                   <h3>{project.title}</h3>
                   <p>{project.description}</p>
