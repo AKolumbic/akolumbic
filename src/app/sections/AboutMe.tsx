@@ -1,10 +1,29 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
+import { fadeInUp } from "../data/variantsData";
 
-export default function AboutMe() {
-  // Load Michroma font dynamically (if not already loaded)
+/**
+ * AboutMe Component
+ *
+ * Renders the About Me section for the portfolio. This section displays a
+ * large centered quote along with a two-column layout that shows a short bio
+ * on the left and a list of key expertise on the right.
+ *
+ * The component dynamically loads the Michroma font (if not already loaded)
+ * and animates its content with a fade in/up effect using Framer Motion.
+ *
+ * @returns {JSX.Element} The rendered AboutMe section.
+ *
+ * @example
+ * <AboutMe />
+ */
+const AboutMe: React.FC = () => {
+  // Load the Michroma font dynamically (if not already loaded)
   useEffect(() => {
-    if (document.head.querySelector("link[href*='Michroma']")) return;
+    const existingFontLink = document.head.querySelector(
+      "link[href*='Michroma']"
+    );
+    if (existingFontLink) return;
 
     const fontLink = document.createElement("link");
     fontLink.href =
@@ -13,15 +32,24 @@ export default function AboutMe() {
     document.head.appendChild(fontLink);
   }, []);
 
-  // Animation Variants
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 40 },
-    visible: (delay = 0) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay, duration: 0.8, ease: "easeOut" },
-    }),
-  };
+  // /**
+  //  * fadeInUp variants for Framer Motion animations.
+  //  *
+  //  * The content starts off hidden (with opacity 0 and moved 40px down) and
+  //  * then fades in and moves upward into place. The delay can be customized via
+  //  * the "custom" prop on the motion element.
+  //  */
+  // const fadeInUp = useMemo(
+  //   () => ({
+  //     hidden: { opacity: 0, y: 40 },
+  //     visible: (delay = 0) => ({
+  //       opacity: 1,
+  //       y: 0,
+  //       transition: { delay, duration: 0.8, ease: "easeOut" },
+  //     }),
+  //   }),
+  //   []
+  // );
 
   return (
     <motion.section
@@ -29,17 +57,17 @@ export default function AboutMe() {
       whileInView="visible"
       viewport={{ once: true }}
       style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "5rem 2rem",
-        fontFamily: "'Times New Roman', serif",
         backgroundColor: "#fff",
         color: "#000",
-        textAlign: "center",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        fontFamily: "'Times New Roman', serif",
+        minHeight: "100vh",
         overflow: "hidden",
+        padding: "5rem 2rem",
+        textAlign: "center",
       }}
     >
       {/* Large Centered Quote */}
@@ -47,13 +75,14 @@ export default function AboutMe() {
         variants={fadeInUp}
         custom={0.2}
         style={{
-          fontSize: "3rem",
-          fontWeight: "bold",
-          fontStyle: "italic",
           color: "#111",
-          maxWidth: "900px",
-          marginBottom: "3rem",
+          fontFamily: "'Times New Roman', serif",
+          fontSize: "3rem",
+          fontStyle: "italic",
+          fontWeight: "bold",
           lineHeight: "1.4",
+          marginBottom: "3rem",
+          maxWidth: "900px",
         }}
       >
         “Do or do not, there is no try.”
@@ -66,13 +95,13 @@ export default function AboutMe() {
         style={{
           display: "flex",
           flexDirection: "row",
+          flexWrap: "wrap",
+          gap: "3rem",
           justifyContent: "center",
           alignItems: "flex-start",
-          gap: "3rem",
-          maxWidth: "1100px",
           margin: "0 auto",
+          maxWidth: "1100px",
           padding: "1rem",
-          flexWrap: "wrap",
           textAlign: "justify",
         }}
       >
@@ -82,17 +111,16 @@ export default function AboutMe() {
           custom={0.6}
           style={{
             flex: 1,
-            minWidth: "320px",
-            lineHeight: "1.8",
             fontSize: "1.1rem",
+            lineHeight: "1.8",
+            minWidth: "320px",
           }}
         >
           <p>
             I’m <strong>Andrew Kolumbic</strong>, a{" "}
-            <strong>Software Engineer </strong>
-            with several years of experience in{" "}
-            <strong>TypeScript, React, Angular, and Vue</strong>. I don’t just
-            write code—I deliver results. I take a structured, disciplined
+            <strong>Software Engineer</strong> with several years of experience
+            in <strong>TypeScript, React, Angular, and Vue</strong>. I don’t
+            just write code—I deliver results. I take a structured, disciplined
             approach to software development, treating every project with the
             precision and dedication it demands. Whether it’s modernizing
             applications, optimizing performance, or leading development teams
@@ -123,16 +151,16 @@ export default function AboutMe() {
           custom={0.8}
           style={{
             flex: 1,
-            minWidth: "320px",
             lineHeight: "1.8",
+            minWidth: "320px",
           }}
         >
           <h3
             style={{
+              borderBottom: "2px solid #000",
               fontSize: "1.6rem",
               fontWeight: "bold",
               marginBottom: "1rem",
-              borderBottom: "2px solid #000",
               paddingBottom: "0.4rem",
               textAlign: "center",
             }}
@@ -141,16 +169,17 @@ export default function AboutMe() {
           </h3>
           <ul
             style={{
-              listStyleType: "none",
-              padding: 0,
-              margin: "0 auto",
               fontSize: "1.1rem",
+              flex: 1,
               lineHeight: "1.8",
+              listStyleType: "none",
+              margin: "0 auto",
               maxWidth: "90%",
+              padding: 0,
             }}
           >
             <li>• TypeScript, JavaScript (ES6+), Python</li>
-            <li>• React, Angular, Vue</li>
+            <li>• React, Angular, Vue, Next.js</li>
             <li>• Node.js, Express.js</li>
             <li>• React Native, Ionic Framework</li>
             <li>• Jest, Mocha, Playwright</li>
@@ -160,22 +189,24 @@ export default function AboutMe() {
         </motion.div>
       </motion.div>
 
-      {/* Responsive behavior - Single column on smaller screens */}
+      {/* Responsive behavior: Single column on smaller screens */}
       <style>
         {`
           @media (max-width: 768px) {
             div {
               flex-direction: column;
-              text-align: center;
               padding: 1rem;
+              text-align: center;
             }
             ul {
-              text-align: left;
               margin: 0 auto;
+              text-align: left;
             }
           }
         `}
       </style>
     </motion.section>
   );
-}
+};
+
+export default React.memo(AboutMe);

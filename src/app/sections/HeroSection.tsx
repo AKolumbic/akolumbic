@@ -1,7 +1,22 @@
 import React, { useMemo, useRef } from "react";
 import { motion } from "framer-motion";
+import {
+  HeroContainer,
+  HeroText,
+  Underline,
+  Subtext,
+} from "../styles/HeroSection.styles";
 
-// Utility: Shuffle function moved outside the component.
+/**
+ * Shuffles an array of numbers into a random order.
+ *
+ * @param {number[]} array - The array of numbers to shuffle.
+ * @returns {number[]} A new array with the elements in randomized order.
+ *
+ * @example
+ * // For an array [0, 1, 2], this might return [1, 0, 2]
+ * const order = shuffleArray([0, 1, 2]);
+ */
 function shuffleArray(array: number[]): number[] {
   return array
     .map((value) => ({ value, sort: Math.random() }))
@@ -9,15 +24,25 @@ function shuffleArray(array: number[]): number[] {
     .map(({ value }) => value);
 }
 
+/**
+ * HeroSection Component
+ *
+ * Renders the hero section with an animated display of the name "Andrew Kolumbic".
+ * Each letter falls into place with a subtle bounce effect, and an underline plus
+ * subtext animate into view.
+ *
+ * @returns {JSX.Element} The rendered hero section.
+ */
 const HeroSection: React.FC = () => {
+  // The name to display in the hero section.
   const name = "Andrew Kolumbic";
 
-  // Compute the randomized order once using a ref.
+  // Compute a randomized order for the letters only once.
   const randomizedOrder = useRef(
     shuffleArray([...Array(name.length).keys()])
   ).current;
 
-  // Memoize the animation variants to avoid recalculations.
+  // Memoize the letter animation variants. Each letter will fall in with a bounce.
   const letterVariants = useMemo(
     () => ({
       initial: { y: "-100vh", opacity: 0 },
@@ -25,38 +50,19 @@ const HeroSection: React.FC = () => {
         y: [0, -8, 3, 0], // Subtle bounce effect
         opacity: 1,
         transition: {
-          delay: randomizedOrder[i] * 0.06, // Slightly slower stagger effect
+          delay: randomizedOrder[i] * 0.06,
           type: "spring",
           stiffness: 110,
           damping: 20,
         },
       }),
     }),
-    [] // No dependencies needed because randomizedOrder is fixed.
+    [randomizedOrder]
   );
 
   return (
-    <motion.section
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        overflow: "hidden",
-        backgroundColor: "#000",
-      }}
-    >
-      {/* Name Animation */}
-      <motion.div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          textAlign: "center",
-          gap: "4px",
-        }}
-      >
+    <HeroContainer>
+      <HeroText>
         {name.split("").map((char, i) => (
           <motion.span
             key={i}
@@ -64,66 +70,26 @@ const HeroSection: React.FC = () => {
             initial="initial"
             animate="fallIn"
             variants={letterVariants}
-            style={{
-              fontSize: "min(10vw, 5rem)",
-              fontWeight: "bold",
-              textTransform: "uppercase",
-              fontFamily: "'Michroma', sans-serif",
-              color: "#FFF",
-              display: "inline-block",
-              whiteSpace: "nowrap",
-            }}
           >
             {char === " " ? "\u00A0" : char}
           </motion.span>
         ))}
-      </motion.div>
+      </HeroText>
 
-      {/* Underline */}
-      <motion.div
+      <Underline
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut", delay: 0.8 }}
-        style={{
-          width: "80%",
-          maxWidth: "400px",
-          height: "2px",
-          backgroundColor: "#FFF",
-          margin: "1rem auto",
-          transformOrigin: "center",
-        }}
-        className="underline"
+        transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
       />
 
-      {/* Subtext: Software Engineer | San Pedro, CA */}
-      <motion.p
+      <Subtext
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 1 }}
-        style={{
-          fontSize: "min(4vw, 1.2rem)",
-          fontFamily: "'Michroma', sans-serif",
-          color: "rgba(255, 255, 255, 0.8)",
-          textAlign: "center",
-          letterSpacing: "1.5px",
-          marginTop: "0.5rem",
-          padding: "0 1rem",
-        }}
+        transition={{ delay: 1, duration: 1 }}
       >
         Software Engineer | San Pedro, CA
-      </motion.p>
-
-      {/* Media Query to hide the underline on small screens */}
-      <style>
-        {`
-          @media (max-width: 600px) {
-            .underline {
-              display: none !important;
-            }
-          }
-        `}
-      </style>
-    </motion.section>
+      </Subtext>
+    </HeroContainer>
   );
 };
 
