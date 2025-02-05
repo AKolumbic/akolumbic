@@ -27,7 +27,7 @@ export default function Contact() {
           <FaEnvelope />
         </IconLink>
         <IconLink
-          href="https://www.linkedin.com/in/andrew-kolumbic-21549a163/"
+          href="https://www.linkedin.com/in/andrew-kolumbic/"
           target="_blank"
           aria-label="LinkedIn"
         >
@@ -77,9 +77,7 @@ export default function Contact() {
         </IconLink>
       </IconContainer>
 
-      <Copyright>
-        © {new Date().getFullYear()} Andrew Kolumbic. All rights reserved.
-      </Copyright>
+      <Copyright>© 2025 Andrew Kolumbic. All rights reserved.</Copyright>
     </Footer>
   );
 }
