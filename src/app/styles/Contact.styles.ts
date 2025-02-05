@@ -13,15 +13,23 @@ export const Footer = styled.footer`
 export const IconContainer = styled.div`
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
+  align-items: center;
   flex-wrap: wrap;
+  gap: 1.5rem;
+  max-width: 450px; /* Keeps icons centered */
+  margin: 0 auto; /* Ensures centering */
 
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 icons per row */
+    grid-template-columns: repeat(4, 1fr); /* 4 icons per row */
     gap: 1rem;
-    max-width: 350px;
-    margin: 0 auto;
+    justify-content: center;
+    justify-items: center; /* Ensures icons are centered */
+    max-width: 300px;
+  }
+
+  @media (max-width: 400px) {
+    grid-template-columns: repeat(3, 1fr); /* Adjusts for very small screens */
   }
 `;
 
@@ -31,7 +39,7 @@ export const IconLink = styled.a`
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
 
   &:hover {
     transform: scale(1.2);

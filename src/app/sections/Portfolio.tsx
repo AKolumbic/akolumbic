@@ -1,3 +1,5 @@
+"use client"; // ✅ Ensures this is a client component
+
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
@@ -12,20 +14,22 @@ import {
 import { professionalProjects, sideProjects } from "../data/projectData";
 
 export default function Portfolio() {
+  const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
   const [activeTab, setActiveTab] = useState<"professional" | "side">(
     "professional"
   );
-  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 1024); // Adjust breakpoint if needed
+      setIsDesktop(window.innerWidth >= 1024);
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  if (isDesktop === null) return null; // ✅ Prevents rendering until the client knows the screen size
 
   return (
     <AnimatedBackground>
@@ -44,7 +48,7 @@ export default function Portfolio() {
           margin: "0 auto",
         }}
       >
-        {/* 🔹 Desktop: Show Both Sections | Mobile: Tab Navigation */}
+        {/* ✅ Tabs for Mobile View */}
         {!isDesktop ? (
           <>
             <Tabs>
@@ -100,7 +104,7 @@ export default function Portfolio() {
           </>
         ) : (
           <>
-            {/* 🔹 Desktop Layout: Show Both Sections Stacked */}
+            {/* ✅ Desktop View: Professional Work above Side Projects */}
             <SectionContainer>
               <h2>Professional Work</h2>
               <GridContainer>

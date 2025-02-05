@@ -31,22 +31,31 @@ export const SectionContainer = styled.div`
 // 🔹 Grid Container for Projects
 export const GridContainer = styled.div`
   display: grid;
-  gap: 2rem;
+  gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   max-width: 1100px;
   width: 100%;
   padding: 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr; /* ✅ Single column on smaller screens */
+    gap: 0.5rem; /* ✅ Reduce gap */
+    padding: 0.5rem; /* ✅ Reduce padding for better alignment */
+  }
 `;
 
 // 🔹 Shared Card Styling (Professional & Side Projects)
 export const Card = styled(motion.div)<{ image?: string }>`
-  position: relative;
+  width: 100%; /* ✅ Allow cards to use the full width available */
+  min-width: 250px;
+  max-width: 100%;
+  margin: 0 auto;
   backdrop-filter: blur(10px);
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  padding: 1.5rem;
-  text-align: left;
+  padding: 1.2rem;
+  text-align: center;
   transition: all 0.3s ease-in-out;
   color: #fff;
   display: flex;
@@ -56,11 +65,17 @@ export const Card = styled(motion.div)<{ image?: string }>`
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 
+  @media (max-width: 768px) {
+    padding: 0.8rem; /* ✅ Adjust padding */
+    min-height: auto; /* ✅ Prevent excessive height issues */
+  }
+
   &:hover {
     transform: scale(1.05);
     box-shadow: 0px 8px 25px rgba(255, 255, 255, 0.3);
   }
 
+  /* ✅ Background Image */
   &::before {
     content: "";
     position: absolute;
@@ -76,8 +91,11 @@ export const Card = styled(motion.div)<{ image?: string }>`
   }
 `;
 
-// 🔹 Floating Cards (Side Projects)
 export const FloatingCard = styled(motion.a)<{ image?: string }>`
+  width: 100%;
+  min-width: 250px;
+  max-width: 100%;
+  margin: 0 auto;
   backdrop-filter: blur(10px);
   background: ${({ image }) =>
     image ? `url(${image})` : "rgba(255, 255, 255, 0.12)"};
@@ -86,13 +104,23 @@ export const FloatingCard = styled(motion.a)<{ image?: string }>`
   background-repeat: no-repeat;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  padding: 1.5rem;
-  text-align: left;
+  display: block;
+  padding: 1.2rem;
+  text-align: center;
   text-decoration: none;
   transition: all 0.3s ease-in-out;
   color: inherit;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    padding: 0.8rem;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 5px 20px rgba(255, 255, 255, 0.3);
+  }
 `;
 
 // 🔹 Tab Navigation
