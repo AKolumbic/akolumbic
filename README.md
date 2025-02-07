@@ -18,4 +18,3 @@ If you have any questions, feedback, or collaboration ideas, feel free to reach 
 
 📧 Email: andrewkolumbic@gmail.com
 🔗 Portfolio: andrewkolumbic.com
-🐙 GitHub: AKolumbic
