@@ -1,12 +1,26 @@
-Andrew Kolumbic - Portfolio Website 🚀
+👋 Hey, I’m Andrew Kolumbic!
 
-Welcome to the source code for my personal portfolio website! This project is built with Next.js, React, TypeScript, and Framer Motion, showcasing my professional work, side projects, and technical expertise in web development.
+🚀 Software Engineer | Frontend Specialist | Tech Enthusiast
+
+I’m a senior frontend developer with expertise in TypeScript, React, Next.js, and modern UI/UX design. With over six years of experience, I focus on high-performance web applications, scalable architecture, and intuitive user experiences.
+
+🛠️ Tech Stack
+My personal projects and work often involve:
+	•	Frontend: React (v19), Next.js (v15), TypeScript
+	•	Styling: Styled Components, TailwindCSS
+	•	Animation & UI Enhancements: Framer Motion, React Intersection Observer
+	•	Testing & Automation: Playwright, ESLint
+	•	Build & Deployment: Vercel (for production hosting)
+
+
+🌎 This App
+Welcome to the source code for my personal portfolio website! This project, built with Next.js, React, TypeScript, and Framer Motion, showcases my professional work, side projects, and technical expertise in web development.
 
 🔹 Features
 
 🖥️ Modern Tech Stack
 • Next.js 14 – Optimized for performance and server-side rendering.
-• React & TypeScript – Strongly-typed, scalable, and maintainable.
+• React & TypeScript – Strongly typed, scalable, and maintainable.
 • Framer Motion – Smooth animations and micro-interactions.
 • Styled Components – Modular and reusable styling with theming support.
 
@@ -19,7 +33,7 @@ Welcome to the source code for my personal portfolio website! This project is bu
 📂 Content
 • Hero Section – Introduces my work philosophy.
 • About Me – Details my experience and development approach.
-• Portfolio – Showcases both professional projects and side projects, with an interactive tab-based UI.
+• Portfolio – Showcases both professional and side projects, with an interactive tab-based UI.
 
 📸 Screenshots
 
@@ -69,10 +83,6 @@ The site will be live at http://localhost:3000.
 ⬜ Implement light/dark theme toggle
 ⬜ Optimize accessibility (a11y) and keyboard navigation
 
-📜 License
-
-This project is open-source and available under the MIT License.
-
 📬 Contact
 
 If you have any questions, feedback, or collaboration ideas, feel free to reach out!
@@ -80,5 +90,3 @@ If you have any questions, feedback, or collaboration ideas, feel free to reach 
 📧 Email: andrewkolumbic@gmail.com
 🔗 Portfolio: andrewkolumbic.com
 🐙 GitHub: AKolumbic
-
-🔹 Built with code, precision, and a love for great UI. ✨🚀
