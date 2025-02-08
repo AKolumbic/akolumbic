@@ -1,15 +1,9 @@
 "use client";
 
-import React, { useEffect, JSX } from "react";
+import React, { useEffect, JSX, useState } from "react";
 import { motion, useAnimation, Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import {
-  HeroSection,
-  AboutMe,
-  // CareerTimeline,
-  Portfolio,
-  Contact,
-} from "./sections";
+import { HeroSection, AboutMe, Portfolio, Contact } from "./sections";
 import { smoothSlideUpVariants } from "./data/variantsData";
 
 /**
@@ -22,10 +16,6 @@ import { smoothSlideUpVariants } from "./data/variantsData";
  *   controls: ReturnType<typeof useAnimation>,
  *   variants: Variants
  * }}
- *
- * @example
- * const { ref, controls, variants } = useAnimatedSection(smoothSlideUpVariants);
- * // Then attach `ref` to the motion element and set its initial, animate, and variants props.
  */
 function useAnimatedSection(variants: Variants) {
   const controls = useAnimation();
@@ -53,7 +43,21 @@ function useAnimatedSection(variants: Variants) {
  * @returns {JSX.Element} The rendered HomePage component.
  */
 export default function HomePage(): JSX.Element {
-  // fixes error caused by Grammerly during development.
+  // State to check if the screen is mobile-sized
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust breakpoint if needed
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  // fixes error caused by Grammarly during development.
   useEffect(() => {
     const body = document.body;
     if (body.hasAttribute("data-new-gr-c-s-check-loaded")) {
@@ -63,6 +67,7 @@ export default function HomePage(): JSX.Element {
       body.removeAttribute("data-gr-ext-installed");
     }
   }, []);
+
   // Disable browser scroll restoration and scroll to top when the component mounts.
   useEffect(() => {
     if (typeof window !== "undefined" && window.history.scrollRestoration) {
@@ -71,43 +76,37 @@ export default function HomePage(): JSX.Element {
     window.scrollTo(0, 0);
   }, []);
 
-  // Use our custom hook to animate the AboutMe and Portfolio sections.
+  // Use custom hook to animate the AboutMe and Portfolio sections.
   const aboutMeAnim = useAnimatedSection(smoothSlideUpVariants);
-  // const careerAnim = useAnimatedSection(smoothSlideUpVariants); // CareerTimeline is commented out.
   const portfolioAnim = useAnimatedSection(smoothSlideUpVariants);
 
   return (
     <>
       <HeroSection />
 
-      <motion.section
-        ref={aboutMeAnim.ref}
-        initial="hidden"
-        animate={aboutMeAnim.controls}
-        variants={aboutMeAnim.variants}
-      >
-        <AboutMe />
-      </motion.section>
+      {/* Conditionally render AboutMe on larger screens */}
+      {!isMobile && (
+        <motion.section
+          ref={aboutMeAnim.ref}
+          initial="hidden"
+          animate={aboutMeAnim.controls}
+          variants={aboutMeAnim.variants}
+        >
+          <AboutMe />
+        </motion.section>
+      )}
 
-      {/*
-      <motion.section
-        ref={careerAnim.ref}
-        initial="hidden"
-        animate={careerAnim.controls}
-        variants={careerAnim.variants}
-      >
-        <CareerTimeline />
-      </motion.section>
-      */}
-
-      <motion.section
-        ref={portfolioAnim.ref}
-        initial="hidden"
-        animate={portfolioAnim.controls}
-        variants={portfolioAnim.variants}
-      >
-        <Portfolio />
-      </motion.section>
+      {/* Conditionally render Portfolio on larger screens */}
+      {!isMobile && (
+        <motion.section
+          ref={portfolioAnim.ref}
+          initial="hidden"
+          animate={portfolioAnim.controls}
+          variants={portfolioAnim.variants}
+        >
+          <Portfolio />
+        </motion.section>
+      )}
 
       <Contact />
     </>
