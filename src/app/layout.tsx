@@ -1,7 +1,8 @@
 import React from "react";
 import "./globals.css";
 import { ReactNode } from "react";
-import Head from "next/head"; // Import Head from Next.js
+import Head from "next/head";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata = {
   title: "Andrew Kolumbic",
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         }}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
