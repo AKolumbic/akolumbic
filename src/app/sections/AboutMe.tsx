@@ -16,12 +16,8 @@ import {
   TooltipContent,
   ExternalLink,
 } from "../styles/AboutMe.styles";
-import {
-  aboutContainerVariants,
-  aboutItemVariants,
-} from "../data/variantsData";
-import { skills } from "../data/skillsData";
-import TactileButton from "../components/tactile-button/tactile-button.component";
+import { aboutContainerVariants, aboutItemVariants, skills } from "../data";
+import { TactileButton } from "@/app/components";
 import { FiDownload, FiExternalLink } from "react-icons/fi";
 
 /**

@@ -3,7 +3,7 @@ import {
   StyledButton,
   ButtonOutter,
   ButtonInner,
-} from "../../styles/TactileButton.styles";
+} from "../styles/TactileButton.styles";
 
 interface TactileButtonProps {
   children: React.ReactNode;

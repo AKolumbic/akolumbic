@@ -15,7 +15,7 @@ import {
   MainColors,
   SunsetColors,
 } from "../types/gradient.types";
-import { themeColors } from "../data/themeColors";
+import { themeColors } from "../data";
 
 /**
  * GradientBackground Component

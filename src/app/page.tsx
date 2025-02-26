@@ -9,7 +9,7 @@ import Portfolio from "./sections/Portfolio";
 import Contact from "./sections/Contact";
 import GradientBackground from "./components/GradientBackground";
 import useScrollAnimation from "./hooks/useScrollAnimation";
-import { smoothSlideUpVariants } from "./data/variantsData";
+import { smoothSlideUpVariants } from "./data";
 import ThemeSelector from "./components/ThemeSelector";
 import { ThemeType } from "./types/theme.types";
 
