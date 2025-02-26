@@ -27,6 +27,94 @@ const GradientOrb = styled(motion.div)<{ $color: string }>`
   pointer-events: none;
 `;
 
+// Wave animation for the beach theme
+const WaveContainer = styled(motion.div)`
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  left: -50%;
+  background: transparent;
+  pointer-events: none;
+`;
+
+const Wave = styled(motion.div)<{ $color: string; $delay: number }>`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: ${(props) => props.$color};
+  opacity: 0.1;
+  border-radius: 43%;
+  animation: wave ${(props) => 7 + props.$delay}s infinite linear;
+
+  @keyframes wave {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+// Gradient overlay for the sunset theme
+const SunsetGradient = styled(motion.div)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    #000000 0%,
+    #1a237e 20%,
+    #7e57c2 40%,
+    #ff5252 60%,
+    #ff9800 80%,
+    #ffd740 100%
+  );
+  opacity: 0;
+  transition: opacity 1s ease;
+`;
+
+type ThemeType = "main" | "beach" | "sunset";
+
+// Theme color types
+interface MainColors {
+  sunset: string;
+  ocean: string;
+  sky: string;
+}
+
+interface BeachColors {
+  sea: string;
+  munsell: string;
+  seaGreen: string;
+  sand: string;
+  vanilla: string;
+  taupe: string;
+}
+
+interface SunsetColors {
+  night: string;
+  deepBlue: string;
+  purple: string;
+  red: string;
+  orange: string;
+  yellow: string;
+}
+
+interface ThemeColors {
+  main: {
+    [key in "hero" | "about" | "portfolio" | "contact"]: MainColors;
+  };
+  beach: {
+    [key in "hero" | "about" | "portfolio" | "contact"]: BeachColors;
+  };
+  sunset: {
+    all: SunsetColors;
+  };
+}
+
 interface GradientBackgroundProps {
   /** Optional class name for additional styling */
   className?: string;
@@ -36,13 +124,15 @@ interface GradientBackgroundProps {
   reducedMotion?: boolean;
   /** Current active section */
   activeSection?: "hero" | "about" | "portfolio" | "contact";
+  /** Current theme */
+  theme?: ThemeType;
 }
 
 /**
  * GradientBackground Component
  *
- * A reusable animated gradient background with colorful orbs that move and
- * scale for a dynamic effect. Colors transition based on the active section.
+ * A reusable animated gradient background that supports multiple California-themed
+ * backgrounds including Main tech, beach waves, and sunset gradients.
  *
  * @param {object} props - Component props
  * @returns {JSX.Element} - Rendered component
@@ -52,37 +142,194 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
   zIndex = 0,
   reducedMotion = false,
   activeSection = "hero",
+  theme = "main",
 }) => {
-  // Color schemes for different sections inspired by California sunsets
-  const sectionColors = {
-    hero: {
-      sunset: "#661C1C", // Darker sunset red
-      ocean: "#1B4B8A", // Darker ocean blue
-      sky: "#4A2B57", // Darker twilight purple
+  // Color schemes for different themes and sections
+  const themeColors: ThemeColors = {
+    main: {
+      hero: {
+        sunset: "#661C1C",
+        ocean: "#1B4B8A",
+        sky: "#4A2B57",
+      },
+      about: {
+        sunset: "#662D15",
+        ocean: "#1B3A6B",
+        sky: "#432B47",
+      },
+      portfolio: {
+        sunset: "#661C1E",
+        ocean: "#153A6B",
+        sky: "#3D2857",
+      },
+      contact: {
+        sunset: "#662424",
+        ocean: "#1B4273",
+        sky: "#472B57",
+      },
     },
-    about: {
-      sunset: "#662D15", // Darker orange sunset
-      ocean: "#1B3A6B", // Darker deep ocean blue
-      sky: "#432B47", // Darker evening purple
+    beach: {
+      hero: {
+        sea: "#01688D",
+        munsell: "#0197B1",
+        seaGreen: "#81BBA0",
+        sand: "#E2D7D6",
+        vanilla: "#D6B59D",
+        taupe: "#B69C87",
+      },
+      about: {
+        sea: "#015F82",
+        munsell: "#018CA3",
+        seaGreen: "#75AB91",
+        sand: "#D6CBC9",
+        vanilla: "#C9A791",
+        taupe: "#A8907C",
+      },
+      portfolio: {
+        sea: "#01779E",
+        munsell: "#01A2BE",
+        seaGreen: "#8DCBAF",
+        sand: "#EEE3E2",
+        vanilla: "#E3C2A9",
+        taupe: "#C4A993",
+      },
+      contact: {
+        sea: "#015A7B",
+        munsell: "#018499",
+        seaGreen: "#6FA189",
+        sand: "#CFC4C3",
+        vanilla: "#C19F89",
+        taupe: "#A18874",
+      },
     },
-    portfolio: {
-      sunset: "#661C1E", // Darker vibrant sunset
-      ocean: "#153A6B", // Darker bright ocean blue
-      sky: "#3D2857", // Darker rich purple
-    },
-    contact: {
-      sunset: "#662424", // Darker soft sunset
-      ocean: "#1B4273", // Darker calm ocean blue
-      sky: "#472B57", // Darker soft purple
+    sunset: {
+      all: {
+        night: "#000000",
+        deepBlue: "#1a237e",
+        purple: "#7e57c2",
+        red: "#ff5252",
+        orange: "#ff9800",
+        yellow: "#ffd740",
+      },
     },
   };
 
-  const currentColors = sectionColors[activeSection];
+  const currentColors =
+    theme === "sunset"
+      ? themeColors.sunset.all
+      : themeColors[theme][activeSection];
 
-  // Configurations for the gradient orbs
+  // Theme-specific configurations
+  const renderThemeContent = () => {
+    switch (theme) {
+      case "beach": {
+        const colors = currentColors as BeachColors;
+        return (
+          <>
+            {/* Gradient orbs for the water and sky */}
+            {[
+              {
+                color: colors.sea,
+                position: { bottom: "-10%", left: "-10%" },
+                size: { width: "120vw", height: "60vh" },
+                animation: {
+                  x: ["-2%", "2%", "-1%"],
+                  y: ["1%", "-2%", "2%"],
+                  scale: [1, 1.02, 0.99],
+                },
+                duration: 20,
+              },
+              {
+                color: colors.munsell,
+                position: { bottom: "20%", right: "-20%" },
+                size: { width: "100vw", height: "50vh" },
+                animation: {
+                  x: ["2%", "-2%", "1%"],
+                  y: ["-1%", "2%", "-2%"],
+                  scale: [0.99, 1.01, 0.98],
+                },
+                duration: 25,
+              },
+              {
+                color: colors.seaGreen,
+                position: { top: "10%", right: "10%" },
+                size: { width: "80vw", height: "40vh" },
+                animation: {
+                  x: ["-1%", "3%", "-2%"],
+                  y: ["2%", "-1%", "2%"],
+                  scale: [1.01, 0.99, 1.02],
+                },
+                duration: 22,
+              },
+            ].map((orb, index) => (
+              <GradientOrb
+                key={index}
+                $color={orb.color}
+                animate={reducedMotion ? {} : orb.animation}
+                transition={{
+                  duration: orb.duration,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "easeInOut",
+                }}
+                style={{
+                  ...orb.position,
+                  ...orb.size,
+                }}
+              />
+            ))}
+            {/* Animated waves */}
+            <WaveContainer>
+              {[0, 1, 2].map((i) => (
+                <Wave
+                  key={i}
+                  $color={colors.sea}
+                  $delay={i}
+                  style={{
+                    top: `${45 + i * 5}%`,
+                    opacity: 0.07 - i * 0.02,
+                  }}
+                />
+              ))}
+            </WaveContainer>
+          </>
+        );
+      }
+
+      case "sunset":
+        return (
+          <SunsetGradient
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.8 }}
+            transition={{ duration: 1 }}
+          />
+        );
+
+      default:
+        return orbs.map((orb, index) => (
+          <GradientOrb
+            key={index}
+            $color={orb.color}
+            animate={reducedMotion ? {} : orb.animation}
+            transition={{
+              duration: orb.duration,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut",
+            }}
+            style={{
+              ...orb.position,
+              ...orb.size,
+            }}
+          />
+        ));
+    }
+  };
+
+  // Default orb configurations (used for main theme)
   const orbs = [
     {
-      color: currentColors.sunset,
+      color: (currentColors as MainColors).sunset,
       position: { top: "0%", left: "0%" },
       size: { width: "120vw", height: "120vh" },
       animation: {
@@ -93,7 +340,7 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
       duration: 25,
     },
     {
-      color: currentColors.ocean,
+      color: (currentColors as MainColors).ocean,
       position: { bottom: "-20%", right: "-20%" },
       size: { width: "120vw", height: "120vh" },
       animation: {
@@ -104,7 +351,7 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
       duration: 30,
     },
     {
-      color: currentColors.sky,
+      color: (currentColors as MainColors).sky,
       position: { top: "30%", right: "-10%" },
       size: { width: "100vw", height: "100vh" },
       animation: {
@@ -118,23 +365,7 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
 
   return (
     <BackgroundContainer className={className} style={{ zIndex }}>
-      {orbs.map((orb, index) => (
-        <GradientOrb
-          key={index}
-          $color={orb.color}
-          animate={reducedMotion ? {} : orb.animation}
-          transition={{
-            duration: orb.duration,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "easeInOut",
-          }}
-          style={{
-            ...orb.position,
-            ...orb.size,
-          }}
-        />
-      ))}
+      {renderThemeContent()}
     </BackgroundContainer>
   );
 };

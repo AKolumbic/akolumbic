@@ -30,16 +30,21 @@ export const slideInFromRightVariants: Variants = {
 };
 
 /**
- * Smooth slide up for Portfolio section.
- *
- * @type {Variants}
+ * Animation variants for smooth slide-up effect
+ * Used for sections that animate in as they come into view
  */
 export const smoothSlideUpVariants: Variants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: {
+    opacity: 0,
+    y: 50,
+  },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 1, ease: [0.25, 1, 0.5, 1] }, // Custom ease-in-out
+    transition: {
+      duration: 0.8,
+      ease: [0.25, 0.1, 0.25, 1.0],
+    },
   },
 };
 

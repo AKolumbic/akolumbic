@@ -1,39 +1,16 @@
 "use client";
 
 import React, { useEffect, JSX, useState } from "react";
-import { motion, useAnimation, Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { HeroSection, AboutMe, Portfolio, Contact } from "./sections";
-import { smoothSlideUpVariants } from "./data/variantsData";
+import HeroSection from "./sections/HeroSection";
+import AboutMe from "./sections/AboutMe";
+import Portfolio from "./sections/Portfolio";
+import Contact from "./sections/Contact";
 import GradientBackground from "./components/GradientBackground";
-
-type Section = "hero" | "about" | "portfolio" | "contact";
-
-/**
- * Custom hook that returns animation controls and a ref for an element.
- * The animation will start when the element comes into view.
- *
- * @param {Variants} variants - The Framer Motion variants to use for the animation.
- * @returns {{
- *   ref: (element: HTMLElement | null) => void,
- *   controls: ReturnType<typeof useAnimation>,
- *   variants: Variants
- * }}
- */
-function useAnimatedSection(variants: Variants) {
-  const controls = useAnimation();
-  const { ref, inView } = useInView({
-    threshold: 0.35,
-    rootMargin: "-10% 0% -10% 0%",
-  });
-
-  useEffect(() => {
-    // Start the animation when the element is in view; hide it otherwise.
-    controls.start(inView ? "visible" : "hidden");
-  }, [inView, controls]);
-
-  return { ref, controls, variants };
-}
+import styled from "styled-components";
+import useScrollAnimation from "./hooks/useScrollAnimation";
+import { smoothSlideUpVariants } from "./data/variantsData";
 
 /**
  * HomePage Component
@@ -48,7 +25,10 @@ function useAnimatedSection(variants: Variants) {
 export default function HomePage(): JSX.Element {
   // State to check if the screen is mobile-sized
   const [isMobile, setIsMobile] = useState(false);
-  const [activeSection, setActiveSection] = useState<Section>("hero");
+  const [activeSection, setActiveSection] = useState<
+    "hero" | "about" | "portfolio" | "contact"
+  >("hero");
+  const [theme, setTheme] = useState<"main" | "beach" | "sunset">("main");
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -81,8 +61,8 @@ export default function HomePage(): JSX.Element {
   }, []);
 
   // Use custom hook to animate the AboutMe and Portfolio sections.
-  const aboutMeAnim = useAnimatedSection(smoothSlideUpVariants);
-  const portfolioAnim = useAnimatedSection(smoothSlideUpVariants);
+  const aboutMeAnim = useScrollAnimation();
+  const portfolioAnim = useScrollAnimation();
 
   // Setup intersection observers for each section
   const { ref: heroRef, inView: heroInView } = useInView({ threshold: 0.5 });
@@ -102,9 +82,62 @@ export default function HomePage(): JSX.Element {
     else if (contactInView) setActiveSection("contact");
   }, [heroInView, aboutInView, portfolioInView, contactInView]);
 
+  // Theme selection component
+  const ThemeSelector = styled.div`
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  `;
+
+  const ThemeButton = styled.button<{ $active: boolean }>`
+    background: ${(props) =>
+      props.$active ? "rgba(255, 255, 255, 0.2)" : "rgba(255, 255, 255, 0.1)"};
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+  `;
+
   return (
     <>
-      <GradientBackground activeSection={activeSection} />
+      <GradientBackground activeSection={activeSection} theme={theme} />
+
+      <ThemeSelector>
+        <ThemeButton
+          $active={theme === "main"}
+          onClick={() => setTheme("main")}
+        >
+          Main
+        </ThemeButton>
+        <ThemeButton
+          $active={theme === "beach"}
+          onClick={() => setTheme("beach")}
+        >
+          Beach
+        </ThemeButton>
+        <ThemeButton
+          $active={theme === "sunset"}
+          onClick={() => setTheme("sunset")}
+        >
+          Sunset
+        </ThemeButton>
+      </ThemeSelector>
 
       <div ref={heroRef}>
         <HeroSection />
@@ -119,7 +152,7 @@ export default function HomePage(): JSX.Element {
           }}
           initial="hidden"
           animate={aboutMeAnim.controls}
-          variants={aboutMeAnim.variants}
+          variants={smoothSlideUpVariants}
         >
           <AboutMe />
         </motion.section>
@@ -134,7 +167,7 @@ export default function HomePage(): JSX.Element {
           }}
           initial="hidden"
           animate={portfolioAnim.controls}
-          variants={portfolioAnim.variants}
+          variants={smoothSlideUpVariants}
         >
           <Portfolio />
         </motion.section>
