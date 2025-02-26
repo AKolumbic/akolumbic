@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   motion,
   useScroll,
@@ -17,14 +17,18 @@ import {
   ContentWrapper,
   SectionTitle,
   ResumeButtonContainer,
+  Tooltip,
+  TooltipContent,
+  ExternalLink,
 } from "../styles/AboutMe.styles";
 import GradientBackground from "../components/GradientBackground";
 import {
   aboutContainerVariants,
   aboutItemVariants,
 } from "../data/variantsData";
+import { skills } from "../data/skillsData";
 import TactileButton from "../components/tactile-button/tactile-button.component";
-import { FiDownload } from "react-icons/fi";
+import { FiDownload, FiExternalLink } from "react-icons/fi";
 
 /**
  * AboutMe Component
@@ -56,15 +60,36 @@ const AboutMe: React.FC = () => {
   const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 0.8]);
 
-  const skills = [
-    "TypeScript, JavaScript (ES6+), Python",
-    "React, Angular, Vue, Next.js",
-    "Node.js, Express.js, FastAPI, MongoDB",
-    "React Native, Ionic Framework",
-    "Jest, Mocha, Karma, Playwright",
-    "Agile, Scrum, Kanban, DevOps, CI/CD",
-    "ChatGPT, OpenAI API, Cursor, Claude, Copilot",
-  ];
+  // State to track which tooltip is currently shown
+  const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
+
+  // Track if we're hovering over the tooltip
+  const [hoveringTooltip, setHoveringTooltip] = useState(false);
+
+  // Store refs for each skill item to position tooltips
+  const skillRefs = useRef<(HTMLLIElement | null)[]>([]);
+
+  // Effect to initialize refs array
+  useEffect(() => {
+    skillRefs.current = skillRefs.current.slice(0, skills.length);
+  }, [skills.length]);
+
+  // Handler for tooltip hover
+  const handleTooltipHover = (isHovering: boolean) => {
+    setHoveringTooltip(isHovering);
+  };
+
+  // Handler for skill item hover
+  const handleSkillHover = (index: number, isHovering: boolean) => {
+    if (isHovering) {
+      setActiveTooltip(index);
+    } else {
+      // Only hide the tooltip if we're not hovering over it
+      if (!hoveringTooltip) {
+        setActiveTooltip(null);
+      }
+    }
+  };
 
   return (
     <AboutSection
@@ -155,6 +180,12 @@ const AboutMe: React.FC = () => {
                       key={index}
                       variants={aboutItemVariants}
                       custom={index}
+                      ref={(el) => {
+                        skillRefs.current[index] = el;
+                        return undefined;
+                      }}
+                      onHoverStart={() => handleSkillHover(index, true)}
+                      onHoverEnd={() => handleSkillHover(index, false)}
                       whileHover={{
                         x: 5,
                         backgroundColor: "rgba(255, 255, 255, 0.05)",
@@ -170,10 +201,63 @@ const AboutMe: React.FC = () => {
                         },
                       }}
                     >
-                      {skill}
+                      {skill.title}
                     </SkillItem>
                   ))}
                 </SkillsList>
+
+                {/* Position tooltip near the active skill item */}
+                <AnimatePresence>
+                  {activeTooltip !== null &&
+                    skillRefs.current[activeTooltip] && (
+                      <Tooltip
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        onHoverStart={() => handleTooltipHover(true)}
+                        onHoverEnd={() => handleTooltipHover(false)}
+                        style={{
+                          position: "absolute",
+                          top: `${
+                            skillRefs.current[activeTooltip]?.offsetTop || 0
+                          }px`,
+                          left: `${
+                            (skillRefs.current[activeTooltip]?.offsetWidth ||
+                              0) - 100
+                          }px`,
+                          pointerEvents: "auto", // Make tooltip interactive
+                        }}
+                      >
+                        <TooltipContent>
+                          <div
+                            style={{
+                              fontWeight: "bold",
+                              marginBottom: "8px",
+                              color: "#64b5f6",
+                            }}
+                          >
+                            {skills[activeTooltip].title}
+                          </div>
+                          <p>{skills[activeTooltip].description}</p>
+                          <div style={{ marginTop: "10px" }}>
+                            {skills[activeTooltip].links.map(
+                              (link, linkIndex) => (
+                                <ExternalLink
+                                  key={linkIndex}
+                                  href={link.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  {link.name} <FiExternalLink size={12} />
+                                </ExternalLink>
+                              )
+                            )}
+                          </div>
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
+                </AnimatePresence>
               </SkillsColumn>
             </ContentContainer>
           </motion.div>

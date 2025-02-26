@@ -188,6 +188,9 @@ export const SkillItem = styled(motion.li)`
   color: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(5px);
   will-change: transform, background-color, border-left-color, box-shadow;
+  position: relative;
+  cursor: pointer;
+  overflow: visible;
 `;
 
 export const BackgroundShape = styled(motion.div)`
@@ -205,5 +208,57 @@ export const ResumeButtonContainer = styled(motion.div)`
 
   @media (max-width: 768px) {
     margin-top: 2rem;
+  }
+`;
+
+// Tooltip Components
+export const Tooltip = styled(motion.div)`
+  width: 280px;
+  z-index: 9999; /* Extra high z-index */
+  pointer-events: auto; /* Make tooltip interactive */
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+
+  @media (max-width: 768px) {
+    width: 260px;
+    left: auto !important;
+    right: 0;
+  }
+`;
+
+export const TooltipContent = styled.div`
+  background: rgba(30, 30, 40, 0.98);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  border: 1px solid rgba(100, 181, 246, 0.3);
+  padding: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  text-align: left;
+  overflow: hidden;
+
+  p {
+    margin: 0 0 8px;
+  }
+`;
+
+export const ExternalLink = styled.a`
+  display: inline-flex;
+  align-items: center;
+  margin-right: 12px;
+  margin-bottom: 6px;
+  color: rgba(100, 181, 246, 0.95);
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    color: rgba(100, 181, 246, 1);
+    transform: translateY(-1px);
+  }
+
+  svg {
+    margin-left: 3px;
   }
 `;
