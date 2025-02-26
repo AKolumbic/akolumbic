@@ -19,24 +19,10 @@ import {
 } from "../styles/Contact.styles";
 
 export default function Contact() {
-  const [isMobile, setIsMobile] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    const checkScreenSize = () => {
-      const isMobileScreen = window.innerWidth <= 768;
-      setIsMobile(isMobileScreen);
-      console.log(isMobile);
-    };
-
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
-
-    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   if (!isClient) return null;
