@@ -7,24 +7,14 @@ export const HeroContainer = styled(motion.section)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #000;
   text-align: center;
   position: relative;
   overflow: hidden;
-`;
+  background-color: transparent;
 
-export const HeroBackgroundOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.9) 0%,
-    rgba(15, 15, 20, 0.85) 100%
-  );
-  z-index: 1;
+  @media (max-width: 768px) {
+    background-color: #000;
+  }
 `;
 
 export const HeroContentWrapper = styled.div`

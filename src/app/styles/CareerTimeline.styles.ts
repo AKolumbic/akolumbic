@@ -6,7 +6,6 @@ export const TimelineContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 4rem 2rem;
-  background: linear-gradient(180deg, #111, #1a1a1a);
 `;
 
 export const TimelineWrapper = styled.div`

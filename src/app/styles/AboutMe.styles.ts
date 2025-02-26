@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 
 export const AboutSection = styled(motion.section)`
-  background: linear-gradient(135deg, #080808 0%, #1a1a1a 100%);
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -110,11 +109,11 @@ export const SectionTitle = styled(motion.h2)`
 export const BioColumn = styled(motion.div)`
   font-size: 1.1rem;
   line-height: 1.8;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
+  background: rgba(30, 30, 30, 0.6);
+  backdrop-filter: blur(12px);
   border-radius: 16px;
   padding: 2.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   height: 100%;
 
@@ -134,11 +133,11 @@ export const BioColumn = styled(motion.div)`
 export const SkillsColumn = styled(motion.div)`
   line-height: 1.8;
   position: relative;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
+  background: rgba(30, 30, 30, 0.6);
+  backdrop-filter: blur(12px);
   border-radius: 16px;
   padding: 2.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   height: 100%;
 `;

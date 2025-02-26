@@ -5,6 +5,9 @@ import { motion, useAnimation, Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { HeroSection, AboutMe, Portfolio, Contact } from "./sections";
 import { smoothSlideUpVariants } from "./data/variantsData";
+import GradientBackground from "./components/GradientBackground";
+
+type Section = "hero" | "about" | "portfolio" | "contact";
 
 /**
  * Custom hook that returns animation controls and a ref for an element.
@@ -45,6 +48,7 @@ function useAnimatedSection(variants: Variants) {
 export default function HomePage(): JSX.Element {
   // State to check if the screen is mobile-sized
   const [isMobile, setIsMobile] = useState(false);
+  const [activeSection, setActiveSection] = useState<Section>("hero");
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -80,14 +84,39 @@ export default function HomePage(): JSX.Element {
   const aboutMeAnim = useAnimatedSection(smoothSlideUpVariants);
   const portfolioAnim = useAnimatedSection(smoothSlideUpVariants);
 
+  // Setup intersection observers for each section
+  const { ref: heroRef, inView: heroInView } = useInView({ threshold: 0.5 });
+  const { ref: aboutRef, inView: aboutInView } = useInView({ threshold: 0.5 });
+  const { ref: portfolioRef, inView: portfolioInView } = useInView({
+    threshold: 0.5,
+  });
+  const { ref: contactRef, inView: contactInView } = useInView({
+    threshold: 0.5,
+  });
+
+  // Update active section based on which section is most in view
+  useEffect(() => {
+    if (heroInView) setActiveSection("hero");
+    else if (aboutInView) setActiveSection("about");
+    else if (portfolioInView) setActiveSection("portfolio");
+    else if (contactInView) setActiveSection("contact");
+  }, [heroInView, aboutInView, portfolioInView, contactInView]);
+
   return (
     <>
-      <HeroSection />
+      <GradientBackground activeSection={activeSection} />
+
+      <div ref={heroRef}>
+        <HeroSection />
+      </div>
 
       {/* Conditionally render AboutMe on larger screens */}
       {!isMobile && (
         <motion.section
-          ref={aboutMeAnim.ref}
+          ref={(node) => {
+            aboutMeAnim.ref(node);
+            aboutRef(node);
+          }}
           initial="hidden"
           animate={aboutMeAnim.controls}
           variants={aboutMeAnim.variants}
@@ -99,7 +128,10 @@ export default function HomePage(): JSX.Element {
       {/* Conditionally render Portfolio on larger screens */}
       {!isMobile && (
         <motion.section
-          ref={portfolioAnim.ref}
+          ref={(node) => {
+            portfolioAnim.ref(node);
+            portfolioRef(node);
+          }}
           initial="hidden"
           animate={portfolioAnim.controls}
           variants={portfolioAnim.variants}
@@ -108,7 +140,9 @@ export default function HomePage(): JSX.Element {
         </motion.section>
       )}
 
-      <Contact />
+      <div ref={contactRef}>
+        <Contact />
+      </div>
     </>
   );
 }

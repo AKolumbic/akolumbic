@@ -11,11 +11,9 @@ import {
   SubtextWrapper,
   SubtextLine,
   HeroContentWrapper,
-  HeroBackgroundOverlay,
   GradientLetter,
   LetterWrapper,
 } from "../styles/HeroSection.styles";
-import GradientBackground from "../components/GradientBackground";
 import TactileButton from "../components/tactile-button/tactile-button.component";
 import { FiArrowDown } from "react-icons/fi";
 
@@ -34,9 +32,23 @@ function shuffleArray(array: number[]): number[] {
 const HeroSection: React.FC = () => {
   // Ensure component only renders on the client (fixes hydration issues)
   const [isClient, setIsClient] = useState(false);
+  // State to check if the screen is mobile-sized
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const isMobileScreen = window.innerWidth <= 768;
+      setIsMobile(isMobileScreen);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   // Define name and split into first/last
@@ -131,10 +143,6 @@ const HeroSection: React.FC = () => {
 
   return (
     <HeroContainer>
-      {/* Gradient Background */}
-      <GradientBackground zIndex={0} />
-      <HeroBackgroundOverlay />
-
       <HeroContentWrapper>
         {/* Name Wrapper (Mobile: Stacks First/Last Name) */}
         <HeroTextWrapper>
@@ -199,18 +207,20 @@ const HeroSection: React.FC = () => {
         </SubtextWrapper>
 
         {/* Scroll down button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2, duration: 0.5 }}
-          style={{
-            marginTop: "3rem",
-          }}
-        >
-          <TactileButton onClick={scrollToAbout}>
-            Explore <FiArrowDown style={{ marginLeft: "8px" }} />
-          </TactileButton>
-        </motion.div>
+        {!isMobile && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2, duration: 0.5 }}
+            style={{
+              marginTop: "3rem",
+            }}
+          >
+            <TactileButton onClick={scrollToAbout}>
+              Explore <FiArrowDown style={{ marginLeft: "8px" }} />
+            </TactileButton>
+          </motion.div>
+        )}
       </HeroContentWrapper>
     </HeroContainer>
   );

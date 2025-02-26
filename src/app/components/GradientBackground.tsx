@@ -4,13 +4,14 @@ import styled from "styled-components";
 
 // Styled Components
 const BackgroundContainer = styled(motion.div)`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   overflow: hidden;
   z-index: 0;
+  transition: background-color 1s ease;
 `;
 
 const GradientOrb = styled(motion.div)<{ $color: string }>`
@@ -20,6 +21,7 @@ const GradientOrb = styled(motion.div)<{ $color: string }>`
   filter: blur(100px);
   opacity: 0.2;
   z-index: 0;
+  transition: background-color 1s ease;
 `;
 
 interface GradientBackgroundProps {
@@ -29,15 +31,15 @@ interface GradientBackgroundProps {
   zIndex?: number;
   /** Optional reduced motion setting for accessibility */
   reducedMotion?: boolean;
-  /** Whether the background should be fixed during scrolling */
-  isFixed?: boolean;
+  /** Current active section */
+  activeSection?: "hero" | "about" | "portfolio" | "contact";
 }
 
 /**
  * GradientBackground Component
  *
  * A reusable animated gradient background with colorful orbs that move and
- * scale for a dynamic effect. Can be configured to remain fixed during scroll.
+ * scale for a dynamic effect. Colors transition based on the active section.
  *
  * @param {object} props - Component props
  * @returns {JSX.Element} - Rendered component
@@ -46,12 +48,38 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
   className,
   zIndex = 0,
   reducedMotion = false,
-  isFixed = false,
+  activeSection = "hero",
 }) => {
+  // Color schemes for different sections
+  const sectionColors = {
+    hero: {
+      primary: "#3b82f6", // Blue
+      secondary: "#8b5cf6", // Purple
+      accent: "#14b8a6", // Teal
+    },
+    about: {
+      primary: "#10b981", // Emerald
+      secondary: "#3b82f6", // Blue
+      accent: "#6366f1", // Indigo
+    },
+    portfolio: {
+      primary: "#8b5cf6", // Purple
+      secondary: "#ec4899", // Pink
+      accent: "#6366f1", // Indigo
+    },
+    contact: {
+      primary: "#6366f1", // Indigo
+      secondary: "#14b8a6", // Teal
+      accent: "#3b82f6", // Blue
+    },
+  };
+
+  const currentColors = sectionColors[activeSection];
+
   // Configurations for the gradient orbs
   const orbs = [
     {
-      color: "#3b82f6", // Blue
+      color: currentColors.primary,
       position: { top: "20%", left: "10%" },
       size: { width: "500px", height: "500px" },
       animation: {
@@ -62,7 +90,7 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
       duration: 25,
     },
     {
-      color: "#8b5cf6", // Purple
+      color: currentColors.secondary,
       position: { bottom: "10%", right: "20%" },
       size: { width: "600px", height: "600px" },
       animation: {
@@ -73,7 +101,7 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
       duration: 30,
     },
     {
-      color: "#14b8a6", // Teal
+      color: currentColors.accent,
       position: { top: "50%", right: "10%" },
       size: { width: "400px", height: "400px" },
       animation: {
@@ -90,7 +118,6 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
       className={className}
       style={{
         zIndex,
-        position: isFixed ? "fixed" : "absolute",
       }}
     >
       {orbs.map((orb, index) => (
