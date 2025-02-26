@@ -166,12 +166,19 @@ export const SubtextWrapper = styled.div`
 export const SubtextLine = styled(motion.p)`
   font-size: min(4vw, 1.5rem);
   font-family: "SF Pro Display", "Michroma", sans-serif;
-  color: rgba(255, 255, 255, 0.9);
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
   text-align: center;
   letter-spacing: 1.5px;
   margin-top: 0.5rem;
   padding: 0 1rem;
   font-weight: 300;
+  will-change: background-position;
+  filter: drop-shadow(0 1px 1px rgba(100, 181, 246, 0.9))
+    drop-shadow(0 0 4px rgba(255, 255, 255, 0.2));
 `;
 
 export const TaglineWrapper = styled(motion.p)`

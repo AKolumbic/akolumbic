@@ -1,7 +1,7 @@
 "use client"; // Ensure it's a client component
 
 import React, { useMemo, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import {
   HeroContainer,
   HeroTextWrapper,
@@ -14,8 +14,8 @@ import {
   GradientLetter,
   LetterWrapper,
 } from "../styles/HeroSection.styles";
-import TactileButton from "../components/tactile-button/tactile-button.component";
-import { FiArrowDown } from "react-icons/fi";
+// import TactileButton from "../components/tactile-button/tactile-button.component";
+// import { FiArrowDown } from "react-icons/fi";
 
 /**
  * Shuffles an array of numbers into a random order.
@@ -33,23 +33,23 @@ const HeroSection: React.FC = () => {
   // Ensure component only renders on the client (fixes hydration issues)
   const [isClient, setIsClient] = useState(false);
   // State to check if the screen is mobile-sized
-  const [isMobile, setIsMobile] = useState(false);
+  // const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    const checkScreenSize = () => {
-      const isMobileScreen = window.innerWidth <= 768;
-      setIsMobile(isMobileScreen);
-    };
+  // useEffect(() => {
+  //   const checkScreenSize = () => {
+  //     const isMobileScreen = window.innerWidth <= 768;
+  //     setIsMobile(isMobileScreen);
+  //   };
 
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
+  //   checkScreenSize();
+  //   window.addEventListener("resize", checkScreenSize);
 
-    return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
+  //   return () => window.removeEventListener("resize", checkScreenSize);
+  // }, []);
 
   // Define name and split into first/last
   const firstName = "Andrew";
@@ -133,11 +133,11 @@ const HeroSection: React.FC = () => {
     };
   };
 
-  const scrollToAbout = () => {
-    document.getElementById("about-section")?.scrollIntoView({
-      behavior: "smooth",
-    });
-  };
+  // const scrollToAbout = () => {
+  //   document.getElementById("about-section")?.scrollIntoView({
+  //     behavior: "smooth",
+  //   });
+  // };
 
   if (!isClient) return null; // Prevents rendering until mounted
 
@@ -199,15 +199,40 @@ const HeroSection: React.FC = () => {
         <SubtextWrapper>
           <SubtextLine
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 0.5 }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              backgroundPosition: ["0% center", "100% center", "0% center"],
+            }}
+            transition={{
+              opacity: { delay: 1.2, duration: 0.5 },
+              y: { delay: 1.2, duration: 0.5 },
+              backgroundPosition: {
+                duration: 14,
+                times: [0, 0.5, 1],
+                ease: "easeInOut",
+                repeat: Infinity,
+                delay: 0.5,
+              },
+            }}
+            style={{
+              backgroundImage: `linear-gradient(
+                to right,
+                #ffffff,
+                #e8f0fe,
+                #c2d7f0,
+                #90b4e5,
+                #64b5f6,
+                #fffde7
+              )`,
+            }}
           >
-            Software Engineer
+            Software Engineer - San Pedro, CA
           </SubtextLine>
         </SubtextWrapper>
 
         {/* Scroll down button */}
-        {!isMobile && (
+        {/* {!isMobile && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -220,7 +245,7 @@ const HeroSection: React.FC = () => {
               Explore <FiArrowDown style={{ marginLeft: "8px" }} />
             </TactileButton>
           </motion.div>
-        )}
+        )} */}
       </HeroContentWrapper>
     </HeroContainer>
   );
