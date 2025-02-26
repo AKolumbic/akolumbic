@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
 export const Footer = styled.footer`
   display: flex;
@@ -29,14 +30,40 @@ export const IconContainer = styled.div`
   margin-bottom: 0.5rem;
 `;
 
-export const IconLink = styled.a`
-  color: white;
+export const IconWrapper = styled(motion.div)`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const IconLink = styled(motion.a)`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
   font-size: 1.5rem;
-  transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+  color: white;
+  transition: color 0.3s ease-in-out;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
 
   &:hover {
-    transform: scale(1.2);
-    color: #bbb;
+    color: #ffe4b5;
+  }
+
+  @media (max-width: 768px) {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.2rem;
+
+    svg {
+      width: 1.2rem;
+      height: 1.2rem;
+    }
   }
 `;
 
