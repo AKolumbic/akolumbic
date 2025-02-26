@@ -83,51 +83,44 @@ const HeroSection: React.FC = () => {
 
   // Get gradient colors for a letter based on its position using white-gray-blue spectrum
   const getGradientColors = () => {
-    // White-gray-blue color palette with subtle yellow
+    // California sunset-inspired color palette (vibrant blue to peach)
     return {
-      start: "#ffffff", // White
-      midLight: "#e8f0fe", // Light blue-white
-      mid: "#c2d7f0", // Light blue-gray
-      midDark: "#90b4e5", // Medium blue
-      end: "#64b5f6", // Brighter blue
-      accent: "#fffde7", // Very subtle yellow tint
+      start: "#4B9FEB", // Bright sky blue
+      midLight: "#4A2B57", // Deep twilight purple
+      mid: "#FF6B6B", // Warm coral
+      end: "#FFE4B5", // Mellow peach
+      midDark: "#FFA07A", // Light salmon (unused)
+      accent: "#FF8C69", // Salmon pink (unused)
     };
   };
 
   // Create rolling wave animation for the entire name
   const letterAnimationProps = (isFirstName: boolean, index: number) => {
     const colors = getGradientColors();
-    // Create a position-based effect that rolls across letters
     const letterPosition = isFirstName ? index : index + firstName.length;
-
-    // Each letter animates with its own part of the wave
-    // The delay is carefully calibrated to create a smooth flow
-    const waveDelay = letterPosition * 0.25; // Reduced delay for more subtle transition
+    const waveDelay = letterPosition * 0.25;
 
     return {
       style: {
         backgroundSize: "200% 100%",
         backgroundImage: `linear-gradient(
           to right,
-          ${colors.start},
-          ${colors.midLight},
-          ${colors.mid},
-          ${colors.midDark},
-          ${colors.end},
-          ${colors.accent}
+          ${colors.start},    /* Ocean blue */
+          ${colors.midLight}, /* Deep twilight purple */
+          ${colors.mid},      /* Warm coral */
+          ${colors.end}       /* Mellow peach */
         )`,
       },
       animate: {
-        // Simple 2-position background shift (start to end)
         backgroundPosition: ["0% center", "100% center", "0% center"],
       },
       transition: {
         backgroundPosition: {
-          duration: 14, // Slower animation cycle
-          times: [0, 0.5, 1], // Better control of timing
+          duration: 14,
+          times: [0, 0.5, 1],
           ease: "easeInOut",
           repeat: Infinity,
-          delay: waveDelay, // This creates the wave effect
+          delay: waveDelay,
         },
       },
     };
@@ -218,12 +211,12 @@ const HeroSection: React.FC = () => {
             style={{
               backgroundImage: `linear-gradient(
                 to right,
-                #ffffff,
-                #e8f0fe,
-                #c2d7f0,
-                #90b4e5,
-                #64b5f6,
-                #fffde7
+                #4B9FEB,  /* Ocean blue */
+                #4A2B57,  /* Deep twilight purple */
+                #FF6B6B,  /* Warm coral */
+                #FFA07A,  /* Light salmon */
+                #FFE4B5,  /* Mellow peach */
+                #FF8C69   /* Salmon pink */
               )`,
             }}
           >

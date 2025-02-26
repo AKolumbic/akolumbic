@@ -68,20 +68,18 @@ export const GradientLetter = styled(motion.span)`
   color: transparent;
   background-image: linear-gradient(
     to right,
-    #ffffff,
-    #e8f0fe,
-    #c2d7f0,
-    #90b4e5,
-    #64b5f6,
-    #fffde7
+    #4b9feb,
+    /* Bright sky blue */ #4a2b57,
+    /* Deep twilight purple */ #ff6b6b,
+    /* Warm coral */ #ffe4b5 /* Mellow peach */
   );
   padding: 0 1px;
   text-shadow: none;
   position: relative;
   z-index: 2;
   will-change: background-position;
-  filter: drop-shadow(0 1px 1px rgba(100, 181, 246, 0.9))
-    drop-shadow(0 0 4px rgba(255, 255, 255, 0.2));
+  filter: drop-shadow(0 1px 1px rgba(255, 107, 107, 0.9))
+    drop-shadow(0 0 4px rgba(255, 140, 105, 0.3));
   letter-spacing: 0.025em;
 `;
 
@@ -101,8 +99,8 @@ export const LetterWrapper = styled(motion.div)`
     opacity: 0.12;
     background: radial-gradient(
       circle at center,
-      rgba(100, 181, 246, 0.8),
-      rgba(100, 181, 246, 0.05) 70%,
+      rgba(255, 107, 107, 0.8),
+      rgba(255, 107, 107, 0.05) 70%,
       transparent 100%
     );
     filter: blur(2px);
@@ -117,7 +115,7 @@ export const LetterWrapper = styled(motion.div)`
     opacity: 0;
     background: radial-gradient(
       circle at center,
-      rgba(100, 181, 246, 0.5),
+      rgba(255, 107, 107, 0.5),
       transparent 70%
     );
     transition: opacity 0.3s ease;
@@ -139,7 +137,7 @@ export const Underline = styled(motion.div)`
   width: 80%;
   max-width: 400px;
   height: 2px;
-  background: linear-gradient(to right, #64b5f6, rgba(255, 255, 255, 0.3));
+  background: linear-gradient(to right, #ff6b6b, rgba(255, 228, 181, 0.3));
   margin: 1.5rem auto;
   border-radius: 2px;
 
@@ -177,8 +175,8 @@ export const SubtextLine = styled(motion.p)`
   padding: 0 1rem;
   font-weight: 300;
   will-change: background-position;
-  filter: drop-shadow(0 1px 1px rgba(100, 181, 246, 0.9))
-    drop-shadow(0 0 4px rgba(255, 255, 255, 0.2));
+  filter: drop-shadow(0 1px 1px rgba(255, 107, 107, 0.9))
+    drop-shadow(0 0 4px rgba(255, 140, 105, 0.3));
 `;
 
 export const TaglineWrapper = styled(motion.p)`

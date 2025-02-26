@@ -11,7 +11,8 @@ const BackgroundContainer = styled(motion.div)`
   bottom: 0;
   overflow: hidden;
   z-index: 0;
-  transition: background-color 1s ease;
+  transition: all 1s ease;
+  background-color: #000;
 `;
 
 const GradientOrb = styled(motion.div)<{ $color: string }>`
@@ -20,8 +21,10 @@ const GradientOrb = styled(motion.div)<{ $color: string }>`
   background: ${(props) => props.$color};
   filter: blur(100px);
   opacity: 0.2;
-  z-index: 0;
-  transition: background-color 1s ease;
+  z-index: 1;
+  mix-blend-mode: lighten;
+  transition: all 1s ease;
+  pointer-events: none;
 `;
 
 interface GradientBackgroundProps {
@@ -50,27 +53,27 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
   reducedMotion = false,
   activeSection = "hero",
 }) => {
-  // Color schemes for different sections
+  // Color schemes for different sections inspired by California sunsets
   const sectionColors = {
     hero: {
-      primary: "#3b82f6", // Blue
-      secondary: "#8b5cf6", // Purple
-      accent: "#14b8a6", // Teal
+      sunset: "#661C1C", // Darker sunset red
+      ocean: "#1B4B8A", // Darker ocean blue
+      sky: "#4A2B57", // Darker twilight purple
     },
     about: {
-      primary: "#10b981", // Emerald
-      secondary: "#3b82f6", // Blue
-      accent: "#6366f1", // Indigo
+      sunset: "#662D15", // Darker orange sunset
+      ocean: "#1B3A6B", // Darker deep ocean blue
+      sky: "#432B47", // Darker evening purple
     },
     portfolio: {
-      primary: "#8b5cf6", // Purple
-      secondary: "#ec4899", // Pink
-      accent: "#6366f1", // Indigo
+      sunset: "#661C1E", // Darker vibrant sunset
+      ocean: "#153A6B", // Darker bright ocean blue
+      sky: "#3D2857", // Darker rich purple
     },
     contact: {
-      primary: "#6366f1", // Indigo
-      secondary: "#14b8a6", // Teal
-      accent: "#3b82f6", // Blue
+      sunset: "#662424", // Darker soft sunset
+      ocean: "#1B4273", // Darker calm ocean blue
+      sky: "#472B57", // Darker soft purple
     },
   };
 
@@ -79,47 +82,42 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
   // Configurations for the gradient orbs
   const orbs = [
     {
-      color: currentColors.primary,
-      position: { top: "20%", left: "10%" },
-      size: { width: "500px", height: "500px" },
+      color: currentColors.sunset,
+      position: { top: "0%", left: "0%" },
+      size: { width: "120vw", height: "120vh" },
       animation: {
-        x: ["-10%", "30%", "-5%"],
-        y: ["5%", "-20%", "25%"],
-        scale: [1, 1.2, 0.9],
+        x: ["-5%", "5%", "-2%"],
+        y: ["2%", "-5%", "5%"],
+        scale: [1, 1.05, 0.98],
       },
       duration: 25,
     },
     {
-      color: currentColors.secondary,
-      position: { bottom: "10%", right: "20%" },
-      size: { width: "600px", height: "600px" },
+      color: currentColors.ocean,
+      position: { bottom: "-20%", right: "-20%" },
+      size: { width: "120vw", height: "120vh" },
       animation: {
-        x: ["10%", "-20%", "10%"],
-        y: ["-5%", "10%", "-25%"],
-        scale: [1.1, 0.9, 1.2],
+        x: ["5%", "-5%", "2%"],
+        y: ["-2%", "5%", "-5%"],
+        scale: [1.02, 0.98, 1.05],
       },
       duration: 30,
     },
     {
-      color: currentColors.accent,
-      position: { top: "50%", right: "10%" },
-      size: { width: "400px", height: "400px" },
+      color: currentColors.sky,
+      position: { top: "30%", right: "-10%" },
+      size: { width: "100vw", height: "100vh" },
       animation: {
-        x: ["-5%", "15%", "-15%"],
-        y: ["15%", "-5%", "10%"],
-        scale: [0.9, 1.1, 0.8],
+        x: ["-2%", "7%", "-4%"],
+        y: ["4%", "-2%", "5%"],
+        scale: [0.98, 1.02, 0.95],
       },
       duration: 20,
     },
   ];
 
   return (
-    <BackgroundContainer
-      className={className}
-      style={{
-        zIndex,
-      }}
-    >
+    <BackgroundContainer className={className} style={{ zIndex }}>
       {orbs.map((orb, index) => (
         <GradientOrb
           key={index}
