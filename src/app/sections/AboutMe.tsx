@@ -93,6 +93,7 @@ const AboutMe: React.FC = () => {
 
   return (
     <AboutSection
+      id="about-section"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
