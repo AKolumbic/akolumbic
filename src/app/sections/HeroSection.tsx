@@ -19,7 +19,7 @@ import {
  */
 function shuffleArray(array: number[]): number[] {
   return array
-    .map((value) => ({ value, sort: value })) // Keeps stable order
+    .map((value) => ({ value, sort: Math.random() })) // Use random values for sorting
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value);
 }
