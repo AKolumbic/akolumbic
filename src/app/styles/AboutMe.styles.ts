@@ -185,15 +185,9 @@ export const SkillItem = styled(motion.li)`
   background: rgba(255, 255, 255, 0.02);
   border-radius: 8px;
   border-left: 3px solid rgba(100, 181, 246, 0.5);
-  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
   color: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(5px);
-
-  &:hover {
-    transform: translateX(5px);
-    background: rgba(255, 255, 255, 0.05);
-    border-left-color: rgba(100, 181, 246, 1);
-  }
+  will-change: transform, background-color, border-left-color, box-shadow;
 `;
 
 export const BackgroundShape = styled(motion.div)`
@@ -202,4 +196,14 @@ export const BackgroundShape = styled(motion.div)`
   border-radius: 50%;
   filter: blur(20px);
   z-index: 0;
+`;
+
+export const ResumeButtonContainer = styled(motion.div)`
+  margin-top: 5rem;
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    margin-top: 2rem;
+  }
 `;

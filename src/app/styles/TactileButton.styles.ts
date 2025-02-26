@@ -6,7 +6,7 @@ export const StyledButton = styled.button`
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   position: relative;
   border-radius: 999vw;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(30, 30, 35, 0.9);
   box-shadow: -0.15em -0.15em 0.15em -0.075em rgba(5, 5, 5, 0.25),
     0.0375em 0.0375em 0.0675em 0 rgba(5, 5, 5, 0.1);
 
@@ -41,7 +41,7 @@ export const ButtonOutter = styled.div`
     0 0.01em 0.01em -0.01em rgba(5, 5, 5, 0.5),
     0.15em 0.3em 0.1em -0.01em rgba(5, 5, 5, 0.25);
 
-  &:hover {
+  ${StyledButton}:active & {
     box-shadow: 0 0 0 0 rgba(5, 5, 5, 1), 0 0 0 0 rgba(5, 5, 5, 0.5),
       0 0 0 0 rgba(5, 5, 5, 0.25);
   }
@@ -55,8 +55,8 @@ export const ButtonInner = styled.div`
   padding: 1em 1.5em;
   background-image: linear-gradient(
     135deg,
-    rgba(230, 230, 230, 1),
-    rgba(180, 180, 180, 1)
+    rgba(80, 80, 100, 0.95),
+    rgba(50, 50, 70, 0.95)
   );
   transition: box-shadow 300ms ease, clip-path 250ms ease,
     background-image 250ms ease, transform 250ms ease;
@@ -71,7 +71,7 @@ export const ButtonInner = styled.div`
     0.12em 0.12em 0.12em inset rgba(255, 255, 255, 0.25),
     -0.075em -0.25em 0.25em 0.1em inset rgba(5, 5, 5, 0.25);
 
-  &:hover {
+  ${StyledButton}:active & {
     clip-path: inset(
       clamp(1px, 0.0625em, 2px) clamp(1px, 0.0625em, 2px)
         clamp(1px, 0.0625em, 2px) clamp(1px, 0.0625em, 2px) round 999vw
@@ -88,24 +88,24 @@ export const ButtonInner = styled.div`
   & span {
     position: relative;
     z-index: 4;
-    font-family: "Inter", sans-serif;
+    font-family: "SF Pro Display", "Inter", sans-serif;
     letter-spacing: -0.05em;
     font-weight: 500;
-    color: rgba(0, 0, 0, 0);
-    background-image: linear-gradient(
-      135deg,
-      rgba(25, 25, 25, 1),
-      rgba(75, 75, 75, 1)
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
+    color: rgba(255, 255, 255, 0.9);
     transition: transform 250ms ease;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     will-change: transform;
     text-shadow: rgba(0, 0, 0, 0.1) 0 0 0.1em;
   }
 
-  &:hover span {
+  ${StyledButton}:active & span {
     transform: scale(0.975);
+    color: rgba(255, 255, 255, 1);
+  }
+
+  ${StyledButton}:hover & span {
+    color: rgba(255, 255, 255, 1);
   }
 `;

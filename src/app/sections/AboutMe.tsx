@@ -16,12 +16,15 @@ import {
   SkillItem,
   ContentWrapper,
   SectionTitle,
+  ResumeButtonContainer,
 } from "../styles/AboutMe.styles";
 import GradientBackground from "../components/GradientBackground";
 import {
   aboutContainerVariants,
   aboutItemVariants,
 } from "../data/variantsData";
+import TactileButton from "../components/tactile-button/tactile-button.component";
+import { FiDownload } from "react-icons/fi";
 
 /**
  * AboutMe Component
@@ -121,6 +124,21 @@ const AboutMe: React.FC = () => {
                   I approach every challenge with a focus on execution, ensuring
                   that ideas don&apos;t just stay ideas—they become reality.
                 </p>
+
+                {/* Resume Download Button */}
+                <ResumeButtonContainer
+                  variants={aboutItemVariants}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <TactileButton
+                    href="/Andrew Kolumbic - Resume.docx"
+                    download="Andrew Kolumbic - Resume.docx"
+                  >
+                    <FiDownload style={{ marginRight: "8px" }} /> Download
+                    Resume
+                  </TactileButton>
+                </ResumeButtonContainer>
               </BioColumn>
 
               {/* Right Column - Skills */}
@@ -138,9 +156,18 @@ const AboutMe: React.FC = () => {
                       variants={aboutItemVariants}
                       custom={index}
                       whileHover={{
-                        x: 10,
-                        backgroundColor: "rgba(255, 255, 255, 0.08)",
-                        transition: { duration: 0.2 },
+                        x: 5,
+                        backgroundColor: "rgba(255, 255, 255, 0.05)",
+                        boxShadow: "0 2px 10px rgba(100, 181, 246, 0.1)",
+                        borderLeftColor: "rgba(100, 181, 246, 1)",
+                        transition: {
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 20,
+                          backgroundColor: { duration: 0.3, ease: "easeOut" },
+                          boxShadow: { duration: 0.3, ease: "easeOut" },
+                          borderLeftColor: { duration: 0.3, ease: "easeOut" },
+                        },
                       }}
                     >
                       {skill}
