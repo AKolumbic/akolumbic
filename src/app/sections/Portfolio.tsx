@@ -1,18 +1,5 @@
 "use client";
 
-/**
- * Portfolio Component
- *
- * Renders the portfolio section of the website, displaying professional and side projects.
- * The layout adapts based on the screen width:
- * - Mobile View: Displays tabs to toggle between Professional Work and Side Projects.
- * - Desktop View: Displays Professional Work and Side Projects in separate sections.
- *
- * The component uses Framer Motion for animations and adjusts its layout based
- * on the window width.
- *
- * @returns {JSX.Element} The rendered Portfolio component.
- */
 import React, { useState, useEffect, JSX } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -26,52 +13,25 @@ import {
   SectionTitle,
 } from "../styles/Portfolio.styles";
 import { professionalProjects, sideProjects } from "../data/projectData";
+import {
+  containerVariants,
+  cardVariants,
+  titleVariants,
+} from "../data/variantsData";
 
-// Animation variants
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-      duration: 0.5,
-    },
-  },
-  exit: {
-    opacity: 0,
-    transition: { duration: 0.3 },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.1, 0.25, 1.0],
-    },
-  },
-  hover: {
-    y: -10,
-    transition: { duration: 0.3, ease: "easeOut" },
-  },
-};
-
-const titleVariants = {
-  hidden: { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut",
-    },
-  },
-};
-
+/**
+ * Portfolio Component
+ *
+ * Renders the portfolio section of the website, displaying professional and side projects.
+ * The layout adapts based on the screen width:
+ * - Mobile View: Displays tabs to toggle between Professional Work and Side Projects.
+ * - Desktop View: Displays Professional Work and Side Projects in separate sections.
+ *
+ * The component uses Framer Motion for animations and adjusts its layout based
+ * on the window width.
+ *
+ * @returns {JSX.Element} The rendered Portfolio component.
+ */
 export default function Portfolio(): JSX.Element {
   // State to determine if the current view is desktop (width >= 1024px)
   const [isDesktop, setIsDesktop] = useState<boolean | null>(null);

@@ -1,152 +1,27 @@
 import React, { useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import styled from "styled-components";
 import {
-  fadeInUp,
-  staggeredFadeInVariants,
-  blurInVariants,
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
+import {
+  AboutSection,
+  Quote,
+  ContentContainer,
+  BioColumn,
+  SkillsColumn,
+  SkillsHeading,
+  SkillsList,
+  SkillItem,
+  ContentWrapper,
+  SectionTitle,
+} from "../styles/AboutMe.styles";
+import GradientBackground from "../components/GradientBackground";
+import {
+  aboutContainerVariants,
+  aboutItemVariants,
 } from "../data/variantsData";
-
-// Styled Components
-const AboutSection = styled(motion.section)`
-  background: linear-gradient(to bottom, #ffffff, #f8f8f8);
-  color: #000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: "Segoe UI", "Roboto", sans-serif;
-  min-height: 100vh;
-  overflow: hidden;
-  padding: 5rem 2rem;
-  text-align: center;
-  position: relative;
-`;
-
-const Quote = styled(motion.p)`
-  color: #111;
-  font-family: "Michroma", sans-serif;
-  font-size: clamp(1.5rem, 5vw, 3rem);
-  font-style: italic;
-  font-weight: bold;
-  line-height: 1.4;
-  margin-bottom: 3rem;
-  max-width: 900px;
-
-  &::before,
-  &::after {
-    content: '"';
-    color: #888;
-    font-size: 1.2em;
-  }
-`;
-
-const ContentContainer = styled(motion.div)`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 3rem;
-  justify-content: center;
-  align-items: flex-start;
-  margin: 0 auto;
-  max-width: 1100px;
-  padding: 1rem;
-  text-align: justify;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    padding: 1rem;
-    text-align: center;
-  }
-`;
-
-const BioColumn = styled(motion.div)`
-  flex: 1;
-  font-size: 1.1rem;
-  line-height: 1.8;
-  min-width: 320px;
-
-  p {
-    margin-bottom: 1.5rem;
-  }
-
-  strong {
-    color: #333;
-    font-weight: 600;
-  }
-`;
-
-const SkillsColumn = styled(motion.div)`
-  flex: 1;
-  line-height: 1.8;
-  min-width: 320px;
-  position: relative;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -20px;
-    width: 3px;
-    height: 100%;
-    background: linear-gradient(to bottom, transparent, #333, transparent);
-
-    @media (max-width: 768px) {
-      display: none;
-    }
-  }
-`;
-
-const SkillsHeading = styled.h3`
-  border-bottom: 2px solid #000;
-  font-family: "Michroma", sans-serif;
-  font-size: 1.6rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.4rem;
-  text-align: center;
-`;
-
-const SkillsList = styled.ul`
-  font-size: 1.1rem;
-  flex: 1;
-  line-height: 1.8;
-  list-style-type: none;
-  margin: 0 auto;
-  max-width: 90%;
-  padding: 0;
-
-  @media (max-width: 768px) {
-    text-align: left;
-  }
-`;
-
-const SkillItem = styled(motion.li)`
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.8rem;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: translateX(5px);
-  }
-
-  &::before {
-    content: "•";
-    color: #555;
-    margin-right: 10px;
-    font-size: 1.2em;
-  }
-`;
-
-const BackgroundShape = styled(motion.div)`
-  position: absolute;
-  background: rgba(0, 0, 0, 0.03);
-  border-radius: 50%;
-  width: 300px;
-  height: 300px;
-  z-index: 0;
-`;
 
 /**
  * AboutMe Component
@@ -155,41 +30,37 @@ const BackgroundShape = styled(motion.div)`
  * large centered quote along with a two-column layout that shows a short bio
  * on the left and a list of key expertise on the right.
  *
- * The component dynamically loads the Michroma font (if not already loaded)
- * and animates its content with a fade in/up effect using Framer Motion.
+ * Features modern Apple/OpenAI-inspired design with glass morphism, gradient
+ * background, and smooth animations.
  *
  * @returns {JSX.Element} The rendered AboutMe section.
- *
- * @example
- * <AboutMe />
  */
 const AboutMe: React.FC = () => {
-  // Load the Michroma font dynamically (if not already loaded)
+  // Load the SF Pro Display font dynamically
   useEffect(() => {
-    const existingFontLink = document.head.querySelector(
-      "link[href*='Michroma']"
-    );
-    if (existingFontLink) return;
+    const link = document.createElement("link");
+    link.href = "https://fonts.cdnfonts.com/css/sf-pro-display";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
 
-    const fontLink = document.createElement("link");
-    fontLink.href =
-      "https://fonts.googleapis.com/css2?family=Michroma&display=swap";
-    fontLink.rel = "stylesheet";
-    document.head.appendChild(fontLink);
+    return () => {
+      document.head.removeChild(link);
+    };
   }, []);
 
   // Parallax scroll effect
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 0.8]);
 
   const skills = [
     "TypeScript, JavaScript (ES6+), Python",
     "React, Angular, Vue, Next.js",
-    "Node.js, Express.js",
+    "Node.js, Express.js, FastAPI, MongoDB",
     "React Native, Ionic Framework",
-    "Jest, Mocha, Playwright",
-    "Generative AI: ChatGPT, GitHub Copilot",
-    "Agile, Scrum, Kanban",
+    "Jest, Mocha, Karma, Playwright",
+    "Agile, Scrum, Kanban, DevOps, CI/CD",
+    "ChatGPT, OpenAI API, Cursor, Claude, Copilot",
   ];
 
   return (
@@ -197,74 +68,90 @@ const AboutMe: React.FC = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
+      variants={aboutContainerVariants}
     >
-      {/* Background decorative shapes */}
-      <BackgroundShape
-        style={{ top: "10%", left: "5%", opacity: 0.5 }}
-        animate={{
-          scale: [1, 1.2, 1],
-          rotate: [0, 180, 360],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      />
-      <BackgroundShape
-        style={{ bottom: "10%", right: "5%", opacity: 0.5 }}
-        animate={{
-          scale: [1.2, 1, 1.2],
-          rotate: [360, 180, 0],
-          opacity: [0.5, 0.3, 0.5],
-        }}
-        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-      />
+      {/* Use the standalone GradientBackground component */}
+      <GradientBackground zIndex={0} />
 
-      {/* Large Centered Quote */}
-      <Quote variants={blurInVariants} style={{ y }}>
-        Do or do not, there is no try.
-      </Quote>
+      <ContentWrapper>
+        {/* Large Centered Quote */}
+        <Quote variants={aboutItemVariants} style={{ y, opacity }}>
+          <span>Do or do not,</span> there is no try.
+        </Quote>
 
-      {/* Two-column layout */}
-      <ContentContainer variants={fadeInUp} custom={0.4}>
-        {/* Left Column - Bio */}
-        <BioColumn variants={fadeInUp} custom={0.6}>
-          <p>
-            I&apos;m <strong>Andrew Kolumbic</strong>, a{" "}
-            <strong>Software Engineer</strong> with several years of experience
-            in <strong>TypeScript, React, Angular, and Vue</strong>. I
-            don&apos;t just write code—I deliver results. I take a structured,
-            disciplined approach to software development, treating every project
-            with the precision and dedication it demands.
-          </p>
-          <p>
-            I believe in efficiency, clarity, and continuous improvement. I stay
-            ahead of the curve by leveraging cutting-edge tools and AI-driven
-            development like <strong>ChatGPT</strong> and{" "}
-            <strong>GitHub Copilot</strong>, not as crutches, but as force
-            multipliers to refine and accelerate workflows.
-          </p>
-          <p>
-            I approach every challenge with a focus on execution, ensuring that
-            ideas don&apos;t just stay ideas—they become reality.
-          </p>
-        </BioColumn>
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <SectionTitle variants={aboutItemVariants}>About Me</SectionTitle>
 
-        {/* Right Column - Skills */}
-        <SkillsColumn variants={fadeInUp} custom={0.8}>
-          <SkillsHeading>Key Expertise</SkillsHeading>
-          <SkillsList>
-            {skills.map((skill, index) => (
-              <SkillItem
-                key={index}
-                variants={staggeredFadeInVariants}
-                custom={index}
-                whileHover={{ x: 10, transition: { duration: 0.2 } }}
+            {/* Two-column layout */}
+            <ContentContainer variants={aboutContainerVariants}>
+              {/* Left Column - Bio */}
+              <BioColumn
+                variants={aboutItemVariants}
+                whileHover={{ y: -5, transition: { duration: 0.3 } }}
               >
-                {skill}
-              </SkillItem>
-            ))}
-          </SkillsList>
-        </SkillsColumn>
-      </ContentContainer>
+                <p>
+                  I&apos;m <strong>Andrew Kolumbic</strong>, a{" "}
+                  <strong>Software Engineer</strong> with several years of
+                  experience in{" "}
+                  <strong>TypeScript, React, Angular, and Vue</strong>. I
+                  don&apos;t just write code—I deliver results. I take a
+                  structured, disciplined approach to software development,
+                  treating every project with the precision and dedication it
+                  demands.
+                </p>
+                <p>
+                  I believe in efficiency, clarity, and continuous improvement.
+                  I stay ahead of the curve by leveraging cutting-edge tools and
+                  AI-driven development like <strong>ChatGPT</strong> and{" "}
+                  <strong>GitHub Copilot</strong>, not as crutches, but as force
+                  multipliers to refine and accelerate workflows.
+                </p>
+                <p>
+                  I approach every challenge with a focus on execution, ensuring
+                  that ideas don&apos;t just stay ideas—they become reality.
+                </p>
+              </BioColumn>
+
+              {/* Right Column - Skills */}
+              <SkillsColumn
+                variants={aboutItemVariants}
+                whileHover={{ y: -5, transition: { duration: 0.3 } }}
+              >
+                <SkillsHeading variants={aboutItemVariants}>
+                  Key Expertise
+                </SkillsHeading>
+                <SkillsList variants={aboutContainerVariants}>
+                  {skills.map((skill, index) => (
+                    <SkillItem
+                      key={index}
+                      variants={aboutItemVariants}
+                      custom={index}
+                      whileHover={{
+                        x: 10,
+                        backgroundColor: "rgba(255, 255, 255, 0.08)",
+                        transition: { duration: 0.2 },
+                      }}
+                    >
+                      {skill}
+                    </SkillItem>
+                  ))}
+                </SkillsList>
+              </SkillsColumn>
+            </ContentContainer>
+          </motion.div>
+        </AnimatePresence>
+      </ContentWrapper>
     </AboutSection>
   );
 };

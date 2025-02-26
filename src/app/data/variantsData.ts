@@ -156,3 +156,100 @@ export const fadeInUp: Variants = {
     transition: { delay, duration: 0.8, ease: "easeOut" },
   }),
 };
+
+/**
+ * Animation variants for container elements in various sections
+ * Handles staggered children animations
+ *
+ * @type {Variants}
+ */
+export const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+      duration: 0.5,
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: 0.3 },
+  },
+};
+
+/**
+ * Animation variants for Portfolio cards and similar components
+ * Handles entrance animation and hover effects
+ *
+ * @type {Variants}
+ */
+export const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.25, 0.1, 0.25, 1.0],
+    },
+  },
+  hover: {
+    y: -10,
+    transition: { duration: 0.3, ease: "easeOut" },
+  },
+};
+
+/**
+ * Animation variants for section titles
+ *
+ * @type {Variants}
+ */
+export const titleVariants: Variants = {
+  hidden: { opacity: 0, y: -20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  },
+};
+
+/**
+ * Animation variants for AboutMe container elements
+ * Similar to containerVariants but with different timing
+ *
+ * @type {Variants}
+ */
+export const aboutContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+      duration: 0.7,
+    },
+  },
+};
+
+/**
+ * Animation variants for AboutMe item elements
+ * Used for individual content items in the AboutMe section
+ *
+ * @type {Variants}
+ */
+export const aboutItemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.25, 0.1, 0.25, 1.0],
+    },
+  },
+};
