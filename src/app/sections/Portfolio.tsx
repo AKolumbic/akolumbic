@@ -116,9 +116,12 @@ export default function Portfolio(): JSX.Element {
                       rel="noopener noreferrer"
                       image={project.image}
                     >
-                      <h3>{project.title}</h3>
-                      <p>{project.description}</p>
-                      <div>{project.tech.join(" • ")}</div>
+                      <div className="overlay" />
+                      <div style={{ position: "relative", zIndex: 1 }}>
+                        <h3>{project.title}</h3>
+                        <p>{project.description}</p>
+                        <div>{project.tech.join(" • ")}</div>
+                      </div>
                     </FloatingCard>
                   ))}
                 </GridContainer>
@@ -154,9 +157,12 @@ export default function Portfolio(): JSX.Element {
                     rel="noopener noreferrer"
                     image={project.image}
                   >
-                    <h3>{project.title}</h3>
-                    <p>{project.description}</p>
-                    <div>{project.tech.join(" • ")}</div>
+                    <div className="overlay" />
+                    <div style={{ position: "relative", zIndex: 1 }}>
+                      <h3>{project.title}</h3>
+                      <p>{project.description}</p>
+                      <div>{project.tech.join(" • ")}</div>
+                    </div>
                   </FloatingCard>
                 ))}
               </GridContainer>

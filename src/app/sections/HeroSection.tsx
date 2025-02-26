@@ -11,6 +11,8 @@ import {
   SubtextWrapper,
   SubtextLine,
 } from "../styles/HeroSection.styles";
+// import { TactileButton } from "../components";
+// import { downloadResume } from "../utils";
 
 /**
  * Shuffles an array of numbers into a random order.
@@ -106,6 +108,19 @@ const HeroSection: React.FC = () => {
         <SubtextLine>Software Engineer</SubtextLine>
         {/* <SubtextLine>San Pedro, CA</SubtextLine> */}
       </SubtextWrapper>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          // paddingBottom: "15px",
+          // height: "100vh",
+        }}
+      >
+        {/* <TactileButton onClick={() => downloadResume()}>
+          Download my Resume
+        </TactileButton> */}
+      </div>
     </HeroContainer>
   );
 };

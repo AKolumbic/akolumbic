@@ -65,6 +65,21 @@ export const Card = styled(motion.div)<{ image?: string }>`
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 
+  /* Overlay for better text readability */
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.7)
+    );
+    z-index: 0;
+  }
+
   @media (max-width: 768px) {
     padding: 0.8rem; /* ✅ Adjust padding */
     min-height: auto; /* ✅ Prevent excessive height issues */
@@ -97,11 +112,7 @@ export const FloatingCard = styled(motion.a)<{ image?: string }>`
   max-width: 100%;
   margin: 0 auto;
   backdrop-filter: blur(10px);
-  background: ${({ image }) =>
-    image ? `url(${image})` : "rgba(255, 255, 255, 0.12)"};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   display: block;
@@ -112,6 +123,36 @@ export const FloatingCard = styled(motion.a)<{ image?: string }>`
   color: inherit;
   position: relative;
   overflow: hidden;
+
+  /* Background Image */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: ${({ image }) => (image ? `url(${image})` : "none")}
+      center/cover no-repeat;
+    opacity: 0.3;
+    z-index: -1;
+    border-radius: 12px;
+  }
+
+  /* Overlay for better text readability */
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.7)
+    );
+    z-index: 0;
+  }
 
   @media (max-width: 768px) {
     padding: 0.8rem;

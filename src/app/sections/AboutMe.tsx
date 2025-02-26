@@ -1,6 +1,152 @@
 import React, { useEffect } from "react";
-import { motion } from "framer-motion";
-import { fadeInUp } from "../data/variantsData";
+import { motion, useScroll, useTransform } from "framer-motion";
+import styled from "styled-components";
+import {
+  fadeInUp,
+  staggeredFadeInVariants,
+  blurInVariants,
+} from "../data/variantsData";
+
+// Styled Components
+const AboutSection = styled(motion.section)`
+  background: linear-gradient(to bottom, #ffffff, #f8f8f8);
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Segoe UI", "Roboto", sans-serif;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 5rem 2rem;
+  text-align: center;
+  position: relative;
+`;
+
+const Quote = styled(motion.p)`
+  color: #111;
+  font-family: "Michroma", sans-serif;
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  font-style: italic;
+  font-weight: bold;
+  line-height: 1.4;
+  margin-bottom: 3rem;
+  max-width: 900px;
+
+  &::before,
+  &::after {
+    content: '"';
+    color: #888;
+    font-size: 1.2em;
+  }
+`;
+
+const ContentContainer = styled(motion.div)`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 3rem;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0 auto;
+  max-width: 1100px;
+  padding: 1rem;
+  text-align: justify;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 1rem;
+    text-align: center;
+  }
+`;
+
+const BioColumn = styled(motion.div)`
+  flex: 1;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  min-width: 320px;
+
+  p {
+    margin-bottom: 1.5rem;
+  }
+
+  strong {
+    color: #333;
+    font-weight: 600;
+  }
+`;
+
+const SkillsColumn = styled(motion.div)`
+  flex: 1;
+  line-height: 1.8;
+  min-width: 320px;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -20px;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, #333, transparent);
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+`;
+
+const SkillsHeading = styled.h3`
+  border-bottom: 2px solid #000;
+  font-family: "Michroma", sans-serif;
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.4rem;
+  text-align: center;
+`;
+
+const SkillsList = styled.ul`
+  font-size: 1.1rem;
+  flex: 1;
+  line-height: 1.8;
+  list-style-type: none;
+  margin: 0 auto;
+  max-width: 90%;
+  padding: 0;
+
+  @media (max-width: 768px) {
+    text-align: left;
+  }
+`;
+
+const SkillItem = styled(motion.li)`
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateX(5px);
+  }
+
+  &::before {
+    content: "•";
+    color: #555;
+    margin-right: 10px;
+    font-size: 1.2em;
+  }
+`;
+
+const BackgroundShape = styled(motion.div)`
+  position: absolute;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 50%;
+  width: 300px;
+  height: 300px;
+  z-index: 0;
+`;
 
 /**
  * AboutMe Component
@@ -32,180 +178,94 @@ const AboutMe: React.FC = () => {
     document.head.appendChild(fontLink);
   }, []);
 
-  // /**
-  //  * fadeInUp variants for Framer Motion animations.
-  //  *
-  //  * The content starts off hidden (with opacity 0 and moved 40px down) and
-  //  * then fades in and moves upward into place. The delay can be customized via
-  //  * the "custom" prop on the motion element.
-  //  */
-  // const fadeInUp = useMemo(
-  //   () => ({
-  //     hidden: { opacity: 0, y: 40 },
-  //     visible: (delay = 0) => ({
-  //       opacity: 1,
-  //       y: 0,
-  //       transition: { delay, duration: 0.8, ease: "easeOut" },
-  //     }),
-  //   }),
-  //   []
-  // );
+  // Parallax scroll effect
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
+
+  const skills = [
+    "TypeScript, JavaScript (ES6+), Python",
+    "React, Angular, Vue, Next.js",
+    "Node.js, Express.js",
+    "React Native, Ionic Framework",
+    "Jest, Mocha, Playwright",
+    "Generative AI: ChatGPT, GitHub Copilot",
+    "Agile, Scrum, Kanban",
+  ];
 
   return (
-    <motion.section
+    <AboutSection
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true }}
-      style={{
-        backgroundColor: "#fff",
-        color: "#000",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        fontFamily: "'Times New Roman', serif",
-        minHeight: "100vh",
-        overflow: "hidden",
-        padding: "5rem 2rem",
-        textAlign: "center",
-      }}
+      viewport={{ once: true, margin: "-100px" }}
     >
-      {/* Large Centered Quote */}
-      <motion.p
-        variants={fadeInUp}
-        custom={0.2}
-        style={{
-          color: "#111",
-          fontFamily: "'Times New Roman', serif",
-          fontSize: "3rem",
-          fontStyle: "italic",
-          fontWeight: "bold",
-          lineHeight: "1.4",
-          marginBottom: "3rem",
-          maxWidth: "900px",
+      {/* Background decorative shapes */}
+      <BackgroundShape
+        style={{ top: "10%", left: "5%", opacity: 0.5 }}
+        animate={{
+          scale: [1, 1.2, 1],
+          rotate: [0, 180, 360],
+          opacity: [0.3, 0.5, 0.3],
         }}
-      >
-        “Do or do not, there is no try.”
-      </motion.p>
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+      />
+      <BackgroundShape
+        style={{ bottom: "10%", right: "5%", opacity: 0.5 }}
+        animate={{
+          scale: [1.2, 1, 1.2],
+          rotate: [360, 180, 0],
+          opacity: [0.5, 0.3, 0.5],
+        }}
+        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+      />
+
+      {/* Large Centered Quote */}
+      <Quote variants={blurInVariants} style={{ y }}>
+        Do or do not, there is no try.
+      </Quote>
 
       {/* Two-column layout */}
-      <motion.div
-        variants={fadeInUp}
-        custom={0.4}
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
-          gap: "3rem",
-          justifyContent: "center",
-          alignItems: "flex-start",
-          margin: "0 auto",
-          maxWidth: "1100px",
-          padding: "1rem",
-          textAlign: "justify",
-        }}
-      >
+      <ContentContainer variants={fadeInUp} custom={0.4}>
         {/* Left Column - Bio */}
-        <motion.div
-          variants={fadeInUp}
-          custom={0.6}
-          style={{
-            flex: 1,
-            fontSize: "1.1rem",
-            lineHeight: "1.8",
-            minWidth: "320px",
-          }}
-        >
+        <BioColumn variants={fadeInUp} custom={0.6}>
           <p>
-            I’m <strong>Andrew Kolumbic</strong>, a{" "}
+            I&apos;m <strong>Andrew Kolumbic</strong>, a{" "}
             <strong>Software Engineer</strong> with several years of experience
-            in <strong>TypeScript, React, Angular, and Vue</strong>. I don’t
-            just write code—I deliver results. I take a structured, disciplined
-            approach to software development, treating every project with the
-            precision and dedication it demands. Whether it’s modernizing
-            applications, optimizing performance, or leading development teams
-            under tight deadlines, I ensure the work gets done—and gets done
-            well.
+            in <strong>TypeScript, React, Angular, and Vue</strong>. I
+            don&apos;t just write code—I deliver results. I take a structured,
+            disciplined approach to software development, treating every project
+            with the precision and dedication it demands.
           </p>
-          <div style={{ height: "20px" }} />
           <p>
             I believe in efficiency, clarity, and continuous improvement. I stay
             ahead of the curve by leveraging cutting-edge tools and AI-driven
             development like <strong>ChatGPT</strong> and{" "}
             <strong>GitHub Copilot</strong>, not as crutches, but as force
-            multipliers to refine and accelerate workflows. Every project I take
-            on is met with a commitment to excellence, ensuring that what I
-            build is not just functional, but scalable, maintainable, and
-            impactful.
+            multipliers to refine and accelerate workflows.
           </p>
-          <div style={{ height: "20px" }} />
           <p>
             I approach every challenge with a focus on execution, ensuring that
-            ideas don’t just stay ideas—they become reality.
+            ideas don&apos;t just stay ideas—they become reality.
           </p>
-        </motion.div>
+        </BioColumn>
 
         {/* Right Column - Skills */}
-        <motion.div
-          variants={fadeInUp}
-          custom={0.8}
-          style={{
-            flex: 1,
-            lineHeight: "1.8",
-            minWidth: "320px",
-          }}
-        >
-          <h3
-            style={{
-              borderBottom: "2px solid #000",
-              fontSize: "1.6rem",
-              fontWeight: "bold",
-              marginBottom: "1rem",
-              paddingBottom: "0.4rem",
-              textAlign: "center",
-            }}
-          >
-            Key Expertise
-          </h3>
-          <ul
-            style={{
-              fontSize: "1.1rem",
-              flex: 1,
-              lineHeight: "1.8",
-              listStyleType: "none",
-              margin: "0 auto",
-              maxWidth: "90%",
-              padding: 0,
-            }}
-          >
-            <li>• TypeScript, JavaScript (ES6+), Python</li>
-            <li>• React, Angular, Vue, Next.js</li>
-            <li>• Node.js, Express.js</li>
-            <li>• React Native, Ionic Framework</li>
-            <li>• Jest, Mocha, Playwright</li>
-            <li>• Generative AI: ChatGPT, GitHub Copilot</li>
-            <li>• Agile, Scrum, Kanban</li>
-          </ul>
-        </motion.div>
-      </motion.div>
-
-      {/* Responsive behavior: Single column on smaller screens */}
-      <style>
-        {`
-          @media (max-width: 768px) {
-            div {
-              flex-direction: column;
-              padding: 1rem;
-              text-align: center;
-            }
-            ul {
-              margin: 0 auto;
-              text-align: left;
-            }
-          }
-        `}
-      </style>
-    </motion.section>
+        <SkillsColumn variants={fadeInUp} custom={0.8}>
+          <SkillsHeading>Key Expertise</SkillsHeading>
+          <SkillsList>
+            {skills.map((skill, index) => (
+              <SkillItem
+                key={index}
+                variants={staggeredFadeInVariants}
+                custom={index}
+                whileHover={{ x: 10, transition: { duration: 0.2 } }}
+              >
+                {skill}
+              </SkillItem>
+            ))}
+          </SkillsList>
+        </SkillsColumn>
+      </ContentContainer>
+    </AboutSection>
   );
 };
 

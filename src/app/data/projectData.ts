@@ -50,6 +50,21 @@ export const sideProjects: SideProject[] = [
     image: "/ak.png",
   },
   {
+    title: "Angular/Python Stock App",
+    description:
+      "A full-stack stock app built with Angular for the front end and Python for the back end.",
+    tech: ["Angular", "Python", "MongoDB"],
+    link: "https://github.com/AKolumbic/asmp",
+    image: "/angular.png",
+  },
+  {
+    title: "Vue Calculator",
+    description: "A calculator built with Vue.js.",
+    tech: ["Vue.js", "JavaScript"],
+    link: "https://github.com/AKolumbic/vue-calc",
+    image: "/vue.svg",
+  },
+  {
     title: "BATMAN: Streets of Gotham",
     description:
       "A 2D Batman Platformer using Phaser 3, TypeScript, and Rollup.",
@@ -64,25 +79,18 @@ export const sideProjects: SideProject[] = [
     link: "https://github.com/AKolumbic/twitchbot",
     image: "/twitch.png",
   },
-  {
-    title: "D&D Stuff",
-    description: "D&D-themed React practice.",
-    tech: ["React", "TypeScript"],
-    link: "https://github.com/AKolumbic/dndStuff",
-    image: "/d&d.png",
-  },
+  // {
+  //   title: "D&D Stuff",
+  //   description: "D&D-themed React practice.",
+  //   tech: ["React", "TypeScript"],
+  //   link: "https://github.com/AKolumbic/dndStuff",
+  //   image: "/d&d.png",
+  // },
   {
     title: "Warcraft Stuff",
     description: "Warcraft-themed coding experiments.",
     tech: ["TypeScript"],
     link: "https://github.com/AKolumbic/warcraft",
     image: "/wow.png",
-  },
-  {
-    title: "Vue Calculator",
-    description: "A calculator built with Vue.js.",
-    tech: ["Vue.js", "JavaScript"],
-    link: "https://github.com/AKolumbic/vue-calc",
-    image: "/vue.svg",
   },
 ];
