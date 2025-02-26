@@ -11,20 +11,28 @@ const BackgroundContainer = styled(motion.div)`
   bottom: 0;
   overflow: hidden;
   z-index: 0;
-  transition: all 1s ease;
+  transition: all 0.5s ease;
   background-color: #000;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+  will-change: transform;
 `;
 
 const GradientOrb = styled(motion.div)<{ $color: string }>`
   position: absolute;
   border-radius: 50%;
   background: ${(props) => props.$color};
-  filter: blur(100px);
-  opacity: 0.2;
+  filter: blur(80px);
+  opacity: 0.15;
   z-index: 1;
   mix-blend-mode: lighten;
-  transition: all 1s ease;
+  transition: all 0.5s ease;
   pointer-events: none;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+  will-change: transform;
 `;
 
 // Wave animation for the beach theme
@@ -35,6 +43,10 @@ const WaveContainer = styled(motion.div)`
   left: -50%;
   background: transparent;
   pointer-events: none;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+  will-change: transform;
 `;
 
 const Wave = styled(motion.div)<{ $color: string; $delay: number }>`
@@ -42,16 +54,20 @@ const Wave = styled(motion.div)<{ $color: string; $delay: number }>`
   width: 100%;
   height: 100%;
   background: ${(props) => props.$color};
-  opacity: 0.1;
+  opacity: 0.08;
   border-radius: 43%;
-  animation: wave ${(props) => 7 + props.$delay}s infinite linear;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+  will-change: transform;
+  animation: wave ${(props) => 10 + props.$delay}s infinite linear;
 
   @keyframes wave {
     from {
-      transform: rotate(0deg);
+      transform: rotate(0deg) translateZ(0);
     }
     to {
-      transform: rotate(360deg);
+      transform: rotate(360deg) translateZ(0);
     }
   }
 `;
@@ -226,40 +242,29 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
         const colors = currentColors as BeachColors;
         return (
           <>
-            {/* Gradient orbs for the water and sky */}
+            {/* Gradient orbs for the water and sky - reduced number and simplified animations */}
             {[
               {
                 color: colors.sea,
                 position: { bottom: "-10%", left: "-10%" },
                 size: { width: "120vw", height: "60vh" },
                 animation: {
-                  x: ["-2%", "2%", "-1%"],
-                  y: ["1%", "-2%", "2%"],
-                  scale: [1, 1.02, 0.99],
+                  x: ["-1%", "1%"],
+                  y: ["1%", "-1%"],
+                  scale: [1, 1.01],
                 },
-                duration: 20,
+                duration: 30,
               },
               {
                 color: colors.munsell,
                 position: { bottom: "20%", right: "-20%" },
                 size: { width: "100vw", height: "50vh" },
                 animation: {
-                  x: ["2%", "-2%", "1%"],
-                  y: ["-1%", "2%", "-2%"],
-                  scale: [0.99, 1.01, 0.98],
+                  x: ["1%", "-1%"],
+                  y: ["-1%", "1%"],
+                  scale: [0.99, 1],
                 },
-                duration: 25,
-              },
-              {
-                color: colors.seaGreen,
-                position: { top: "10%", right: "10%" },
-                size: { width: "80vw", height: "40vh" },
-                animation: {
-                  x: ["-1%", "3%", "-2%"],
-                  y: ["2%", "-1%", "2%"],
-                  scale: [1.01, 0.99, 1.02],
-                },
-                duration: 22,
+                duration: 35,
               },
             ].map((orb, index) => (
               <GradientOrb
@@ -270,7 +275,7 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
                   duration: orb.duration,
                   repeat: Infinity,
                   repeatType: "reverse",
-                  ease: "easeInOut",
+                  ease: "linear",
                 }}
                 style={{
                   ...orb.position,
@@ -278,16 +283,16 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
                 }}
               />
             ))}
-            {/* Animated waves */}
+            {/* Simplified waves - reduced number and slower animation */}
             <WaveContainer>
-              {[0, 1, 2].map((i) => (
+              {[0, 1].map((i) => (
                 <Wave
                   key={i}
                   $color={colors.sea}
-                  $delay={i}
+                  $delay={i * 2}
                   style={{
-                    top: `${45 + i * 5}%`,
-                    opacity: 0.07 - i * 0.02,
+                    top: `${45 + i * 8}%`,
+                    opacity: 0.06 - i * 0.02,
                   }}
                 />
               ))}
@@ -300,13 +305,45 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
         return (
           <SunsetGradient
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.8 }}
-            transition={{ duration: 1 }}
+            animate={{ opacity: 0.7 }}
+            transition={{ duration: 0.5 }}
+            style={{
+              transform: "translateZ(0)",
+              backfaceVisibility: "hidden",
+              perspective: 1000,
+              willChange: "transform, opacity",
+            }}
           />
         );
 
-      default:
-        return orbs.map((orb, index) => (
+      default: {
+        // Simplified main theme animations
+        const simplifiedOrbs = [
+          {
+            color: (currentColors as MainColors).sunset,
+            position: { top: "0%", left: "0%" },
+            size: { width: "120vw", height: "120vh" },
+            animation: {
+              x: ["-2%", "2%"],
+              y: ["1%", "-1%"],
+              scale: [1, 1.02],
+            },
+            duration: 35,
+          },
+          {
+            color: (currentColors as MainColors).ocean,
+            position: { bottom: "-20%", right: "-20%" },
+            size: { width: "120vw", height: "120vh" },
+            animation: {
+              x: ["2%", "-2%"],
+              y: ["-1%", "1%"],
+              scale: [1.01, 0.99],
+            },
+            duration: 40,
+          },
+        ];
+
+        return simplifiedOrbs.map((orb, index) => (
           <GradientOrb
             key={index}
             $color={orb.color}
@@ -315,7 +352,7 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
               duration: orb.duration,
               repeat: Infinity,
               repeatType: "reverse",
-              ease: "easeInOut",
+              ease: "linear",
             }}
             style={{
               ...orb.position,
@@ -323,45 +360,9 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
             }}
           />
         ));
+      }
     }
   };
-
-  // Default orb configurations (used for main theme)
-  const orbs = [
-    {
-      color: (currentColors as MainColors).sunset,
-      position: { top: "0%", left: "0%" },
-      size: { width: "120vw", height: "120vh" },
-      animation: {
-        x: ["-5%", "5%", "-2%"],
-        y: ["2%", "-5%", "5%"],
-        scale: [1, 1.05, 0.98],
-      },
-      duration: 25,
-    },
-    {
-      color: (currentColors as MainColors).ocean,
-      position: { bottom: "-20%", right: "-20%" },
-      size: { width: "120vw", height: "120vh" },
-      animation: {
-        x: ["5%", "-5%", "2%"],
-        y: ["-2%", "5%", "-5%"],
-        scale: [1.02, 0.98, 1.05],
-      },
-      duration: 30,
-    },
-    {
-      color: (currentColors as MainColors).sky,
-      position: { top: "30%", right: "-10%" },
-      size: { width: "100vw", height: "100vh" },
-      animation: {
-        x: ["-2%", "7%", "-4%"],
-        y: ["4%", "-2%", "5%"],
-        scale: [0.98, 1.02, 0.95],
-      },
-      duration: 20,
-    },
-  ];
 
   return (
     <BackgroundContainer className={className} style={{ zIndex }}>

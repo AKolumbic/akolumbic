@@ -87,63 +87,12 @@ const HeroSection: React.FC = () => {
     [isMobile, randomizedOrder]
   );
 
-  // Get gradient colors for a letter based on its position using white-gray-blue spectrum
-  const getGradientColors = () => {
-    // California sunset-inspired color palette (vibrant blue to peach)
-    return {
-      start: "#FF6B6B", // Warm coral
-      midLight: "#4A2B57", // Deep twilight purple
-      mid: "#FF6B6B", // Warm coral
-      end: "#FFE4B5", // Mellow peach
-    };
-  };
-
-  // Create rolling wave animation for the entire name - simplified for mobile
-  const letterAnimationProps = (isFirstName: boolean, index: number) => {
-    const colors = getGradientColors();
-
-    if (isMobile) {
-      return {
-        style: {
-          backgroundImage: `linear-gradient(
-            to right,
-            ${colors.start},
-            ${colors.end}
-          )`,
-          backgroundSize: "100% 100%",
-          willChange: "transform",
-          transform: "translateZ(0)",
-        },
-      };
-    }
-
-    const letterPosition = isFirstName ? index : index + firstName.length;
-    const waveDelay = letterPosition * 0.25;
-
+  // Simplified letter props without ongoing animations
+  const letterAnimationProps = () => {
     return {
       style: {
-        backgroundSize: "200% 100%",
-        backgroundImage: `linear-gradient(
-          to right,
-          ${colors.start},    /* Ocean blue */
-          ${colors.midLight}, /* Deep twilight purple */
-          ${colors.mid},      /* Warm coral */
-          ${colors.end}       /* Mellow peach */
-        )`,
-        willChange: "background-position",
+        willChange: "transform",
         transform: "translateZ(0)",
-      },
-      animate: {
-        backgroundPosition: ["0% center", "100% center", "0% center"],
-      },
-      transition: {
-        backgroundPosition: {
-          duration: 14,
-          times: [0, 0.5, 1],
-          ease: "easeInOut",
-          repeat: Infinity,
-          delay: waveDelay,
-        },
       },
     };
   };
@@ -173,12 +122,11 @@ const HeroSection: React.FC = () => {
                     ? {
                         scale: 1.08,
                         transition: { duration: 0.2 },
-                        z: 10,
                       }
                     : undefined
                 }
               >
-                <GradientLetter {...letterAnimationProps(true, i)}>
+                <GradientLetter {...letterAnimationProps()}>
                   {char}
                 </GradientLetter>
               </LetterWrapper>
@@ -197,12 +145,11 @@ const HeroSection: React.FC = () => {
                     ? {
                         scale: 1.08,
                         transition: { duration: 0.2 },
-                        z: 10,
                       }
                     : undefined
                 }
               >
-                <GradientLetter {...letterAnimationProps(false, i)}>
+                <GradientLetter {...letterAnimationProps()}>
                   {char}
                 </GradientLetter>
               </LetterWrapper>
@@ -223,38 +170,10 @@ const HeroSection: React.FC = () => {
         <SubtextWrapper>
           <SubtextLine
             initial={{ opacity: 0, y: 20 }}
-            animate={{
-              opacity: 1,
-              y: 0,
-              backgroundPosition: isMobile
-                ? undefined
-                : ["0% center", "100% center", "0% center"],
-            }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
               opacity: { delay: isMobile ? 0.4 : 1.2, duration: 0.5 },
               y: { delay: isMobile ? 0.4 : 1.2, duration: 0.5 },
-              backgroundPosition: isMobile
-                ? undefined
-                : {
-                    duration: 14,
-                    times: [0, 0.5, 1],
-                    ease: "easeInOut",
-                    repeat: Infinity,
-                    delay: 0.5,
-                  },
-            }}
-            style={{
-              backgroundImage: `linear-gradient(
-                to right,
-                #4B9FEB,
-                ${isMobile ? "#FFE4B5" : "#4A2B57"},
-                ${isMobile ? undefined : "#FF6B6B"},
-                ${isMobile ? undefined : "#FFA07A"},
-                ${isMobile ? undefined : "#FFE4B5"},
-                ${isMobile ? undefined : "#FF8C69"}
-              )`,
-              willChange: "transform",
-              transform: "translateZ(0)",
             }}
           >
             Software Engineer - San Pedro, CA

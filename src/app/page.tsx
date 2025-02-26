@@ -30,15 +30,46 @@ export default function HomePage(): JSX.Element {
   >("hero");
   const [theme, setTheme] = useState<"main" | "beach" | "sunset">("main");
 
+  // Debounced scroll handler
   useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth <= 768); // Adjust breakpoint if needed
+    let timeoutId: NodeJS.Timeout;
+    const handleScroll = () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        const scrollPosition = window.scrollY;
+        if (scrollPosition < window.innerHeight * 0.5) {
+          setActiveSection("hero");
+        }
+      }, 100); // 100ms debounce
     };
 
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, []);
 
-    return () => window.removeEventListener("resize", checkScreenSize);
+  // Optimized resize handler
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    const handleResize = () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        setIsMobile(window.innerWidth <= 768);
+      }, 100); // 100ms debounce
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, []);
 
   // fixes error caused by Grammarly during development.
@@ -60,29 +91,42 @@ export default function HomePage(): JSX.Element {
     window.scrollTo(0, 0);
   }, []);
 
+  // Setup intersection observers with reduced sensitivity
+  const { ref: heroRef, inView: heroInView } = useInView({
+    threshold: 0.1,
+    triggerOnce: false,
+  });
+  const { ref: aboutRef, inView: aboutInView } = useInView({
+    threshold: 0.3,
+    triggerOnce: false,
+  });
+  const { ref: portfolioRef, inView: portfolioInView } = useInView({
+    threshold: 0.3,
+    triggerOnce: false,
+  });
+  const { ref: contactRef, inView: contactInView } = useInView({
+    threshold: 0.3,
+    triggerOnce: false,
+  });
+
+  // Update active section based on visibility
+  useEffect(() => {
+    if (heroInView) {
+      setActiveSection("hero");
+    } else if (aboutInView) {
+      setActiveSection("about");
+    } else if (portfolioInView) {
+      setActiveSection("portfolio");
+    } else if (contactInView) {
+      setActiveSection("contact");
+    }
+  }, [heroInView, aboutInView, portfolioInView, contactInView]);
+
   // Use custom hook to animate the AboutMe and Portfolio sections.
   const aboutMeAnim = useScrollAnimation();
   const portfolioAnim = useScrollAnimation();
 
-  // Setup intersection observers for each section
-  const { ref: heroRef, inView: heroInView } = useInView({ threshold: 0.5 });
-  const { ref: aboutRef, inView: aboutInView } = useInView({ threshold: 0.5 });
-  const { ref: portfolioRef, inView: portfolioInView } = useInView({
-    threshold: 0.5,
-  });
-  const { ref: contactRef, inView: contactInView } = useInView({
-    threshold: 0.5,
-  });
-
-  // Update active section based on which section is most in view
-  useEffect(() => {
-    if (heroInView) setActiveSection("hero");
-    else if (aboutInView) setActiveSection("about");
-    else if (portfolioInView) setActiveSection("portfolio");
-    else if (contactInView) setActiveSection("contact");
-  }, [heroInView, aboutInView, portfolioInView, contactInView]);
-
-  // Theme selection component
+  // Optimized styled components
   const ThemeSelector = styled.div`
     position: fixed;
     top: 20px;
@@ -95,6 +139,8 @@ export default function HomePage(): JSX.Element {
     padding: 10px;
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    transform: translateZ(0);
+    will-change: transform;
   `;
 
   const ThemeButton = styled.button<{ $active: boolean }>`
@@ -107,7 +153,8 @@ export default function HomePage(): JSX.Element {
     cursor: pointer;
     font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 14px;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease;
+    transform: translateZ(0);
 
     &:hover {
       background: rgba(255, 255, 255, 0.25);
@@ -139,9 +186,13 @@ export default function HomePage(): JSX.Element {
         </ThemeButton>
       </ThemeSelector>
 
-      <div ref={heroRef}>
+      <motion.div
+        ref={heroRef}
+        initial={false}
+        style={{ willChange: "transform, opacity" }}
+      >
         <HeroSection />
-      </div>
+      </motion.div>
 
       {/* Conditionally render AboutMe on larger screens */}
       {!isMobile && (
@@ -153,6 +204,7 @@ export default function HomePage(): JSX.Element {
           initial="hidden"
           animate={aboutMeAnim.controls}
           variants={smoothSlideUpVariants}
+          style={{ willChange: "transform, opacity" }}
         >
           <AboutMe />
         </motion.section>
@@ -168,6 +220,7 @@ export default function HomePage(): JSX.Element {
           initial="hidden"
           animate={portfolioAnim.controls}
           variants={smoothSlideUpVariants}
+          style={{ willChange: "transform, opacity" }}
         >
           <Portfolio />
         </motion.section>

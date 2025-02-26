@@ -4,6 +4,13 @@ import { ReactNode } from "react";
 import Head from "next/head";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Playfair_Display } from "next/font/google";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  display: "swap",
+});
 
 export const metadata = {
   title: "Andrew Kolumbic",
@@ -12,7 +19,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={playfair.className}>
       <Head>
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <link

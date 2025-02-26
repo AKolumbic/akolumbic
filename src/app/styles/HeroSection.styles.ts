@@ -51,44 +51,40 @@ export const HeroTextWrapper = styled.div`
 `;
 
 export const FirstName = styled.div`
-  font-size: min(10vw, 5rem);
-  font-weight: bold;
-  text-transform: uppercase;
-  font-family: "SF Pro Display", "Michroma", sans-serif;
-  white-space: nowrap;
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  transform: translateZ(0);
-  will-change: transform;
-
-  @media (max-width: 600px) {
-    font-size: min(12vw, 4rem);
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-  }
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: center;
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
 `;
 
-export const LastName = styled(FirstName)``;
+export const LastName = styled.div`
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 1.1;
+  display: flex;
+  justify-content: center;
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+`;
 
 /* Individual letter with gradient animation */
 export const GradientLetter = styled(motion.span)`
   display: inline-block;
-  background-size: 200% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: #ffffff;
   padding: 0 1px;
-  text-shadow: none;
+  text-shadow: 0 0 10px rgba(255, 236, 179, 0.4),
+    0 0 20px rgba(255, 236, 179, 0.2);
   position: relative;
   z-index: 2;
-  will-change: transform, background-position;
+  will-change: transform;
   transform: translateZ(0);
-  filter: drop-shadow(0 1px 1px rgba(255, 107, 107, 0.9))
-    drop-shadow(0 0 4px rgba(255, 140, 105, 0.3));
   letter-spacing: 0.025em;
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
 
   @media (max-width: 768px) {
-    background-size: 100% 100%;
-    filter: drop-shadow(0 1px 1px rgba(255, 107, 107, 0.7));
     letter-spacing: 0;
   }
 `;
@@ -188,29 +184,16 @@ export const SubtextWrapper = styled.div`
 `;
 
 export const SubtextLine = styled(motion.p)`
-  font-size: min(4vw, 1.5rem);
-  font-family: "SF Pro Display", "Michroma", sans-serif;
-  background-size: 200% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  text-align: center;
-  letter-spacing: 1.5px;
-  margin-top: 0.5rem;
-  padding: 0 1rem;
-  font-weight: 300;
-  will-change: transform, background-position;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 236, 179, 0.3);
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  margin: 0;
+  padding: 0;
+  will-change: transform;
   transform: translateZ(0);
-  filter: drop-shadow(0 1px 1px rgba(255, 107, 107, 0.9))
-    drop-shadow(0 0 4px rgba(255, 140, 105, 0.3));
-
-  @media (max-width: 768px) {
-    font-size: min(3.5vw, 1.2rem);
-    letter-spacing: 1px;
-    background-size: 100% 100%;
-    filter: drop-shadow(0 1px 1px rgba(255, 107, 107, 0.7));
-  }
 `;
 
 export const TaglineWrapper = styled(motion.p)`
