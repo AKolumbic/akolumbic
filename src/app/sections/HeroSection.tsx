@@ -52,8 +52,8 @@ const HeroSection: React.FC = () => {
   }, []);
 
   // Define name and split into first/last
-  const firstName = "Andrew";
-  const lastName = "Kolumbic";
+  const firstName = "ANDREW";
+  const lastName = "KOLUMBIC";
 
   // Compute a stable randomized order for letters - only for desktop
   const randomizedOrder = useMemo(
@@ -64,23 +64,23 @@ const HeroSection: React.FC = () => {
     [isMobile]
   );
 
+  // Calculate total animation duration for name
+  const totalNameLength = firstName.length + lastName.length;
+  const lastLetterDelay = (totalNameLength - 1) * 0.4; // Time until last letter starts
+  const nameAnimationComplete = lastLetterDelay + 2.5; // Add letter animation duration
+
   // Animation variants - simplified for mobile
   const letterVariants = useMemo(
     () => ({
-      initial: isMobile
-        ? { opacity: 0 }
-        : { y: "-100vh", opacity: 0, rotateX: 5 },
+      initial: isMobile ? { opacity: 0 } : { opacity: 0, scale: 1.2 },
       fallIn: (i: number) => ({
-        y: isMobile ? 0 : [0, -8, 3, 0],
-        opacity: 1,
-        rotateX: isMobile ? 0 : [5, 0],
-        scale: isMobile ? 1 : [1, 1.05, 0.98, 1],
+        opacity: [0, 0.3, 0.6, 0.8, 1],
+        scale: isMobile ? 1 : [1.2, 1.1, 1.05, 1],
         transition: {
-          delay: isMobile ? i * 0.03 : randomizedOrder[i] * 0.06,
-          type: isMobile ? "tween" : "spring",
-          duration: isMobile ? 0.3 : undefined,
-          stiffness: isMobile ? undefined : 110,
-          damping: isMobile ? undefined : 20,
+          delay: isMobile ? i * 0.03 : randomizedOrder[i] * 0.4,
+          duration: isMobile ? 0.3 : 2.5,
+          times: [0, 0.2, 0.5, 0.8, 1],
+          ease: "easeInOut",
         },
       }),
     }),
@@ -117,14 +117,6 @@ const HeroSection: React.FC = () => {
                 initial="initial"
                 animate="fallIn"
                 variants={letterVariants}
-                whileHover={
-                  !isMobile
-                    ? {
-                        scale: 1.08,
-                        transition: { duration: 0.2 },
-                      }
-                    : undefined
-                }
               >
                 <GradientLetter {...letterAnimationProps()}>
                   {char}
@@ -140,14 +132,6 @@ const HeroSection: React.FC = () => {
                 initial="initial"
                 animate="fallIn"
                 variants={letterVariants}
-                whileHover={
-                  !isMobile
-                    ? {
-                        scale: 1.08,
-                        transition: { duration: 0.2 },
-                      }
-                    : undefined
-                }
               >
                 <GradientLetter {...letterAnimationProps()}>
                   {char}
@@ -161,19 +145,26 @@ const HeroSection: React.FC = () => {
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: 1, opacity: 1 }}
           transition={{
-            delay: isMobile ? 0.3 : 0.8,
+            delay: isMobile ? 0.3 : nameAnimationComplete + 0.5, // Wait for name + 0.5s
             duration: isMobile ? 0.4 : 0.8,
             ease: "easeOut",
           }}
         />
 
-        <SubtextWrapper>
+        <SubtextWrapper
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            delay: isMobile ? 0.4 : nameAnimationComplete + 1.3, // Wait for name + line + 0.5s
+            duration: 0.8,
+          }}
+        >
           <SubtextLine
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              opacity: { delay: isMobile ? 0.4 : 1.2, duration: 0.5 },
-              y: { delay: isMobile ? 0.4 : 1.2, duration: 0.5 },
+              opacity: { duration: 0.8 },
+              y: { duration: 0.8 },
             }}
           >
             Software Engineer - San Pedro, CA

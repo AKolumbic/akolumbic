@@ -130,7 +130,9 @@ export default function HomePage(): JSX.Element {
   return (
     <>
       <GradientBackground activeSection={activeSection} theme={theme} />
-      <ThemeSelector currentTheme={theme} onThemeChange={setTheme} />
+      {!isMobile && (
+        <ThemeSelector currentTheme={theme} onThemeChange={setTheme} />
+      )}
 
       <motion.div
         ref={heroRef}

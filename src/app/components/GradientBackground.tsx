@@ -54,13 +54,13 @@ const Wave = styled(motion.div)<{ $color: string; $delay: number }>`
   width: 100%;
   height: 100%;
   background: ${(props) => props.$color};
-  opacity: 0.08;
+  opacity: 0.12;
   border-radius: 43%;
   transform: translateZ(0);
   backface-visibility: hidden;
   perspective: 1000;
   will-change: transform;
-  animation: wave ${(props) => 10 + props.$delay}s infinite linear;
+  animation: wave ${(props) => 20 + props.$delay}s infinite linear;
 
   @keyframes wave {
     from {
@@ -82,14 +82,48 @@ const SunsetGradient = styled(motion.div)`
   background: linear-gradient(
     to bottom,
     #000000 0%,
-    #1a237e 20%,
-    #7e57c2 40%,
-    #ff5252 60%,
-    #ff9800 80%,
+    #000000 10%,
+    #1a237e 40%,
+    #7e57c2 60%,
+    #ff5252 75%,
+    #ff9800 85%,
     #ffd740 100%
   );
   opacity: 0;
   transition: opacity 1s ease;
+`;
+
+const CurvedHorizon = styled(motion.div)`
+  position: absolute;
+  top: 0;
+  left: -50%;
+  right: -50%;
+  bottom: 0;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    ellipse at 50% 80%,
+    transparent 0%,
+    rgba(0, 0, 0, 0.3) 30%,
+    rgba(0, 0, 0, 0.8) 60%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  transform-origin: center;
+  pointer-events: none;
+`;
+
+const SolarFlare = styled(motion.div)`
+  position: absolute;
+  width: 60vw;
+  height: 60vh;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 215, 64, 0.3) 0%,
+    rgba(255, 82, 82, 0.2) 30%,
+    transparent 70%
+  );
+  filter: blur(30px);
+  mix-blend-mode: screen;
 `;
 
 type ThemeType = "main" | "beach" | "sunset";
@@ -164,24 +198,24 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
   const themeColors: ThemeColors = {
     main: {
       hero: {
-        sunset: "#661C1C",
-        ocean: "#1B4B8A",
-        sky: "#4A2B57",
+        sunset: "#1A1A1A",
+        ocean: "#0D1B2A",
+        sky: "#1B263B",
       },
       about: {
-        sunset: "#662D15",
-        ocean: "#1B3A6B",
-        sky: "#432B47",
+        sunset: "#1F1F1F",
+        ocean: "#162635",
+        sky: "#1E2A3F",
       },
       portfolio: {
-        sunset: "#661C1E",
-        ocean: "#153A6B",
-        sky: "#3D2857",
+        sunset: "#242424",
+        ocean: "#1A2C3D",
+        sky: "#212E44",
       },
       contact: {
-        sunset: "#662424",
-        ocean: "#1B4273",
-        sky: "#472B57",
+        sunset: "#292929",
+        ocean: "#1E3245",
+        sky: "#243248",
       },
     },
     beach: {
@@ -242,124 +276,271 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
         const colors = currentColors as BeachColors;
         return (
           <>
-            {/* Gradient orbs for the water and sky - reduced number and simplified animations */}
-            {[
-              {
-                color: colors.sea,
-                position: { bottom: "-10%", left: "-10%" },
-                size: { width: "120vw", height: "60vh" },
-                animation: {
-                  x: ["-1%", "1%"],
-                  y: ["1%", "-1%"],
-                  scale: [1, 1.01],
-                },
-                duration: 30,
-              },
-              {
-                color: colors.munsell,
-                position: { bottom: "20%", right: "-20%" },
-                size: { width: "100vw", height: "50vh" },
-                animation: {
-                  x: ["1%", "-1%"],
-                  y: ["-1%", "1%"],
-                  scale: [0.99, 1],
-                },
-                duration: 35,
-              },
-            ].map((orb, index) => (
-              <GradientOrb
-                key={index}
-                $color={orb.color}
-                animate={reducedMotion ? {} : orb.animation}
-                transition={{
-                  duration: orb.duration,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  ease: "linear",
-                }}
-                style={{
-                  ...orb.position,
-                  ...orb.size,
-                }}
-              />
-            ))}
-            {/* Simplified waves - reduced number and slower animation */}
+            {/* Base gradient for ocean color */}
+            <motion.div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: `linear-gradient(to bottom, ${colors.sea} 0%, ${colors.munsell} 60%, ${colors.seaGreen} 100%)`,
+                opacity: 0.3,
+              }}
+            />
+
+            {/* Waves */}
             <WaveContainer>
-              {[0, 1].map((i) => (
-                <Wave
-                  key={i}
-                  $color={colors.sea}
-                  $delay={i * 2}
-                  style={{
-                    top: `${45 + i * 8}%`,
-                    opacity: 0.06 - i * 0.02,
-                  }}
-                />
-              ))}
+              {!reducedMotion && (
+                <>
+                  <Wave
+                    $color={colors.sea}
+                    $delay={0}
+                    style={{
+                      opacity: 0.15,
+                      transform: "translateZ(0)",
+                    }}
+                  />
+                  <Wave
+                    $color={colors.munsell}
+                    $delay={5}
+                    style={{
+                      opacity: 0.12,
+                      transform: "translateZ(0)",
+                    }}
+                  />
+                  <Wave
+                    $color={colors.seaGreen}
+                    $delay={10}
+                    style={{
+                      opacity: 0.1,
+                      transform: "translateZ(0)",
+                    }}
+                  />
+                </>
+              )}
             </WaveContainer>
+
+            {/* Gradient orbs */}
+            <GradientOrb
+              $color={colors.sand}
+              animate={
+                !reducedMotion
+                  ? {
+                      x: ["-5%", "5%"],
+                      y: ["2%", "-2%"],
+                    }
+                  : {}
+              }
+              transition={{
+                duration: 25,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut",
+              }}
+              style={{
+                top: "60%",
+                left: "50%",
+                width: "80vw",
+                height: "40vh",
+                opacity: 0.4,
+                mixBlendMode: "soft-light",
+              }}
+            />
+            <GradientOrb
+              $color={colors.vanilla}
+              animate={
+                !reducedMotion
+                  ? {
+                      x: ["3%", "-3%"],
+                      y: ["-2%", "2%"],
+                    }
+                  : {}
+              }
+              transition={{
+                duration: 30,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut",
+              }}
+              style={{
+                bottom: "20%",
+                right: "30%",
+                width: "60vw",
+                height: "30vh",
+                opacity: 0.35,
+                mixBlendMode: "soft-light",
+              }}
+            />
+            {/* Additional warm light orb */}
+            <GradientOrb
+              $color={colors.taupe}
+              animate={
+                !reducedMotion
+                  ? {
+                      x: ["2%", "-2%"],
+                      y: ["-3%", "3%"],
+                    }
+                  : {}
+              }
+              transition={{
+                duration: 20,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut",
+              }}
+              style={{
+                bottom: "40%",
+                left: "20%",
+                width: "50vw",
+                height: "40vh",
+                opacity: 0.3,
+                mixBlendMode: "soft-light",
+              }}
+            />
           </>
         );
       }
 
-      case "sunset":
+      case "sunset": {
+        const colors = currentColors as SunsetColors;
         return (
-          <SunsetGradient
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.7 }}
-            transition={{ duration: 0.5 }}
-            style={{
-              transform: "translateZ(0)",
-              backfaceVisibility: "hidden",
-              perspective: 1000,
-              willChange: "transform, opacity",
-            }}
-          />
+          <>
+            <SunsetGradient
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.9 }}
+              transition={{ duration: reducedMotion ? 0 : 1.5 }}
+            />
+            <CurvedHorizon
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: reducedMotion ? 0 : 1.5 }}
+            />
+            {/* Solar Flare Animation */}
+            {!reducedMotion && (
+              <SolarFlare
+                initial={{ opacity: 0.4, scale: 1 }}
+                animate={{
+                  opacity: [0.4, 0.6, 0.4],
+                  scale: [1, 1.1, 1],
+                  x: ["-50%", "-48%", "-50%"],
+                  y: ["-50%", "-52%", "-50%"],
+                }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                style={{
+                  top: "75%",
+                  left: "50%",
+                  transformOrigin: "center",
+                }}
+              />
+            )}
+            {/* Subtle color movement */}
+            {!reducedMotion && (
+              <>
+                <GradientOrb
+                  $color={colors.purple}
+                  animate={{
+                    y: ["70%", "65%", "70%"],
+                    scale: [1, 1.1, 1],
+                    opacity: [0.2, 0.3, 0.2],
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  style={{
+                    bottom: 0,
+                    left: "30%",
+                    width: "40vw",
+                    height: "30vh",
+                    opacity: 0.2,
+                  }}
+                />
+                <GradientOrb
+                  $color={colors.orange}
+                  animate={{
+                    y: ["75%", "70%", "75%"],
+                    scale: [1, 1.2, 1],
+                    opacity: [0.15, 0.25, 0.15],
+                  }}
+                  transition={{
+                    duration: 10,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  style={{
+                    bottom: 0,
+                    right: "20%",
+                    width: "35vw",
+                    height: "25vh",
+                    opacity: 0.15,
+                  }}
+                />
+              </>
+            )}
+          </>
         );
+      }
 
       default: {
-        // Simplified main theme animations
-        const simplifiedOrbs = [
-          {
-            color: (currentColors as MainColors).sunset,
-            position: { top: "0%", left: "0%" },
-            size: { width: "120vw", height: "120vh" },
-            animation: {
-              x: ["-2%", "2%"],
-              y: ["1%", "-1%"],
-              scale: [1, 1.02],
-            },
-            duration: 35,
-          },
-          {
-            color: (currentColors as MainColors).ocean,
-            position: { bottom: "-20%", right: "-20%" },
-            size: { width: "120vw", height: "120vh" },
-            animation: {
-              x: ["2%", "-2%"],
-              y: ["-1%", "1%"],
-              scale: [1.01, 0.99],
-            },
-            duration: 40,
-          },
-        ];
-
-        return simplifiedOrbs.map((orb, index) => (
-          <GradientOrb
-            key={index}
-            $color={orb.color}
-            animate={reducedMotion ? {} : orb.animation}
-            transition={{
-              duration: orb.duration,
-              repeat: Infinity,
-              repeatType: "reverse",
-              ease: "linear",
-            }}
-            style={{
-              ...orb.position,
-              ...orb.size,
-            }}
-          />
-        ));
+        const colors = currentColors as MainColors;
+        return (
+          <>
+            <GradientOrb
+              $color={colors.ocean}
+              initial={{ x: "-50%", y: "-50%" }}
+              animate={
+                !reducedMotion
+                  ? {
+                      x: ["-50%", "-48%", "-50%"],
+                      y: ["-50%", "-52%", "-50%"],
+                    }
+                  : {}
+              }
+              transition={{
+                duration: 15,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              style={{
+                top: "50%",
+                left: "50%",
+                width: "120vw",
+                height: "120vh",
+                opacity: 0.4,
+              }}
+            />
+            <GradientOrb
+              $color={colors.sky}
+              initial={{ x: "-50%", y: "-50%" }}
+              animate={
+                !reducedMotion
+                  ? {
+                      x: ["-50%", "-52%", "-50%"],
+                      y: ["-50%", "-48%", "-50%"],
+                    }
+                  : {}
+              }
+              transition={{
+                duration: 18,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              style={{
+                top: "50%",
+                left: "50%",
+                width: "100vw",
+                height: "100vh",
+                opacity: 0.3,
+              }}
+            />
+          </>
+        );
       }
     }
   };

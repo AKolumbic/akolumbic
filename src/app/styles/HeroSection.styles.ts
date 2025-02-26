@@ -37,27 +37,31 @@ export const HeroContentWrapper = styled.div`
 export const HeroTextWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 1.5rem;
+  gap: 4rem;
   justify-content: center;
   align-items: center;
   text-align: center;
   transform: translateZ(0);
   will-change: transform;
+  width: 100%;
+  padding: 0 2rem;
 
   @media (max-width: 600px) {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 2rem;
   }
 `;
 
 export const FirstName = styled.div`
   font-size: clamp(3rem, 8vw, 6rem);
   line-height: 1.1;
-  margin-bottom: 0.5rem;
   display: flex;
   justify-content: center;
-  font-family: "Playfair Display", serif;
-  font-weight: 700;
+  font-family: "Franklin Gothic Heavy", "Franklin Gothic", "ITC Franklin Gothic",
+    Arial, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  -webkit-text-stroke: 0.75px white;
 `;
 
 export const LastName = styled.div`
@@ -65,27 +69,34 @@ export const LastName = styled.div`
   line-height: 1.1;
   display: flex;
   justify-content: center;
-  font-family: "Playfair Display", serif;
-  font-weight: 700;
+  font-family: "Franklin Gothic Heavy", "Franklin Gothic", "ITC Franklin Gothic",
+    Arial, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  -webkit-text-stroke: 0.75px white;
 `;
 
 /* Individual letter with gradient animation */
 export const GradientLetter = styled(motion.span)`
   display: inline-block;
   color: #ffffff;
-  padding: 0 1px;
-  text-shadow: 0 0 10px rgba(255, 236, 179, 0.4),
-    0 0 20px rgba(255, 236, 179, 0.2);
+  padding: 0;
+  margin: 0 -0.01em;
   position: relative;
   z-index: 2;
   will-change: transform;
   transform: translateZ(0);
-  letter-spacing: 0.025em;
-  font-family: "Playfair Display", serif;
-  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-family: "Franklin Gothic Heavy", "Franklin Gothic", "ITC Franklin Gothic",
+    Arial, sans-serif;
+  font-weight: 900;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
   @media (max-width: 768px) {
-    letter-spacing: 0;
+    letter-spacing: -0.02em;
+    margin: 0;
+    -webkit-text-stroke: 0.25px white;
   }
 `;
 
@@ -93,56 +104,12 @@ export const GradientLetter = styled(motion.span)`
 export const LetterWrapper = styled(motion.div)`
   display: inline-block;
   position: relative;
-  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.5));
   transform-style: preserve-3d;
   perspective: 1000px;
   will-change: transform;
   transform: translateZ(0);
 
-  @media (min-width: 769px) {
-    &::before {
-      content: "";
-      position: absolute;
-      inset: -2px;
-      z-index: -1;
-      opacity: 0.12;
-      background: radial-gradient(
-        circle at center,
-        rgba(255, 107, 107, 0.8),
-        rgba(255, 107, 107, 0.05) 70%,
-        transparent 100%
-      );
-      filter: blur(2px);
-    }
-
-    &::after {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      border-radius: 2px;
-      z-index: -1;
-      opacity: 0;
-      background: radial-gradient(
-        circle at center,
-        rgba(255, 107, 107, 0.5),
-        transparent 70%
-      );
-      transition: opacity 0.3s ease;
-    }
-
-    &:hover::after {
-      opacity: 0.6;
-    }
-
-    &:hover::before {
-      opacity: 0.25;
-      filter: blur(3px);
-      transition: all 0.3s ease;
-    }
-  }
-
   @media (max-width: 768px) {
-    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.4));
     transform-style: flat;
     perspective: none;
   }
@@ -153,7 +120,7 @@ export const Underline = styled(motion.div)`
   width: 80%;
   max-width: 400px;
   height: 2px;
-  background: linear-gradient(to right, #ff6b6b, rgba(255, 228, 181, 0.3));
+  background: white; // linear-gradient(to right, #ff6b6b, rgba(255, 228, 181, 0.3));
   margin: 1.5rem auto;
   border-radius: 2px;
   transform: translateZ(0);
@@ -167,7 +134,7 @@ export const Underline = styled(motion.div)`
 `;
 
 /* Wrapper allows subtext to stack on mobile */
-export const SubtextWrapper = styled.div`
+export const SubtextWrapper = styled(motion.div)`
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
@@ -186,10 +153,10 @@ export const SubtextWrapper = styled.div`
 export const SubtextLine = styled(motion.p)`
   font-size: clamp(1rem, 2.5vw, 1.5rem);
   color: #ffffff;
-  text-shadow: 0 0 10px rgba(255, 236, 179, 0.3);
-  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Franklin Gothic Roman", "Franklin Gothic",
+    "ITC Franklin Gothic Book", Arial, sans-serif;
   font-weight: 400;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
   margin: 0;
   padding: 0;
   will-change: transform;

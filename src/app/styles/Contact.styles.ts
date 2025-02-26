@@ -51,10 +51,6 @@ export const IconLink = styled(motion.a)`
     height: 1.5rem;
   }
 
-  &:hover {
-    color: #ffe4b5;
-  }
-
   @media (max-width: 768px) {
     width: 2rem;
     height: 2rem;
