@@ -10,6 +10,7 @@ export const Footer = styled.footer`
   backdrop-filter: blur(10px);
   width: 100%;
   text-align: center;
+  opacity: 0.75;
 
   /* Stick to bottom only on mobile */
   @media (max-width: 768px) {
