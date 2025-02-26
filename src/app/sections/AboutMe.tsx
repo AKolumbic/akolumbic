@@ -119,8 +119,6 @@ const AboutMe: React.FC = () => {
               alignItems: "center",
             }}
           >
-            <SectionTitle variants={aboutItemVariants}>About Me</SectionTitle>
-
             {/* Two-column layout */}
             <ContentContainer variants={aboutContainerVariants}>
               {/* Left Column - Bio */}
@@ -128,6 +126,9 @@ const AboutMe: React.FC = () => {
                 variants={aboutItemVariants}
                 whileHover={{ y: -5, transition: { duration: 0.3 } }}
               >
+                <SectionTitle variants={aboutItemVariants}>
+                  About Me
+                </SectionTitle>
                 <p>
                   I&apos;m <strong>Andrew Kolumbic</strong>, a{" "}
                   <strong>Software Engineer</strong> with several years of
@@ -141,8 +142,8 @@ const AboutMe: React.FC = () => {
                 <p>
                   I believe in efficiency, clarity, and continuous improvement.
                   I stay ahead of the curve by leveraging cutting-edge tools and
-                  AI-driven development like <strong>ChatGPT</strong> and{" "}
-                  <strong>GitHub Copilot</strong>, not as crutches, but as force
+                  AI-driven development like <strong>Cursor</strong> and{" "}
+                  <strong>ChatGPT</strong>, not as crutches, but as force
                   multipliers to refine and accelerate workflows.
                 </p>
                 <p>

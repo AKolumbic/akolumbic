@@ -202,7 +202,7 @@ export const BackgroundShape = styled(motion.div)`
 `;
 
 export const ResumeButtonContainer = styled(motion.div)`
-  margin-top: 5rem;
+  margin-top: 3rem;
   display: flex;
   justify-content: center;
 
