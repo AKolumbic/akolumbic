@@ -3,6 +3,13 @@
 import React, { useState, useEffect, JSX } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  professionalProjects,
+  sideProjects,
+  containerVariants,
+  cardVariants,
+  titleVariants,
+} from "../data";
+import {
   FloatingCard,
   Card,
   GridContainer,
@@ -10,13 +17,7 @@ import {
   Tabs,
   SectionContainer,
   SectionTitle,
-} from "../styles/Portfolio.styles";
-import { professionalProjects, sideProjects } from "../data/projectData";
-import {
-  containerVariants,
-  cardVariants,
-  titleVariants,
-} from "../data/variantsData";
+} from "../styles";
 
 /**
  * Portfolio Component

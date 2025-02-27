@@ -5,8 +5,8 @@ import {
   ThemeToggle,
   ThemePanel,
   ThemeButton,
-} from "../styles/ThemeSelector.styles";
-import { ThemeType } from "../types/theme.types";
+} from "../styles";
+import { ThemeType } from "../types";
 
 interface ThemeSelectorProps {
   currentTheme: ThemeType;

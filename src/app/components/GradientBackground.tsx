@@ -8,13 +8,13 @@ import {
   SunsetGradient,
   CurvedHorizon,
   SolarFlare,
-} from "../styles/GradientBackground.styles";
+} from "../styles";
 import {
   GradientBackgroundProps,
   BeachColors,
   MainColors,
   SunsetColors,
-} from "../types/gradient.types";
+} from "../types";
 import { themeColors } from "../data";
 
 /**

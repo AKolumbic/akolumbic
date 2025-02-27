@@ -1,11 +1,4 @@
-export interface CareerEvent {
-  company: string;
-  role: string;
-  duration: string;
-  description: string;
-  tech?: string[];
-  image?: string;
-}
+import { CareerEvent } from "../types/data.types";
 
 export const careerTimeline: CareerEvent[] = [
   {

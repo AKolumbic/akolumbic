@@ -1,10 +1,4 @@
-export interface ProfessionalProject {
-  title: string;
-  // company: string;
-  // impact: string;
-  tech: string[];
-  image: string; // 🔹 New property for background image
-}
+import { ProfessionalProject } from "../types";
 
 export const professionalProjects: ProfessionalProject[] = [
   {

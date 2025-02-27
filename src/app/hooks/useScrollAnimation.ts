@@ -22,4 +22,4 @@ const useScrollAnimation = () => {
   return { ref, controls };
 };
 
-export default useScrollAnimation;
+export { useScrollAnimation };

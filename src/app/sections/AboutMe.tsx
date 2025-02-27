@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
+import { FiDownload, FiExternalLink } from "react-icons/fi";
 import { AnimatePresence } from "framer-motion";
+import { TactileButton } from "@/app/components";
+import { aboutContainerVariants, aboutItemVariants, skills } from "../data";
 import {
   AboutSection,
   Quote,
@@ -15,10 +18,7 @@ import {
   Tooltip,
   TooltipContent,
   ExternalLink,
-} from "../styles/AboutMe.styles";
-import { aboutContainerVariants, aboutItemVariants, skills } from "../data";
-import { TactileButton } from "@/app/components";
-import { FiDownload, FiExternalLink } from "react-icons/fi";
+} from "../styles";
 
 /**
  * AboutMe Component

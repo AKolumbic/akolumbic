@@ -3,15 +3,11 @@
 import React, { useEffect, JSX, useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import HeroSection from "./sections/HeroSection";
-import AboutMe from "./sections/AboutMe";
-import Portfolio from "./sections/Portfolio";
-import Contact from "./sections/Contact";
-import GradientBackground from "./components/GradientBackground";
-import useScrollAnimation from "./hooks/useScrollAnimation";
+import { HeroSection, AboutMe, Portfolio, Contact } from "./sections";
+import { GradientBackground, ThemeSelector } from "./components";
+import { useScrollAnimation } from "./hooks";
 import { smoothSlideUpVariants } from "./data";
-import ThemeSelector from "./components/ThemeSelector";
-import { ThemeType } from "./types/theme.types";
+import { ThemeType } from "./types";
 
 /**
  * HomePage Component

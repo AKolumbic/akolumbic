@@ -16,7 +16,7 @@ import {
   IconLink,
   Copyright,
   IconWrapper,
-} from "../styles/Contact.styles";
+} from "../styles";
 
 export default function Contact() {
   const [isClient, setIsClient] = useState(false);

@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  StyledButton,
-  ButtonOutter,
-  ButtonInner,
-} from "../styles/TactileButton.styles";
+import { StyledButton, ButtonOutter, ButtonInner } from "../styles";
 
 interface TactileButtonProps {
   children: React.ReactNode;

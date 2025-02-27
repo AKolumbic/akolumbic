@@ -13,9 +13,7 @@ import {
   HeroContentWrapper,
   GradientLetter,
   LetterWrapper,
-} from "../styles/HeroSection.styles";
-// import TactileButton from "../components/tactile-button/tactile-button.component";
-// import { FiArrowDown } from "react-icons/fi";
+} from "../styles";
 
 /**
  * Shuffles an array of numbers into a random order.

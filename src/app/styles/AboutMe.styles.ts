@@ -83,29 +83,6 @@ export const ContentContainer = styled(motion.div)`
   }
 `;
 
-export const SectionTitle = styled(motion.h2)`
-  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  margin-bottom: 3rem;
-  position: relative;
-  display: inline-block;
-  text-align: center;
-  align-self: center;
-
-  &::after {
-    content: "";
-    position: absolute;
-    height: 4px;
-    width: 40%;
-    background: linear-gradient(to right, #64b5f6, transparent);
-    bottom: -0.5rem;
-    left: 30%;
-    border-radius: 4px;
-  }
-`;
-
 export const BioColumn = styled(motion.div)`
   font-size: 1.1rem;
   line-height: 1.8;
