@@ -1,39 +1,17 @@
 "use client";
 
 import React, { useEffect, JSX, useState } from "react";
-import { motion, useAnimation, Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { HeroSection, AboutMe, Portfolio, Contact } from "./sections";
-import { smoothSlideUpVariants } from "./data/variantsData";
+import HeroSection from "./sections/HeroSection";
+import AboutMe from "./sections/AboutMe";
+import Portfolio from "./sections/Portfolio";
+import Contact from "./sections/Contact";
 import GradientBackground from "./components/GradientBackground";
-
-type Section = "hero" | "about" | "portfolio" | "contact";
-
-/**
- * Custom hook that returns animation controls and a ref for an element.
- * The animation will start when the element comes into view.
- *
- * @param {Variants} variants - The Framer Motion variants to use for the animation.
- * @returns {{
- *   ref: (element: HTMLElement | null) => void,
- *   controls: ReturnType<typeof useAnimation>,
- *   variants: Variants
- * }}
- */
-function useAnimatedSection(variants: Variants) {
-  const controls = useAnimation();
-  const { ref, inView } = useInView({
-    threshold: 0.35,
-    rootMargin: "-10% 0% -10% 0%",
-  });
-
-  useEffect(() => {
-    // Start the animation when the element is in view; hide it otherwise.
-    controls.start(inView ? "visible" : "hidden");
-  }, [inView, controls]);
-
-  return { ref, controls, variants };
-}
+import useScrollAnimation from "./hooks/useScrollAnimation";
+import { smoothSlideUpVariants } from "./data/variantsData";
+import ThemeSelector from "./components/ThemeSelector";
+import { ThemeType } from "./types/theme.types";
 
 /**
  * HomePage Component
@@ -48,17 +26,51 @@ function useAnimatedSection(variants: Variants) {
 export default function HomePage(): JSX.Element {
   // State to check if the screen is mobile-sized
   const [isMobile, setIsMobile] = useState(false);
-  const [activeSection, setActiveSection] = useState<Section>("hero");
+  const [activeSection, setActiveSection] = useState<
+    "hero" | "about" | "portfolio" | "contact"
+  >("hero");
+  const [theme, setTheme] = useState<ThemeType>("main");
 
+  // Debounced scroll handler
   useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth <= 768); // Adjust breakpoint if needed
+    let timeoutId: NodeJS.Timeout;
+    const handleScroll = () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        const scrollPosition = window.scrollY;
+        if (scrollPosition < window.innerHeight * 0.5) {
+          setActiveSection("hero");
+        }
+      }, 100); // 100ms debounce
     };
 
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, []);
 
-    return () => window.removeEventListener("resize", checkScreenSize);
+  // Optimized resize handler
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    const handleResize = () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        setIsMobile(window.innerWidth <= 768);
+      }, 100); // 100ms debounce
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, []);
 
   // fixes error caused by Grammarly during development.
@@ -80,35 +92,55 @@ export default function HomePage(): JSX.Element {
     window.scrollTo(0, 0);
   }, []);
 
-  // Use custom hook to animate the AboutMe and Portfolio sections.
-  const aboutMeAnim = useAnimatedSection(smoothSlideUpVariants);
-  const portfolioAnim = useAnimatedSection(smoothSlideUpVariants);
-
-  // Setup intersection observers for each section
-  const { ref: heroRef, inView: heroInView } = useInView({ threshold: 0.5 });
-  const { ref: aboutRef, inView: aboutInView } = useInView({ threshold: 0.5 });
+  // Setup intersection observers with reduced sensitivity
+  const { ref: heroRef, inView: heroInView } = useInView({
+    threshold: 0.1,
+    triggerOnce: false,
+  });
+  const { ref: aboutRef, inView: aboutInView } = useInView({
+    threshold: 0.3,
+    triggerOnce: false,
+  });
   const { ref: portfolioRef, inView: portfolioInView } = useInView({
-    threshold: 0.5,
+    threshold: 0.3,
+    triggerOnce: false,
   });
   const { ref: contactRef, inView: contactInView } = useInView({
-    threshold: 0.5,
+    threshold: 0.3,
+    triggerOnce: false,
   });
 
-  // Update active section based on which section is most in view
+  // Update active section based on visibility
   useEffect(() => {
-    if (heroInView) setActiveSection("hero");
-    else if (aboutInView) setActiveSection("about");
-    else if (portfolioInView) setActiveSection("portfolio");
-    else if (contactInView) setActiveSection("contact");
+    if (heroInView) {
+      setActiveSection("hero");
+    } else if (aboutInView) {
+      setActiveSection("about");
+    } else if (portfolioInView) {
+      setActiveSection("portfolio");
+    } else if (contactInView) {
+      setActiveSection("contact");
+    }
   }, [heroInView, aboutInView, portfolioInView, contactInView]);
+
+  // Use custom hook to animate the AboutMe and Portfolio sections.
+  const aboutMeAnim = useScrollAnimation();
+  const portfolioAnim = useScrollAnimation();
 
   return (
     <>
-      <GradientBackground activeSection={activeSection} />
+      <GradientBackground activeSection={activeSection} theme={theme} />
+      {!isMobile && (
+        <ThemeSelector currentTheme={theme} onThemeChange={setTheme} />
+      )}
 
-      <div ref={heroRef}>
+      <motion.div
+        ref={heroRef}
+        initial={false}
+        style={{ willChange: "transform, opacity" }}
+      >
         <HeroSection />
-      </div>
+      </motion.div>
 
       {/* Conditionally render AboutMe on larger screens */}
       {!isMobile && (
@@ -119,7 +151,8 @@ export default function HomePage(): JSX.Element {
           }}
           initial="hidden"
           animate={aboutMeAnim.controls}
-          variants={aboutMeAnim.variants}
+          variants={smoothSlideUpVariants}
+          style={{ willChange: "transform, opacity" }}
         >
           <AboutMe />
         </motion.section>
@@ -134,7 +167,8 @@ export default function HomePage(): JSX.Element {
           }}
           initial="hidden"
           animate={portfolioAnim.controls}
-          variants={portfolioAnim.variants}
+          variants={smoothSlideUpVariants}
+          style={{ willChange: "transform, opacity" }}
         >
           <Portfolio />
         </motion.section>

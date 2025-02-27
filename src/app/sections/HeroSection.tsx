@@ -33,95 +33,66 @@ const HeroSection: React.FC = () => {
   // Ensure component only renders on the client (fixes hydration issues)
   const [isClient, setIsClient] = useState(false);
   // State to check if the screen is mobile-sized
-  // const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // useEffect(() => {
-  //   const checkScreenSize = () => {
-  //     const isMobileScreen = window.innerWidth <= 768;
-  //     setIsMobile(isMobileScreen);
-  //   };
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const isMobileScreen = window.innerWidth <= 768;
+      setIsMobile(isMobileScreen);
+    };
 
-  //   checkScreenSize();
-  //   window.addEventListener("resize", checkScreenSize);
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
 
-  //   return () => window.removeEventListener("resize", checkScreenSize);
-  // }, []);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
 
   // Define name and split into first/last
-  const firstName = "Andrew";
-  const lastName = "Kolumbic";
+  const firstName = "ANDREW";
+  const lastName = "KOLUMBIC";
 
-  // Compute a stable randomized order for letters
+  // Compute a stable randomized order for letters - only for desktop
   const randomizedOrder = useMemo(
-    () => shuffleArray([...Array(firstName.length + lastName.length).keys()]),
-    []
+    () =>
+      !isMobile
+        ? shuffleArray([...Array(firstName.length + lastName.length).keys()])
+        : [],
+    [isMobile]
   );
 
-  // Animation variants
+  // Calculate total animation duration for name
+  const totalNameLength = firstName.length + lastName.length;
+  const lastLetterDelay = (totalNameLength - 1) * 0.4; // Time until last letter starts
+  const nameAnimationComplete = lastLetterDelay + 2.5; // Add letter animation duration
+
+  // Animation variants - simplified for mobile
   const letterVariants = useMemo(
     () => ({
-      initial: { y: "-100vh", opacity: 0, rotateX: 5 },
+      initial: isMobile ? { opacity: 0 } : { opacity: 0, scale: 1.2 },
       fallIn: (i: number) => ({
-        y: [0, -8, 3, 0], // Subtle bounce
-        opacity: 1,
-        rotateX: [5, 0],
-        scale: [1, 1.05, 0.98, 1], // Very subtle pulse
+        opacity: [0, 0.3, 0.6, 0.8, 1],
+        scale: isMobile ? 1 : [1.2, 1.1, 1.05, 1],
         transition: {
-          delay: randomizedOrder[i] * 0.06,
-          type: "spring",
-          stiffness: 110,
-          damping: 20,
+          delay: isMobile ? i * 0.03 : randomizedOrder[i] * 0.4,
+          duration: isMobile ? 0.3 : 2.5,
+          times: [0, 0.2, 0.5, 0.8, 1],
+          ease: "easeInOut",
         },
       }),
     }),
-    [randomizedOrder]
+    [isMobile, randomizedOrder]
   );
 
-  // Get gradient colors for a letter based on its position using white-gray-blue spectrum
-  const getGradientColors = () => {
-    // California sunset-inspired color palette (vibrant blue to peach)
-    return {
-      start: "#4B9FEB", // Bright sky blue
-      midLight: "#4A2B57", // Deep twilight purple
-      mid: "#FF6B6B", // Warm coral
-      end: "#FFE4B5", // Mellow peach
-      midDark: "#FFA07A", // Light salmon (unused)
-      accent: "#FF8C69", // Salmon pink (unused)
-    };
-  };
-
-  // Create rolling wave animation for the entire name
-  const letterAnimationProps = (isFirstName: boolean, index: number) => {
-    const colors = getGradientColors();
-    const letterPosition = isFirstName ? index : index + firstName.length;
-    const waveDelay = letterPosition * 0.25;
-
+  // Simplified letter props without ongoing animations
+  const letterAnimationProps = () => {
     return {
       style: {
-        backgroundSize: "200% 100%",
-        backgroundImage: `linear-gradient(
-          to right,
-          ${colors.start},    /* Ocean blue */
-          ${colors.midLight}, /* Deep twilight purple */
-          ${colors.mid},      /* Warm coral */
-          ${colors.end}       /* Mellow peach */
-        )`,
-      },
-      animate: {
-        backgroundPosition: ["0% center", "100% center", "0% center"],
-      },
-      transition: {
-        backgroundPosition: {
-          duration: 14,
-          times: [0, 0.5, 1],
-          ease: "easeInOut",
-          repeat: Infinity,
-          delay: waveDelay,
-        },
+        willChange: "transform",
+        transform: "translateZ(0)",
       },
     };
   };
@@ -132,12 +103,11 @@ const HeroSection: React.FC = () => {
   //   });
   // };
 
-  if (!isClient) return null; // Prevents rendering until mounted
+  if (!isClient) return null;
 
   return (
     <HeroContainer>
       <HeroContentWrapper>
-        {/* Name Wrapper (Mobile: Stacks First/Last Name) */}
         <HeroTextWrapper>
           <FirstName>
             {firstName.split("").map((char, i) => (
@@ -147,13 +117,8 @@ const HeroSection: React.FC = () => {
                 initial="initial"
                 animate="fallIn"
                 variants={letterVariants}
-                whileHover={{
-                  scale: 1.08,
-                  transition: { duration: 0.2 },
-                  z: 10,
-                }}
               >
-                <GradientLetter {...letterAnimationProps(true, i)}>
+                <GradientLetter {...letterAnimationProps()}>
                   {char}
                 </GradientLetter>
               </LetterWrapper>
@@ -167,13 +132,8 @@ const HeroSection: React.FC = () => {
                 initial="initial"
                 animate="fallIn"
                 variants={letterVariants}
-                whileHover={{
-                  scale: 1.08,
-                  transition: { duration: 0.2 },
-                  z: 10,
-                }}
               >
-                <GradientLetter {...letterAnimationProps(false, i)}>
+                <GradientLetter {...letterAnimationProps()}>
                   {char}
                 </GradientLetter>
               </LetterWrapper>
@@ -181,43 +141,30 @@ const HeroSection: React.FC = () => {
           </LastName>
         </HeroTextWrapper>
 
-        {/* Underline with enhanced animation */}
         <Underline
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: 1, opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
+          transition={{
+            delay: isMobile ? 0.3 : nameAnimationComplete + 0.5, // Wait for name + 0.5s
+            duration: isMobile ? 0.4 : 0.8,
+            ease: "easeOut",
+          }}
         />
 
-        {/* Subtext with improved styling and animation */}
-        <SubtextWrapper>
+        <SubtextWrapper
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            delay: isMobile ? 0.4 : nameAnimationComplete + 1.3, // Wait for name + line + 0.5s
+            duration: 0.8,
+          }}
+        >
           <SubtextLine
             initial={{ opacity: 0, y: 20 }}
-            animate={{
-              opacity: 1,
-              y: 0,
-              backgroundPosition: ["0% center", "100% center", "0% center"],
-            }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
-              opacity: { delay: 1.2, duration: 0.5 },
-              y: { delay: 1.2, duration: 0.5 },
-              backgroundPosition: {
-                duration: 14,
-                times: [0, 0.5, 1],
-                ease: "easeInOut",
-                repeat: Infinity,
-                delay: 0.5,
-              },
-            }}
-            style={{
-              backgroundImage: `linear-gradient(
-                to right,
-                #4B9FEB,  /* Ocean blue */
-                #4A2B57,  /* Deep twilight purple */
-                #FF6B6B,  /* Warm coral */
-                #FFA07A,  /* Light salmon */
-                #FFE4B5,  /* Mellow peach */
-                #FF8C69   /* Salmon pink */
-              )`,
+              opacity: { duration: 0.8 },
+              y: { duration: 0.8 },
             }}
           >
             Software Engineer - San Pedro, CA
