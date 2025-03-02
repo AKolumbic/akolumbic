@@ -13,7 +13,7 @@ import HeroSection from "./sections/HeroSection";
 import AboutMe from "./sections/AboutMe";
 import Portfolio from "./sections/Portfolio";
 import Contact from "./sections/Contact";
-import GradientBackground from "./components/GradientBackground";
+import SafeGradientBackground from "./components/SafeGradientBackground";
 import ThemeSelector from "./components/ThemeSelector";
 import { ThemeType } from "./types/theme.types";
 import ScrollProgress from "./components/ScrollProgress";
@@ -243,7 +243,7 @@ export default function HomePage(): JSX.Element {
 
   return (
     <>
-      <GradientBackground activeSection={activeSection} theme={theme} />
+      <SafeGradientBackground activeSection={activeSection} theme={theme} />
       {!isMobile && (
         <ThemeSelector currentTheme={theme} onThemeChange={setTheme} />
       )}
