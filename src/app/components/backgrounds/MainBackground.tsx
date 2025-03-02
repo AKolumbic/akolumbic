@@ -63,10 +63,88 @@ const fragmentShader = `
     return value * 0.95;
   }
 
+  // Generate a single star at a specific position
+  float star(vec2 position, float brightness) {
+    // Hash function for pseudo-random values
+    vec2 p = fract(position * vec2(123.34, 234.56));
+    p += dot(p, p + 34.23);
+    float hash = fract(p.x * p.y);
+    
+    // Only create stars at specific hash thresholds (makes them sparse)
+    if (hash > 0.995) { // Slightly more stars (from 0.997)
+      // Shape of the star - significantly larger point
+      float dist = length(fract(position) - 0.5);
+      float star = 1.0 - smoothstep(0.0, 0.06 * hash, dist); // Increased from 0.0315 to 0.06 (about 2x larger)
+      
+      // Star brightness based on another hash factor
+      return star * brightness * hash;
+    }
+    return 0.0;
+  }
+  
+  // Generate a sparse, distant starfield
+  vec3 starField(vec2 uv, vec2 mousePos, float time) {
+    // Very dark background with sparse stars
+    vec3 stars = vec3(0.0);
+    
+    // Each layer of stars should have a unique position and twinkling
+    vec2 starUV1 = uv * 1.0;
+    vec2 starUV2 = uv * 1.1 + vec2(0.2);
+    vec2 starUV3 = uv * 0.9 - vec2(0.3);
+    
+    // Create multiple layers of stars at different scales
+    for (int i = 0; i < 3; i++) {
+      // Each layer has different scale and seed
+      float scale = 25.0 + float(i) * 25.0; // Adjusted scale to spread stars more evenly
+      float seed = 10.0 * float(i + 1);
+      vec2 useUV;
+      
+      // Select different base positions for different layers
+      if (i == 0) useUV = starUV1;
+      else if (i == 1) useUV = starUV2;
+      else useUV = starUV3;
+      
+      // Create more pronounced twinkling effect 
+      float twinkleSpeed = 0.3 + float(i) * 0.2; // Different speeds for different layers
+      float twinklePhase = seed + time * twinkleSpeed;
+      float twinkle = sin(twinklePhase) * 0.8 + 0.5; // Increased amplitude from 0.5 to 0.8
+      
+      // More random twinkling for some stars
+      float randOffset = fract(sin(seed * 234.45) * 436.78);
+      float extraTwinkle = sin(time * 1.5 + randOffset * 10.0) * 0.5 + 0.5;
+      twinkle = mix(twinkle, extraTwinkle, randOffset);
+      
+      // Generate stars across entire screen by using repeating pattern
+      for (float x = -2.0; x <= 2.0; x += 1.0) {
+        for (float y = -2.0; y <= 2.0; y += 1.0) {
+          vec2 offset = vec2(x, y);
+          vec2 pos = (useUV + offset) * scale + seed;
+          float s = star(pos, 0.7 + 0.3 * float(i)); // Increased brightness
+          
+          // Star color with slight random variation
+          float colorVar = fract(sin(dot(floor(pos), vec2(12.9898, 78.233))) * 43758.5453);
+          vec3 starColor = vec3(0.8 + 0.2 * colorVar, 0.9 + 0.1 * colorVar, 1.0);
+          
+          // Add more pronounced twinkling
+          stars += s * starColor * (0.3 + 0.7 * twinkle);
+        }
+      }
+    }
+    
+    // Calculate mouse influence for star brightening effect - smaller radius
+    float mouseDistance = distance(uv, mousePos);
+    float mouseBrightness = smoothstep(0.15, 0.0, mouseDistance); // Reduced from 0.3 to 0.15 (smaller radius)
+    
+    // Increase star brightness near mouse
+    stars *= 1.0 + mouseBrightness * 5.0;
+    
+    return stars * 0.5;
+  }
+
   void main() {
     vec2 uv = v_uv;
     vec2 aspect = vec2(u_resolution.x/u_resolution.y, 1.0);
-    uv = (uv - 0.5) * aspect + 0.5;
+    vec2 aspectCorrectedUV = (uv - 0.5) * aspect + 0.5;
     
     // Define our color palette - deep blue, navy, midnight blue, charcoal
     vec3 darkNavy = vec3(0.04, 0.06, 0.14);    // Very dark navy
@@ -77,49 +155,32 @@ const fragmentShader = `
     // Base animation speed (increased by 5%)
     float time = u_time * 0.0525; // Slightly faster
     
-    // Vector from UV to mouse position (correct direction for pushing away)
+    // Mouse position (used for star brightening instead of smoke displacement)
     vec2 mousePos = u_mouse;
-    vec2 toMouse = mousePos - uv;
-    float distToMouse = length(toMouse);
     
-    // Create a more noticeable pushing force (15% more intense)
-    float pushRadius = 0.17; // Slightly larger radius of influence (+15%)
-    float pushStrength = 0.0345; // Increased strength by 15%
-    
-    // Calculate push vector - away from the mouse
-    vec2 pushDir = normalize(-toMouse); // Reversed direction to push away
-    
-    // Enhanced falloff curve for more pronounced effect near cursor
-    float baseFactor = smoothstep(pushRadius, 0.0, distToMouse);
-    // Sharper curve with slightly more influence in the mid-range
-    float pushFactor = pow(baseFactor, 1.8); 
-    
-    // Calculate the enhanced displacement with 15% more effect
-    vec2 displacement = pushDir * pushFactor * pushStrength;
-    
-    // Apply displacement to all noise layers for consistent motion
+    // Apply standard motion to smoke layers without mouse displacement
     vec2 baseMotion1 = vec2(time * 0.3, time * 0.2);
     vec2 baseMotion2 = vec2(-time * 0.2, time * 0.3);
     
-    // Get significantly denser smoke pattern with more complex interaction and enhanced mouse influence
-    float f1 = fbm(uv * 3.4 + baseMotion1 + displacement * 0.35);
-    float f2 = fbm(uv * 2.4 + baseMotion2 + f1 * 0.45 + displacement * 0.58);
-    float f3 = fbm(uv * 4.8 + f1 * 0.28 + vec2(time) * 0.15 + displacement * 0.8);
+    // Get smoke pattern with standard motion (no mouse influence on smoke)
+    float f1 = fbm(aspectCorrectedUV * 3.4 + baseMotion1);
+    float f2 = fbm(aspectCorrectedUV * 2.4 + baseMotion2 + f1 * 0.45);
+    float f3 = fbm(aspectCorrectedUV * 4.8 + f1 * 0.28 + vec2(time) * 0.15);
     
     // Add another layer with higher frequency for finer smokey detail
-    float f4 = fbm(uv * 6.5 + f2 * 0.18 + vec2(-time * 0.2, time * 0.08));
+    float f4 = fbm(aspectCorrectedUV * 6.5 + f2 * 0.18 + vec2(-time * 0.2, time * 0.08));
     
     // Add a fifth layer for microscale smoke particles
-    float f5 = fbm(uv * 8.5 + f3 * 0.12 + vec2(time * 0.15, -time * 0.1));
+    float f5 = fbm(aspectCorrectedUV * 8.5 + f3 * 0.12 + vec2(time * 0.15, -time * 0.1));
     
     // Calculate distance from center for edge concentration
-    float distFromCenter = length((uv - 0.5) * 2.0);
+    float distFromCenter = length((aspectCorrectedUV - 0.5) * 2.0);
     
     // Create an edge density multiplier (higher at edges, lower in center)
     float edgeDensity = smoothstep(0.0, 1.8, distFromCenter);
     
     // Add extra smoke around edges (further enhanced for density)
-    float edgeSmoke = fbm(uv * 3.0 + vec2(time * 0.22, -time * 0.16)) * edgeDensity * 0.65;
+    float edgeSmoke = fbm(aspectCorrectedUV * 3.0 + vec2(time * 0.22, -time * 0.16)) * edgeDensity * 0.65;
     
     // Combine all noise layers with additional micro-detail layer
     float finalNoise = f2 * 0.50 + f3 * 0.25 + f4 * 0.15 + f5 * 0.10 + edgeSmoke;
@@ -127,22 +188,48 @@ const fragmentShader = `
     // Further increase edge-to-center contrast for denser appearance
     finalNoise = mix(finalNoise * 0.85, finalNoise * 1.25, edgeDensity);
     
-    // Use the noise to mix between the colors with smoother transitions
-    vec3 color;
-    if (finalNoise < 0.35) {
-      // Dark regions
-      color = mix(black, darkNavy, smoothstep(0.0, 0.35, finalNoise));
-    } else if (finalNoise < 0.65) {
-      // Mid regions
-      color = mix(darkNavy, midnightBlue, smoothstep(0.35, 0.65, finalNoise));
-    } else {
-      // Light regions (still dark)
-      color = mix(midnightBlue, charcoalGray, smoothstep(0.65, 1.0, finalNoise));
+    // Generate distant starfield with mouse trail effect
+    vec3 stars = vec3(0.0);
+    
+    // Create the main star brightness effect at the current mouse position
+    stars += starField(uv, mousePos, u_time);
+    
+    // Create trail effect with fading brightness
+    for (int i = 1; i <= 5; i++) {
+      float trailFactor = 1.0 - float(i) / 5.0; // Fades from 0.8 to 0.0
+      
+      // Movement speed-based offset (assuming mouse moved from right to left or left to right)
+      float xOffset = -0.03 * float(i); // Negative X = trail to the left
+      
+      // Create a trail position offset from current mouse position
+      vec2 trailPos = mousePos + vec2(xOffset, 0.0);
+      
+      // Add stars at the trail position with reduced brightness
+      vec3 trailStars = starField(uv, trailPos, u_time);
+      stars = max(stars, trailStars * trailFactor * 0.8);
     }
     
-    // Modified vignette with 15% stronger effect
-    float vignette = 1.0 - smoothstep(0.5, 1.75, distFromCenter);
-    color = mix(color, black, (1.0 - vignette) * 0.69);
+    // Create smoke color based on noise
+    vec3 smokeColor;
+    if (finalNoise < 0.35) {
+      // Dark regions
+      smokeColor = mix(black, darkNavy, smoothstep(0.0, 0.35, finalNoise));
+    } else if (finalNoise < 0.65) {
+      // Mid regions
+      smokeColor = mix(darkNavy, midnightBlue, smoothstep(0.35, 0.65, finalNoise));
+    } else {
+      // Light regions (still dark)
+      smokeColor = mix(midnightBlue, charcoalGray, smoothstep(0.65, 1.0, finalNoise));
+    }
+    
+    // Start with stars as the background
+    vec3 color = stars;
+    
+    // Determine smoke opacity - denser smoke = more opaque
+    float smokeOpacity = smoothstep(0.05, 0.7, finalNoise);
+    
+    // Layer smoke on top of stars
+    color = mix(color, smokeColor, smokeOpacity);
     
     gl_FragColor = vec4(color, 1.0);
   }
@@ -173,12 +260,24 @@ const SmokeEffect = ({ reducedMotion }: { reducedMotion: boolean }) => {
   const { viewport } = useThree();
   const materialRef = useRef<THREE.ShaderMaterial>(null!);
   const mousePosition = useRef<THREE.Vector2>(new THREE.Vector2(0.5, 0.5));
+  const prevMousePosition = useRef<THREE.Vector2>(new THREE.Vector2(0.5, 0.5));
+  const mouseVelocity = useRef<THREE.Vector2>(new THREE.Vector2(0.0, 0.0));
 
-  // Set up mouse tracking
+  // Set up mouse tracking with velocity calculation
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
+      // Store previous position
+      prevMousePosition.current.copy(mousePosition.current);
+
+      // Update current position
       mousePosition.current.x = event.clientX / window.innerWidth;
       mousePosition.current.y = 1.0 - event.clientY / window.innerHeight;
+
+      // Calculate velocity (direction and speed of mouse movement)
+      mouseVelocity.current.x =
+        mousePosition.current.x - prevMousePosition.current.x;
+      mouseVelocity.current.y =
+        mousePosition.current.y - prevMousePosition.current.y;
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -203,6 +302,9 @@ const SmokeEffect = ({ reducedMotion }: { reducedMotion: boolean }) => {
         viewport.width * viewport.factor;
       materialRef.current.uniforms.u_resolution.value.y =
         viewport.height * viewport.factor;
+
+      // Slowly decay mouse velocity when not moving
+      mouseVelocity.current.multiplyScalar(0.95);
     }
   });
 
