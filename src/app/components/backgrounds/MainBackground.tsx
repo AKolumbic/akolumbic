@@ -1,121 +1,172 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { BackgroundProps } from "./types";
 
-// Static CSS-based background that works reliably in all environments
-const StaticSmokeBackground: React.FC = () => {
+// Interactive starry background that highlights stars when the mouse is nearby
+const StarryBackground: React.FC<{ reducedMotion: boolean }> = ({
+  reducedMotion,
+}) => {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [stars, setStars] = useState<
+    Array<{
+      x: number;
+      y: number;
+      size: number;
+      twinkleSpeed: number;
+      brightness: number;
+      id: number;
+    }>
+  >([]);
+  const backgroundRef = useRef<HTMLDivElement>(null);
+  const isMouseMoving = useRef(false);
+  const lastUpdate = useRef(0);
+
+  // Create stars on component mount
+  useEffect(() => {
+    // Increased stars by another 15% (from 86 to 99)
+    const newStars = Array.from({ length: 99 }).map((_, i) => ({
+      x: Math.random() * 100, // x position as percentage
+      y: Math.random() * 100, // y position as percentage
+      size: 1 + Math.random() * 2, // Size between 1-3px
+      twinkleSpeed: 3 + Math.random() * 7, // Animation duration between 3-10s
+      brightness: 0.1 + Math.random() * 0.5, // Base brightness between 0.1-0.6
+      id: i, // Unique ID for React keys
+    }));
+    setStars(newStars);
+  }, []);
+
+  // Track mouse movements
+  useEffect(() => {
+    if (reducedMotion) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      isMouseMoving.current = true;
+
+      // Throttle updates to improve performance
+      const now = Date.now();
+      if (now - lastUpdate.current < 30) return; // ~30fps
+      lastUpdate.current = now;
+
+      const rect = backgroundRef.current?.getBoundingClientRect();
+      if (rect) {
+        setMousePos({
+          x: ((e.clientX - rect.left) / rect.width) * 100,
+          y: ((e.clientY - rect.top) / rect.height) * 100,
+        });
+      }
+    };
+
+    const handleMouseLeave = () => {
+      isMouseMoving.current = false;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, [reducedMotion]);
+
   return (
     <div
+      ref={backgroundRef}
       style={{
         position: "absolute",
         top: 0,
         left: 0,
         width: "100%",
         height: "100%",
-        backgroundImage: `
+        background: `
           radial-gradient(circle at 50% 50%, rgba(5, 6, 14, 0.5) 0%, rgba(4, 6, 20, 0.7) 25%, rgba(4, 8, 30, 0.8) 50%, rgba(7, 11, 34, 0.9) 75%, rgba(10, 17, 40, 1) 100%),
           linear-gradient(to bottom, #020206, #0D1B2A, #1B263B)
         `,
         overflow: "hidden",
       }}
     >
-      {/* Animated stars effect with CSS */}
-      <div
-        style={{
-          position: "absolute",
-          width: "100%",
-          height: "100%",
-          background: `
-            radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.5) 0.1%, rgba(255, 255, 255, 0) 0.15%),
-            radial-gradient(circle at 70% 40%, rgba(255, 255, 255, 0.5) 0.1%, rgba(255, 255, 255, 0) 0.1%),
-            radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.5) 0.05%, rgba(255, 255, 255, 0) 0.1%),
-            radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.5) 0.05%, rgba(255, 255, 255, 0) 0.08%),
-            radial-gradient(circle at 10% 80%, rgba(255, 255, 255, 0.5) 0.05%, rgba(255, 255, 255, 0) 0.1%),
-            radial-gradient(circle at 60% 70%, rgba(255, 255, 255, 0.5) 0.05%, rgba(255, 255, 255, 0) 0.1%),
-            radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.5) 0.05%, rgba(255, 255, 255, 0) 0.1%),
-            radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.5) 0.05%, rgba(255, 255, 255, 0) 0.08%),
-            radial-gradient(circle at 50% 90%, rgba(255, 255, 255, 0.5) 0.05%, rgba(255, 255, 255, 0) 0.1%)
-          `,
-        }}
-      />
+      {/* Fancy stars with mouse interaction */}
+      <div className="starField">
+        {stars.map((star) => {
+          // Calculate distance from mouse to this star (Euclidean distance)
+          const dx = star.x - mousePos.x;
+          const dy = star.y - mousePos.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
 
-      {/* Animated smoke effect with CSS */}
-      <div
-        style={{
-          position: "absolute",
-          width: "200%",
-          height: "200%",
-          top: "-50%",
-          left: "-50%",
-          background:
-            "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPgogIDxmaWx0ZXIgaWQ9Im5vaXNlIj4KICAgIDxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIwLjA1IiBudW1PY3RhdmVzPSIyIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+CiAgICA8ZmVDb2xvck1hdHJpeCB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIi8+CiAgPC9maWx0ZXI+CiAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI25vaXNlKSIgb3BhY2l0eT0iMC4wNSIvPgo8L3N2Zz4=')",
-          opacity: 0.8,
-          animation: "drift 20s linear infinite",
-        }}
-      />
+          // The closer to the mouse, the brighter the star
+          // Slightly reduced influence radius to 14% due to more stars
+          const influenceRadius = 14;
+          const mouseEffect =
+            isMouseMoving.current && !reducedMotion
+              ? Math.max(0, 1 - distance / influenceRadius)
+              : 0;
 
-      {/* Animated particles */}
-      <div className="stars">
-        {Array.from({ length: 20 }).map((_, i) => (
-          <div
-            key={`star-${i}`}
-            className="star"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${5 + Math.random() * 10}s`,
-            }}
-          />
-        ))}
+          // Boost brightness based on mouse proximity (max 2x brighter)
+          const boostedBrightness = star.brightness * (1 + mouseEffect * 2);
+
+          // Apply a subtle size increase too
+          const boostedSize = star.size * (1 + mouseEffect * 0.5);
+
+          return (
+            <div
+              key={star.id}
+              className="star"
+              style={{
+                left: `${star.x}%`,
+                top: `${star.y}%`,
+                width: `${boostedSize}px`,
+                height: `${boostedSize}px`,
+                opacity: boostedBrightness,
+                animationDuration: `${star.twinkleSpeed}s`,
+                // Increase glow effect by 5% and make it smoother
+                boxShadow:
+                  mouseEffect > 0.25
+                    ? `0 0 ${3 + mouseEffect * 5.25}px rgba(255, 255, 255, ${
+                        mouseEffect * 0.735
+                      })`
+                    : "none",
+                // Highlight color varies slightly based on position
+                backgroundColor:
+                  mouseEffect > 0.5
+                    ? `hsl(${210 + (star.id % 60)}, 80%, ${
+                        70 + mouseEffect * 30
+                      }%)`
+                    : "white",
+                // Make transitions smoother for a more refined effect
+                transition:
+                  "opacity 0.3s ease-out, width 0.3s ease-out, height 0.3s ease-out, box-shadow 0.3s ease-out, background-color 0.3s ease-out",
+              }}
+            />
+          );
+        })}
       </div>
 
-      {/* CSS animations */}
       <style jsx>{`
-        @keyframes drift {
-          0% {
-            transform: rotate(0deg) scale(1);
-          }
-          50% {
-            transform: rotate(5deg) scale(1.1);
-          }
-          100% {
-            transform: rotate(0deg) scale(1);
-          }
-        }
-
-        .stars {
+        .starField {
           position: absolute;
           width: 100%;
           height: 100%;
           top: 0;
           left: 0;
-          pointer-events: none;
         }
 
         .star {
           position: absolute;
-          width: 2px;
-          height: 2px;
           border-radius: 50%;
-          background-color: white;
-          opacity: 0;
+          transform: translate(-50%, -50%);
           animation: twinkle linear infinite;
         }
 
         @keyframes twinkle {
-          0% {
-            opacity: 0;
-            transform: scale(0.5);
+          0%,
+          100% {
+            opacity: 0.1;
+            transform: scale(0.7);
           }
           50% {
-            opacity: 0.8;
-            transform: scale(1);
-          }
-          100% {
-            opacity: 0;
-            transform: scale(0.5);
+            opacity: 0.9;
+            transform: scale(1.1);
           }
         }
       `}</style>
@@ -123,61 +174,11 @@ const StaticSmokeBackground: React.FC = () => {
   );
 };
 
-// Mouse tracking effect for extra interactivity
-const MouseTracker: React.FC = () => {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({
-        x: e.clientX,
-        y: e.clientY,
-      });
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  return (
-    <div
-      className="mouse-glow"
-      style={{
-        left: `${mousePos.x}px`,
-        top: `${mousePos.y}px`,
-      }}
-    >
-      <style jsx>{`
-        .mouse-glow {
-          position: fixed;
-          width: 200px;
-          height: 200px;
-          border-radius: 50%;
-          background: radial-gradient(
-            circle,
-            rgba(255, 255, 255, 0.15) 0%,
-            rgba(255, 255, 255, 0) 70%
-          );
-          transform: translate(-50%, -50%);
-          pointer-events: none;
-          z-index: 10;
-          mix-blend-mode: screen;
-        }
-      `}</style>
-    </div>
-  );
-};
-
-// Main background component - now simplified to avoid React 19 compatibility issues
+// Main background component with improved star interaction
 const MainBackground: React.FC<BackgroundProps> = ({
   reducedMotion = false,
 }) => {
-  return (
-    <>
-      <StaticSmokeBackground />
-      {!reducedMotion && <MouseTracker />}
-    </>
-  );
+  return <StarryBackground reducedMotion={reducedMotion} />;
 };
 
 // Add display name for React DevTools and error reporting

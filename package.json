@@ -9,9 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@react-spring/three": "^9.7.5",
-    "@react-three/drei": "^9.88.17",
-    "@react-three/fiber": "^8.15.11",
     "@vercel/analytics": "^1.4.1",
     "@vercel/speed-insights": "^1.1.0",
     "framer-motion": "^12.0.6",
@@ -20,8 +17,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^5.4.0",
     "react-intersection-observer": "^9.15.1",
-    "styled-components": "^6.1.14",
-    "three": "^0.174.0"
+    "styled-components": "^6.1.14"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -52,7 +52,7 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
   // Get the appropriate colors based on theme and section
   const currentColors = (() => {
     // Special case for themes with only 'all' property
-    if (theme === "sunset" || theme === "california3d") {
+    if (theme === "sunset") {
       return themeColors[theme].all;
     }
     // Normal case for main and beach themes

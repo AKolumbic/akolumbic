@@ -1,31 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Transpile Three.js and related packages properly
-  transpilePackages: [
-    "three",
-    "@react-three/fiber",
-    "@react-three/drei",
-    "@react-spring/three",
-  ],
+  // Removed Three.js transpilation config
 
-  // Webpack config to handle Three.js correctly
-  webpack: (config) => {
-    // Allow importing of shader files
-    config.module.rules.push({
-      test: /\.(glsl|vs|fs|vert|frag)$/,
-      exclude: /node_modules/,
-      use: ["raw-loader"],
-    });
-
-    return config;
-  },
+  // Removed Webpack config for shader files
 
   // Turbopack config - simplified for stability
   experimental: {
     turbo: {},
   },
 
-  // Ensure images from Three.js are optimized
+  // Image optimization settings
   images: {
     domains: [],
     remotePatterns: [],
@@ -34,8 +18,8 @@ const nextConfig = {
   // Set production sourcemaps for easier debugging
   productionBrowserSourceMaps: true,
 
-  // Strict mode can cause issues with Three.js animations
-  reactStrictMode: false,
+  // Enable React strict mode now that we don't have Three.js
+  reactStrictMode: true,
 
   // Handle Vercel deployment
   output: "standalone",

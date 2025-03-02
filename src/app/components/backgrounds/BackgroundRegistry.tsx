@@ -5,7 +5,6 @@ import {
   MainBackground,
   BeachBackground,
   SunsetBackground,
-  CaliforniaThreeJSBackground,
 } from "./ClientBackgrounds";
 
 // Interface for registry entries
@@ -18,7 +17,6 @@ const backgrounds: Record<ThemeType, BackgroundRegistryEntry> = {
   main: { component: MainBackground },
   beach: { component: BeachBackground },
   sunset: { component: SunsetBackground },
-  california3d: { component: CaliforniaThreeJSBackground },
 };
 
 /**

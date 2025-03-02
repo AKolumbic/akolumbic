@@ -5,7 +5,7 @@ import { BackgroundProps } from "./types";
 
 /**
  * A simple fallback background component that shows a gradient
- * when Three.js components fail to load
+ * when other background components fail to load
  */
 const FallbackBackground: React.FC<BackgroundProps> = ({
   colors,
