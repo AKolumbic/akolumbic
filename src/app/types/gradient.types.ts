@@ -22,6 +22,14 @@ export interface SunsetColors {
   yellow: string;
 }
 
+export interface CaliforniaThreeJSColors {
+  goldenState: string;
+  poppy: string;
+  coastalBlue: string;
+  redwood: string;
+  sierraGreen: string;
+}
+
 export interface ThemeColors {
   main: {
     [key in "hero" | "about" | "portfolio" | "contact"]: MainColors;
@@ -31,6 +39,9 @@ export interface ThemeColors {
   };
   sunset: {
     all: SunsetColors;
+  };
+  california3d: {
+    all: CaliforniaThreeJSColors;
   };
 }
 
@@ -47,4 +58,4 @@ export interface GradientBackgroundProps {
   theme?: ThemeType;
 }
 
-export type ThemeType = "main" | "beach" | "sunset";
+export type ThemeType = "main" | "beach" | "sunset" | "california3d";

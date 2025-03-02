@@ -67,4 +67,13 @@ export const themeColors: ThemeColors = {
       yellow: "#ffd740",
     },
   },
+  california3d: {
+    all: {
+      goldenState: "#FFD700", // California gold
+      poppy: "#FF6D00", // California poppy orange
+      coastalBlue: "#1E88E5", // Pacific ocean blue
+      redwood: "#5D4037", // Redwood forest brown
+      sierraGreen: "#2E7D32", // Sierra mountains green
+    },
+  },
 };

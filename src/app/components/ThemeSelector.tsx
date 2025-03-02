@@ -17,6 +17,8 @@ const themeGradients = {
   main: "linear-gradient(135deg, #1A1A1A 0%, #0D1B2A 50%, #1B263B 100%)",
   beach: "linear-gradient(135deg, #01688D 0%, #0197B1 50%, #81BBA0 100%)",
   sunset: "linear-gradient(135deg, #1a237e 0%, #7e57c2 50%, #ff5252 100%)",
+  california3d:
+    "linear-gradient(135deg, #FFD700 0%, #FF6D00 50%, #1E88E5 100%)",
 };
 
 const ThemeSelector: React.FC<ThemeSelectorProps> = ({
@@ -90,6 +92,18 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               whileTap={{ scale: 0.98 }}
             >
               Sunset
+            </ThemeButton>
+            <ThemeButton
+              $active={currentTheme === "california3d"}
+              $gradient={themeGradients.california3d}
+              onClick={() => {
+                onThemeChange("california3d");
+                setIsOpen(false);
+              }}
+              whileHover={{ x: 2 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              California 3D
             </ThemeButton>
           </ThemePanel>
         )}

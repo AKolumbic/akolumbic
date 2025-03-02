@@ -66,8 +66,8 @@ const HeroSection: React.FC = () => {
 
   // Calculate total animation duration for name
   const totalNameLength = firstName.length + lastName.length;
-  const lastLetterDelay = (totalNameLength - 1) * 0.4; // Time until last letter starts
-  const nameAnimationComplete = lastLetterDelay + 2.5; // Add letter animation duration
+  const lastLetterDelay = (totalNameLength - 1) * 0.2; // Time until last letter starts (reduced from 0.4 to 0.2)
+  const nameAnimationComplete = lastLetterDelay + 1.25; // Add letter animation duration (reduced from 2.5 to 1.25)
 
   // Animation variants - simplified for mobile
   const letterVariants = useMemo(
@@ -77,8 +77,8 @@ const HeroSection: React.FC = () => {
         opacity: [0, 0.3, 0.6, 0.8, 1],
         scale: isMobile ? 1 : [1.2, 1.1, 1.05, 1],
         transition: {
-          delay: isMobile ? i * 0.03 : randomizedOrder[i] * 0.4,
-          duration: isMobile ? 0.3 : 2.5,
+          delay: isMobile ? i * 0.015 : randomizedOrder[i] * 0.2, // Reduced from 0.03 and 0.4 to 0.015 and 0.2
+          duration: isMobile ? 0.15 : 1.25, // Reduced from 0.3 and 2.5 to 0.15 and 1.25
           times: [0, 0.2, 0.5, 0.8, 1],
           ease: "easeInOut",
         },
@@ -145,8 +145,8 @@ const HeroSection: React.FC = () => {
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: 1, opacity: 1 }}
           transition={{
-            delay: isMobile ? 0.3 : nameAnimationComplete + 0.5, // Wait for name + 0.5s
-            duration: isMobile ? 0.4 : 0.8,
+            delay: isMobile ? 0.15 : nameAnimationComplete + 0.25, // Reduced from 0.3 and 0.5 to 0.15 and 0.25
+            duration: isMobile ? 0.2 : 0.4, // Reduced from 0.4 and 0.8 to 0.2 and 0.4
             ease: "easeOut",
           }}
         />
@@ -155,16 +155,16 @@ const HeroSection: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{
-            delay: isMobile ? 0.4 : nameAnimationComplete + 1.3, // Wait for name + line + 0.5s
-            duration: 0.8,
+            delay: isMobile ? 0.2 : nameAnimationComplete + 0.65, // Reduced from 0.4 and 1.3 to 0.2 and 0.65
+            duration: 0.4, // Reduced from 0.8 to 0.4
           }}
         >
           <SubtextLine
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              opacity: { duration: 0.8 },
-              y: { duration: 0.8 },
+              opacity: { duration: 0.4 }, // Reduced from 0.8 to 0.4
+              y: { duration: 0.4 }, // Reduced from 0.8 to 0.4
             }}
           >
             Software Engineer - San Pedro, CA
