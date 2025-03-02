@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
-import { Canvas, useFrame, extend, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { BackgroundProps } from "./types";
 
 // Fragment shader code for smokey effect with aerodynamic mouse interaction
@@ -45,97 +45,74 @@ const fragmentShader = `
     return 130.0 * dot(m, g);
   }
 
-  // Further enhanced FBM function for 15% more smoke density
   float fbm(vec2 p) {
     float value = 0.0;
-    float amplitude = 0.65; // Further increased for denser smoke
-    float frequency = 1.15; // Higher base frequency for more detail
-    float lacunarity = 2.25; // Increased frequency multiplier
-    float gain = 0.48; // Higher gain to enhance detail persistence across scales
+    float amplitude = 0.65;
+    float frequency = 1.15;
+    float lacunarity = 2.25;
+    float gain = 0.48;
     
-    for(int i = 0; i < 9; i++) { // Increased to 9 octaves for maximum detail
+    for(int i = 0; i < 9; i++) {
       value += amplitude * snoise(p * frequency);
       amplitude *= gain;
       frequency *= lacunarity;
     }
     
-    // Normalize the value a bit to keep overall range similar but denser
     return value * 0.95;
   }
 
-  // Generate a single star at a specific position
   float star(vec2 position, float brightness) {
-    // Hash function for pseudo-random values
     vec2 p = fract(position * vec2(123.34, 234.56));
     p += dot(p, p + 34.23);
     float hash = fract(p.x * p.y);
     
-    // Only create stars at specific hash thresholds (makes them sparse)
-    if (hash > 0.995) { // Slightly more stars (from 0.997)
-      // Shape of the star - significantly larger point
+    if (hash > 0.995) {
       float dist = length(fract(position) - 0.5);
-      float star = 1.0 - smoothstep(0.0, 0.06 * hash, dist); // Increased from 0.0315 to 0.06 (about 2x larger)
-      
-      // Star brightness based on another hash factor
+      float star = 1.0 - smoothstep(0.0, 0.06 * hash, dist);
       return star * brightness * hash;
     }
     return 0.0;
   }
   
-  // Generate a sparse, distant starfield
   vec3 starField(vec2 uv, vec2 mousePos, float time) {
-    // Very dark background with sparse stars
     vec3 stars = vec3(0.0);
-    
-    // Each layer of stars should have a unique position and twinkling
     vec2 starUV1 = uv * 1.0;
     vec2 starUV2 = uv * 1.1 + vec2(0.2);
     vec2 starUV3 = uv * 0.9 - vec2(0.3);
     
-    // Create multiple layers of stars at different scales
     for (int i = 0; i < 3; i++) {
-      // Each layer has different scale and seed
-      float scale = 25.0 + float(i) * 25.0; // Adjusted scale to spread stars more evenly
+      float scale = 25.0 + float(i) * 25.0;
       float seed = 10.0 * float(i + 1);
       vec2 useUV;
       
-      // Select different base positions for different layers
       if (i == 0) useUV = starUV1;
       else if (i == 1) useUV = starUV2;
       else useUV = starUV3;
       
-      // Create more pronounced twinkling effect 
-      float twinkleSpeed = 0.3 + float(i) * 0.2; // Different speeds for different layers
+      float twinkleSpeed = 0.3 + float(i) * 0.2;
       float twinklePhase = seed + time * twinkleSpeed;
-      float twinkle = sin(twinklePhase) * 0.8 + 0.5; // Increased amplitude from 0.5 to 0.8
+      float twinkle = sin(twinklePhase) * 0.8 + 0.5;
       
-      // More random twinkling for some stars
       float randOffset = fract(sin(seed * 234.45) * 436.78);
       float extraTwinkle = sin(time * 1.5 + randOffset * 10.0) * 0.5 + 0.5;
       twinkle = mix(twinkle, extraTwinkle, randOffset);
       
-      // Generate stars across entire screen by using repeating pattern
       for (float x = -2.0; x <= 2.0; x += 1.0) {
         for (float y = -2.0; y <= 2.0; y += 1.0) {
           vec2 offset = vec2(x, y);
           vec2 pos = (useUV + offset) * scale + seed;
-          float s = star(pos, 0.7 + 0.3 * float(i)); // Increased brightness
+          float s = star(pos, 0.7 + 0.3 * float(i));
           
-          // Star color with slight random variation
           float colorVar = fract(sin(dot(floor(pos), vec2(12.9898, 78.233))) * 43758.5453);
           vec3 starColor = vec3(0.8 + 0.2 * colorVar, 0.9 + 0.1 * colorVar, 1.0);
           
-          // Add more pronounced twinkling
           stars += s * starColor * (0.3 + 0.7 * twinkle);
         }
       }
     }
     
-    // Calculate mouse influence for star brightening effect - smaller radius
     float mouseDistance = distance(uv, mousePos);
-    float mouseBrightness = smoothstep(0.15, 0.0, mouseDistance); // Reduced from 0.3 to 0.15 (smaller radius)
-    
-    // Increase star brightness near mouse
+    float mouseBrightness = smoothstep(0.15, 0.0, mouseDistance);
     stars *= 1.0 + mouseBrightness * 5.0;
     
     return stars * 0.5;
@@ -146,89 +123,53 @@ const fragmentShader = `
     vec2 aspect = vec2(u_resolution.x/u_resolution.y, 1.0);
     vec2 aspectCorrectedUV = (uv - 0.5) * aspect + 0.5;
     
-    // Define our color palette - deep blue, navy, midnight blue, charcoal
-    vec3 darkNavy = vec3(0.04, 0.06, 0.14);    // Very dark navy
-    vec3 midnightBlue = vec3(0.07, 0.11, 0.22); // Midnight blue
-    vec3 charcoalGray = vec3(0.16, 0.16, 0.19); // Charcoal gray
-    vec3 black = vec3(0.02, 0.02, 0.04);       // Near black
+    // Define color palette
+    vec3 darkNavy = vec3(0.04, 0.06, 0.14);
+    vec3 midnightBlue = vec3(0.07, 0.11, 0.22);
+    vec3 charcoalGray = vec3(0.16, 0.16, 0.19);
+    vec3 black = vec3(0.02, 0.02, 0.04);
     
-    // Base animation speed (increased by 5%)
-    float time = u_time * 0.0525; // Slightly faster
-    
-    // Mouse position (used for star brightening instead of smoke displacement)
+    float time = u_time * 0.0525;
     vec2 mousePos = u_mouse;
     
-    // Apply standard motion to smoke layers without mouse displacement
     vec2 baseMotion1 = vec2(time * 0.3, time * 0.2);
     vec2 baseMotion2 = vec2(-time * 0.2, time * 0.3);
     
-    // Get smoke pattern with standard motion (no mouse influence on smoke)
     float f1 = fbm(aspectCorrectedUV * 3.4 + baseMotion1);
     float f2 = fbm(aspectCorrectedUV * 2.4 + baseMotion2 + f1 * 0.45);
     float f3 = fbm(aspectCorrectedUV * 4.8 + f1 * 0.28 + vec2(time) * 0.15);
-    
-    // Add another layer with higher frequency for finer smokey detail
     float f4 = fbm(aspectCorrectedUV * 6.5 + f2 * 0.18 + vec2(-time * 0.2, time * 0.08));
-    
-    // Add a fifth layer for microscale smoke particles
     float f5 = fbm(aspectCorrectedUV * 8.5 + f3 * 0.12 + vec2(time * 0.15, -time * 0.1));
     
-    // Calculate distance from center for edge concentration
     float distFromCenter = length((aspectCorrectedUV - 0.5) * 2.0);
-    
-    // Create an edge density multiplier (higher at edges, lower in center)
     float edgeDensity = smoothstep(0.0, 1.8, distFromCenter);
-    
-    // Add extra smoke around edges (further enhanced for density)
     float edgeSmoke = fbm(aspectCorrectedUV * 3.0 + vec2(time * 0.22, -time * 0.16)) * edgeDensity * 0.65;
     
-    // Combine all noise layers with additional micro-detail layer
     float finalNoise = f2 * 0.50 + f3 * 0.25 + f4 * 0.15 + f5 * 0.10 + edgeSmoke;
-    
-    // Further increase edge-to-center contrast for denser appearance
     finalNoise = mix(finalNoise * 0.85, finalNoise * 1.25, edgeDensity);
     
-    // Generate distant starfield with mouse trail effect
     vec3 stars = vec3(0.0);
-    
-    // Create the main star brightness effect at the current mouse position
     stars += starField(uv, mousePos, u_time);
     
-    // Create trail effect with fading brightness
     for (int i = 1; i <= 5; i++) {
-      float trailFactor = 1.0 - float(i) / 5.0; // Fades from 0.8 to 0.0
-      
-      // Movement speed-based offset (assuming mouse moved from right to left or left to right)
-      float xOffset = -0.03 * float(i); // Negative X = trail to the left
-      
-      // Create a trail position offset from current mouse position
+      float trailFactor = 1.0 - float(i) / 5.0;
+      float xOffset = -0.03 * float(i);
       vec2 trailPos = mousePos + vec2(xOffset, 0.0);
-      
-      // Add stars at the trail position with reduced brightness
       vec3 trailStars = starField(uv, trailPos, u_time);
       stars = max(stars, trailStars * trailFactor * 0.8);
     }
     
-    // Create smoke color based on noise
     vec3 smokeColor;
     if (finalNoise < 0.35) {
-      // Dark regions
       smokeColor = mix(black, darkNavy, smoothstep(0.0, 0.35, finalNoise));
     } else if (finalNoise < 0.65) {
-      // Mid regions
       smokeColor = mix(darkNavy, midnightBlue, smoothstep(0.35, 0.65, finalNoise));
     } else {
-      // Light regions (still dark)
       smokeColor = mix(midnightBlue, charcoalGray, smoothstep(0.65, 1.0, finalNoise));
     }
     
-    // Start with stars as the background
     vec3 color = stars;
-    
-    // Determine smoke opacity - denser smoke = more opaque
     float smokeOpacity = smoothstep(0.05, 0.7, finalNoise);
-    
-    // Layer smoke on top of stars
     color = mix(color, smokeColor, smokeOpacity);
     
     gl_FragColor = vec4(color, 1.0);
@@ -245,18 +186,8 @@ const vertexShader = `
   }
 `;
 
-// Create a custom shader material class
-class SmokeShaderMaterial extends THREE.ShaderMaterial {
-  constructor(parameters = {}) {
-    super(parameters);
-  }
-}
-
-// Add the custom shader material to R3F
-extend({ SmokeShaderMaterial });
-
 // Helper function to detect WebGL support
-const detectWebGLSupport = () => {
+const detectWebGLSupport = (): boolean | null => {
   try {
     const canvas = document.createElement("canvas");
     return !!(
@@ -269,144 +200,92 @@ const detectWebGLSupport = () => {
   }
 };
 
-const SmokeEffect = React.memo(
-  ({ reducedMotion }: { reducedMotion: boolean }) => {
-    const { viewport } = useThree();
-    const materialRef = useRef<THREE.ShaderMaterial>(null!);
-    const mousePosition = useRef<THREE.Vector2>(new THREE.Vector2(0.5, 0.5));
-    const prevMousePosition = useRef<THREE.Vector2>(
-      new THREE.Vector2(0.5, 0.5)
-    );
-    const mouseVelocity = useRef<THREE.Vector2>(new THREE.Vector2(0.0, 0.0));
-    const timeRef = useRef<number>(0);
-    const frameId = useRef<number | null>(null);
+// Types for the shader material
+interface ShaderMaterialProps {
+  uniforms: {
+    u_time: { value: number };
+    u_mouse: { value: THREE.Vector2 };
+    u_resolution: { value: THREE.Vector2 };
+  };
+  vertexShader: string;
+  fragmentShader: string;
+  depthTest: boolean;
+  depthWrite: boolean;
+  needsUpdate?: boolean;
+}
 
-    // Set up our own animation loop outside of React's lifecycle
-    useEffect(() => {
-      let previousTime = performance.now();
+// Simplified smoke effect component to avoid React issues in production
+function SimpleSmokeEffect({
+  reducedMotion = false,
+}: {
+  reducedMotion: boolean;
+}) {
+  const materialRef = useRef<THREE.ShaderMaterial & ShaderMaterialProps>(null);
+  const mousePosition = useRef<THREE.Vector2>(new THREE.Vector2(0.5, 0.5));
+  const timeRef = useRef<number>(0);
+  const { size } = useThree();
 
-      // This function will run continuously with requestAnimationFrame
-      const animate = (currentTime: number) => {
-        const deltaTime = (currentTime - previousTime) / 1000; // in seconds
-        previousTime = currentTime;
+  // Setup shader material
+  useEffect(() => {
+    const material = materialRef.current;
+    if (!material) return;
 
-        if (materialRef.current) {
-          // Only increment if not in reduced motion mode
-          if (!reducedMotion) {
-            // Use actual time delta to ensure smooth animation regardless of framerate
-            timeRef.current += deltaTime;
-          }
+    const handleMouseMove = (event: MouseEvent) => {
+      mousePosition.current.x = event.clientX / window.innerWidth;
+      mousePosition.current.y = 1.0 - event.clientY / window.innerHeight;
+    };
 
-          // Update the shader uniforms
-          materialRef.current.uniforms.u_time.value = reducedMotion
-            ? 0
-            : timeRef.current;
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
-          // Update mouse position uniform with smoother transitions
-          materialRef.current.uniforms.u_mouse.value.lerp(
-            mousePosition.current,
-            0.1
-          );
+  // Update shader uniforms
+  useFrame((_, delta) => {
+    const material = materialRef.current;
+    if (!material) return;
 
-          // Update resolution uniform in case of resize
-          materialRef.current.uniforms.u_resolution.value.x =
-            viewport.width * viewport.factor;
-          materialRef.current.uniforms.u_resolution.value.y =
-            viewport.height * viewport.factor;
+    if (!reducedMotion) {
+      timeRef.current += delta;
+    }
 
-          // Slowly decay mouse velocity when not moving
-          mouseVelocity.current.multiplyScalar(0.95);
+    material.uniforms.u_time.value = reducedMotion ? 0 : timeRef.current;
+    material.uniforms.u_mouse.value.lerp(mousePosition.current, 0.1);
+    material.uniforms.u_resolution.value.set(size.width, size.height);
+  });
 
-          // Force material update
-          materialRef.current.needsUpdate = true;
-        }
-
-        // Continue the animation loop
-        frameId.current = requestAnimationFrame(animate);
-      };
-
-      // Start the animation loop
-      frameId.current = requestAnimationFrame(animate);
-
-      // Clean up when component unmounts
-      return () => {
-        if (frameId.current !== null) {
-          cancelAnimationFrame(frameId.current);
-        }
-      };
-    }, [reducedMotion, viewport]);
-
-    // Set up mouse tracking with velocity calculation
-    useEffect(() => {
-      const handleMouseMove = (event: MouseEvent) => {
-        // Store previous position
-        prevMousePosition.current.copy(mousePosition.current);
-
-        // Update current position
-        mousePosition.current.x = event.clientX / window.innerWidth;
-        mousePosition.current.y = 1.0 - event.clientY / window.innerHeight;
-
-        // Calculate velocity (direction and speed of mouse movement)
-        mouseVelocity.current.x =
-          mousePosition.current.x - prevMousePosition.current.x;
-        mouseVelocity.current.y =
-          mousePosition.current.y - prevMousePosition.current.y;
-      };
-
-      window.addEventListener("mousemove", handleMouseMove);
-
-      return () => {
-        window.removeEventListener("mousemove", handleMouseMove);
-      };
-    }, []);
-
-    // UseFrame is still needed for r3f to know this is an animated component
-    // But we'll do minimal work here since our main animation is handled separately
-    useFrame(() => {
-      // This is intentionally empty, as our animation is handled in the useEffect
-    });
-
-    return (
-      // @ts-expect-error - extending materials in r3f causes TS issues
-      <smokeShaderMaterial
+  return (
+    <mesh>
+      <planeGeometry args={[2, 2]} />
+      <shaderMaterial
         ref={materialRef}
         vertexShader={vertexShader}
         fragmentShader={fragmentShader}
         uniforms={{
-          u_time: { value: 0.0 },
+          u_time: { value: 0 },
           u_mouse: { value: new THREE.Vector2(0.5, 0.5) },
-          u_resolution: {
-            value: new THREE.Vector2(viewport.width, viewport.height),
-          },
+          u_resolution: { value: new THREE.Vector2(1, 1) },
         }}
-        transparent={false}
         depthTest={false}
         depthWrite={false}
       />
-    );
-  }
-);
-
-// Add display name to fix linter error
-SmokeEffect.displayName = "SmokeEffect";
+    </mesh>
+  );
+}
 
 const MainBackground: React.FC<BackgroundProps> = ({
   reducedMotion = false,
 }) => {
-  // State to track if WebGL is supported
   const [webGLSupported, setWebGLSupported] = useState<boolean | null>(null);
   const [renderError, setRenderError] = useState<boolean>(false);
 
-  // Check WebGL support on client side only
+  // Check WebGL support
   useEffect(() => {
     setWebGLSupported(detectWebGLSupport());
   }, []);
 
-  // Render a fallback if WebGL is not supported or there was a render error
+  // Static fallback for no WebGL or errors
   if (webGLSupported === false || renderError) {
-    console.warn(
-      "WebGL not supported or render error occurred, showing fallback background"
-    );
+    console.warn("WebGL not supported or render error, showing fallback");
     return (
       <div
         style={{
@@ -421,7 +300,7 @@ const MainBackground: React.FC<BackgroundProps> = ({
     );
   }
 
-  // If we're still detecting WebGL support, show a loading state
+  // Loading state
   if (webGLSupported === null) {
     return (
       <div
@@ -437,60 +316,56 @@ const MainBackground: React.FC<BackgroundProps> = ({
     );
   }
 
-  return (
-    <div
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <Canvas
-        orthographic
-        camera={{ position: [0, 0, 1], zoom: 1, near: 0.01, far: 100 }}
-        style={{ width: "100%", height: "100%" }}
-        gl={{
-          antialias: true,
-          alpha: false,
-          powerPreference: "high-performance",
-          stencil: false,
-          depth: false,
-        }}
-        frameloop="always"
-        performance={{ min: 0.5 }}
-        dpr={[1, 2]}
-        onCreated={({ gl }) => {
-          // Set a clear color for the WebGL context
-          gl.setClearColor(new THREE.Color("#020206"));
-
-          // Prevent context loss if possible
-          gl.getContext().canvas.addEventListener("webglcontextlost", (e) => {
-            e.preventDefault();
-            console.warn("WebGL context lost, trying to restore");
-          });
-
-          // Add listener for context restoration
-          gl.getContext().canvas.addEventListener(
-            "webglcontextrestored",
-            () => {
-              console.log("WebGL context restored");
-            }
-          );
-        }}
-        onError={(error) => {
-          console.error("Canvas render error:", error);
-          setRenderError(true);
+  // Try rendering with React-Three-Fiber with error boundaries
+  try {
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
         }}
       >
-        <mesh frustumCulled={false}>
-          <planeGeometry args={[2, 2]} />
-          <SmokeEffect reducedMotion={reducedMotion} />
-        </mesh>
-      </Canvas>
-    </div>
-  );
+        <Canvas
+          gl={{
+            powerPreference: "high-performance",
+            antialias: false,
+            stencil: false,
+            depth: false,
+            failIfMajorPerformanceCaveat: false,
+          }}
+          camera={{ position: [0, 0, 1], fov: 60 }}
+          dpr={[1, 1.5]}
+          style={{ width: "100%", height: "100%" }}
+          onError={(error) => {
+            console.error("Canvas render error:", error);
+            setRenderError(true);
+          }}
+        >
+          <SimpleSmokeEffect reducedMotion={reducedMotion} />
+        </Canvas>
+      </div>
+    );
+  } catch (error) {
+    console.error("Error rendering MainBackground:", error);
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: "linear-gradient(to bottom, #020206, #0D1B2A, #1B263B)",
+        }}
+      />
+    );
+  }
 };
+
+// Add display name for React DevTools and error reporting
+MainBackground.displayName = "MainBackground";
 
 export default MainBackground;
