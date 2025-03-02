@@ -1,10 +1,12 @@
 import React from "react";
 import { ThemeType } from "../../types/gradient.types";
-import MainBackground from "./MainBackground";
-import BeachBackground from "./BeachBackground";
-import SunsetBackground from "./SunsetBackground";
-import CaliforniaThreeJSBackground from "./CaliforniaThreeJSBackground";
 import { BackgroundProps } from "./types";
+import {
+  MainBackground,
+  BeachBackground,
+  SunsetBackground,
+  CaliforniaThreeJSBackground,
+} from "./ClientBackgrounds";
 
 // Interface for registry entries
 interface BackgroundRegistryEntry {

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect } from "react";
 import { BackgroundContainer } from "../styles/GradientBackground.styles";
 import { GradientBackgroundProps } from "../types/gradient.types";
