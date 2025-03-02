@@ -122,15 +122,14 @@ const AboutMe: React.FC = () => {
 
   return (
     <AboutSection
-      id="about-section"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
       variants={aboutContainerVariants}
     >
       <ContentWrapper>
-        {/* Large Centered Quote */}
-        <Quote variants={aboutItemVariants}>
+        {/* Large Centered Quote with anchor tag */}
+        <Quote id="about-section" variants={aboutItemVariants}>
           <span>Do or do not,</span> there is no try.
         </Quote>
 
