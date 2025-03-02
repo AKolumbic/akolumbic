@@ -21,6 +21,22 @@ const themeGradients = {
     "linear-gradient(135deg, #FFD700 0%, #FF6D00 50%, #1E88E5 100%)",
 };
 
+// Function to get display name of theme with proper capitalization
+const getThemeDisplayName = (theme: ThemeType): string => {
+  switch (theme) {
+    case "main":
+      return "Main";
+    case "beach":
+      return "Beach";
+    case "sunset":
+      return "Sunset";
+    case "california3d":
+      return "California 3D";
+    default:
+      return theme;
+  }
+};
+
 const ThemeSelector: React.FC<ThemeSelectorProps> = ({
   currentTheme,
   onThemeChange,
@@ -33,6 +49,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
+        title={`Theme: ${getThemeDisplayName(currentTheme)}`}
       >
         <svg
           width="20"
@@ -67,7 +84,10 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               whileHover={{ x: 2 }}
               whileTap={{ scale: 0.98 }}
             >
-              Main
+              Main{" "}
+              {currentTheme === "main" && (
+                <span className="visually-hidden">(Current)</span>
+              )}
             </ThemeButton>
             <ThemeButton
               $active={currentTheme === "beach"}
@@ -79,7 +99,10 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               whileHover={{ x: 2 }}
               whileTap={{ scale: 0.98 }}
             >
-              Beach
+              Beach{" "}
+              {currentTheme === "beach" && (
+                <span className="visually-hidden">(Current)</span>
+              )}
             </ThemeButton>
             <ThemeButton
               $active={currentTheme === "sunset"}
@@ -91,7 +114,10 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               whileHover={{ x: 2 }}
               whileTap={{ scale: 0.98 }}
             >
-              Sunset
+              Sunset{" "}
+              {currentTheme === "sunset" && (
+                <span className="visually-hidden">(Current)</span>
+              )}
             </ThemeButton>
             <ThemeButton
               $active={currentTheme === "california3d"}
@@ -103,7 +129,10 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               whileHover={{ x: 2 }}
               whileTap={{ scale: 0.98 }}
             >
-              California 3D
+              California 3D{" "}
+              {currentTheme === "california3d" && (
+                <span className="visually-hidden">(Current)</span>
+              )}
             </ThemeButton>
           </ThemePanel>
         )}
