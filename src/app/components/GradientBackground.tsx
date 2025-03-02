@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BackgroundContainer } from "../styles/GradientBackground.styles";
 import { GradientBackgroundProps } from "../types/gradient.types";
 import { themeColors } from "../data/themeColors";
@@ -20,6 +20,11 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
   activeSection = "hero",
   theme = "main",
 }) => {
+  // Add logging for debugging
+  useEffect(() => {
+    console.log(`Background updated: ${theme} theme, ${activeSection} section`);
+  }, [theme, activeSection]);
+
   const currentColors =
     theme === "sunset"
       ? themeColors.sunset.all

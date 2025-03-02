@@ -17,11 +17,6 @@ export const themeColors: ThemeColors = {
       ocean: "#1A2C3D",
       sky: "#212E44",
     },
-    contact: {
-      sunset: "#292929",
-      ocean: "#1E3245",
-      sky: "#243248",
-    },
   },
   beach: {
     hero: {
@@ -47,14 +42,6 @@ export const themeColors: ThemeColors = {
       sand: "#EEE3E2",
       vanilla: "#E3C2A9",
       taupe: "#C4A993",
-    },
-    contact: {
-      sea: "#015A7B",
-      munsell: "#018499",
-      seaGreen: "#6FA189",
-      sand: "#CFC4C3",
-      vanilla: "#C19F89",
-      taupe: "#A18874",
     },
   },
   sunset: {

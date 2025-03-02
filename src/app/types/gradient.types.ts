@@ -32,10 +32,10 @@ export interface CaliforniaThreeJSColors {
 
 export interface ThemeColors {
   main: {
-    [key in "hero" | "about" | "portfolio" | "contact"]: MainColors;
+    [key in "hero" | "about" | "portfolio"]: MainColors;
   };
   beach: {
-    [key in "hero" | "about" | "portfolio" | "contact"]: BeachColors;
+    [key in "hero" | "about" | "portfolio"]: BeachColors;
   };
   sunset: {
     all: SunsetColors;
@@ -53,7 +53,7 @@ export interface GradientBackgroundProps {
   /** Optional reduced motion setting for accessibility */
   reducedMotion?: boolean;
   /** Current active section */
-  activeSection?: "hero" | "about" | "portfolio" | "contact";
+  activeSection?: "hero" | "about" | "portfolio";
   /** Current theme */
   theme?: ThemeType;
 }

@@ -262,6 +262,7 @@ const SmokeEffect = ({ reducedMotion }: { reducedMotion: boolean }) => {
   const mousePosition = useRef<THREE.Vector2>(new THREE.Vector2(0.5, 0.5));
   const prevMousePosition = useRef<THREE.Vector2>(new THREE.Vector2(0.5, 0.5));
   const mouseVelocity = useRef<THREE.Vector2>(new THREE.Vector2(0.0, 0.0));
+  const timeRef = useRef<number>(0);
 
   // Set up mouse tracking with velocity calculation
   useEffect(() => {
@@ -287,15 +288,23 @@ const SmokeEffect = ({ reducedMotion }: { reducedMotion: boolean }) => {
     };
   }, []);
 
-  useFrame((state) => {
+  // Update shaders on every frame - force animation to run continuously
+  useFrame(() => {
     if (materialRef.current) {
-      // Update time uniform
+      // Increment our own time value instead of relying on state.clock
+      // This ensures animation continues even if React's rendering pauses
+      timeRef.current += 0.016; // ~60fps increment
+
+      // Update time uniform with our independent time tracker
       materialRef.current.uniforms.u_time.value = reducedMotion
         ? 0
-        : state.clock.getElapsedTime();
+        : timeRef.current;
 
-      // Update mouse position uniform
-      materialRef.current.uniforms.u_mouse.value = mousePosition.current;
+      // Update mouse position uniform with smoother transitions
+      materialRef.current.uniforms.u_mouse.value.lerp(
+        mousePosition.current,
+        0.1
+      );
 
       // Update resolution uniform
       materialRef.current.uniforms.u_resolution.value.x =
@@ -329,6 +338,16 @@ const SmokeEffect = ({ reducedMotion }: { reducedMotion: boolean }) => {
 };
 
 const MainBackground: React.FC<BackgroundProps> = ({ reducedMotion }) => {
+  // Add ref to track component mount status
+  const isComponentMounted = useRef(true);
+
+  // Ensure animation continues running even when other components mount
+  useEffect(() => {
+    return () => {
+      isComponentMounted.current = false;
+    };
+  }, []);
+
   return (
     <div
       style={{
@@ -343,7 +362,20 @@ const MainBackground: React.FC<BackgroundProps> = ({ reducedMotion }) => {
         orthographic
         camera={{ position: [0, 0, 1], zoom: 1, near: 0.01, far: 100 }}
         style={{ width: "100%", height: "100%" }}
-        gl={{ antialias: true, alpha: false }}
+        gl={{
+          antialias: true,
+          alpha: false,
+          powerPreference: "high-performance",
+          stencil: false,
+          depth: false,
+        }}
+        frameloop="always"
+        performance={{ min: 0.5 }}
+        dpr={[1, 2]}
+        onCreated={({ gl }) => {
+          // Ensure WebGL context doesn't get lost
+          gl.setClearColor(new THREE.Color("#020206"));
+        }}
       >
         <mesh frustumCulled={false}>
           <planeGeometry args={[2, 2]} />

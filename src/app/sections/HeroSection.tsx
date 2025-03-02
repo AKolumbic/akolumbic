@@ -1,7 +1,6 @@
 "use client"; // Ensure it's a client component
 
 import React, { useMemo, useState, useEffect } from "react";
-// import { motion } from "framer-motion";
 import {
   HeroContainer,
   HeroTextWrapper,
@@ -170,22 +169,6 @@ const HeroSection: React.FC = () => {
             Software Engineer - San Pedro, CA
           </SubtextLine>
         </SubtextWrapper>
-
-        {/* Scroll down button */}
-        {/* {!isMobile && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2, duration: 0.5 }}
-            style={{
-              marginTop: "3rem",
-            }}
-          >
-            <TactileButton onClick={scrollToAbout}>
-              Explore <FiArrowDown style={{ marginLeft: "8px" }} />
-            </TactileButton>
-          </motion.div>
-        )} */}
       </HeroContentWrapper>
     </HeroContainer>
   );
