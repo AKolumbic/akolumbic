@@ -1,10 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Ensure NODE_ENV is standardized
-  env: {
-    NODE_ENV: process.env.NODE_ENV || "production",
-  },
-
   // Transpile Three.js and related packages properly
   transpilePackages: [
     "three",
@@ -25,6 +20,11 @@ const nextConfig = {
     return config;
   },
 
+  // Turbopack config - simplified for stability
+  experimental: {
+    turbo: {},
+  },
+
   // Ensure images from Three.js are optimized
   images: {
     domains: [],
@@ -36,9 +36,6 @@ const nextConfig = {
 
   // Strict mode can cause issues with Three.js animations
   reactStrictMode: false,
-
-  // Optimize production builds
-  swcMinify: true,
 
   // Handle Vercel deployment
   output: "standalone",
