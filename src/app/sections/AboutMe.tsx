@@ -58,24 +58,64 @@ const AboutMe: React.FC = () => {
   // Store refs for each skill item to position tooltips
   const skillRefs = useRef<(HTMLLIElement | null)[]>([]);
 
-  // Effect to initialize refs array
+  // Effect to initialize refs array and handle window blur
   useEffect(() => {
     skillRefs.current = skillRefs.current.slice(0, skills.length);
+
+    // Handle window blur (user switches windows/tabs)
+    const handleWindowBlur = () => {
+      setActiveTooltip(null);
+      setHoveringTooltip(false);
+    };
+
+    // Handle mouse leave from document
+    const handleDocumentMouseLeave = (e: MouseEvent) => {
+      if (
+        e.clientY <= 0 ||
+        e.clientX <= 0 ||
+        e.clientX >= window.innerWidth ||
+        e.clientY >= window.innerHeight
+      ) {
+        setActiveTooltip(null);
+        setHoveringTooltip(false);
+      }
+    };
+
+    window.addEventListener("blur", handleWindowBlur);
+    document.addEventListener("mouseleave", handleDocumentMouseLeave);
+
+    return () => {
+      window.removeEventListener("blur", handleWindowBlur);
+      document.removeEventListener("mouseleave", handleDocumentMouseLeave);
+      // Clean up tooltip state on unmount
+      setActiveTooltip(null);
+      setHoveringTooltip(false);
+    };
   }, [skills.length]);
 
   // Handler for tooltip hover
   const handleTooltipHover = (isHovering: boolean) => {
     setHoveringTooltip(isHovering);
+    if (!isHovering) {
+      // Add a small delay before hiding the tooltip to prevent flickering
+      setTimeout(() => {
+        setActiveTooltip(null);
+      }, 100);
+    }
   };
 
   // Handler for skill item hover
   const handleSkillHover = (index: number, isHovering: boolean) => {
     if (isHovering) {
       setActiveTooltip(index);
+      setHoveringTooltip(false);
     } else {
       // Only hide the tooltip if we're not hovering over it
       if (!hoveringTooltip) {
-        setActiveTooltip(null);
+        // Add a small delay before hiding the tooltip to prevent flickering
+        setTimeout(() => {
+          setActiveTooltip(null);
+        }, 100);
       }
     }
   };
