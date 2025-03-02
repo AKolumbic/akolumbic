@@ -376,7 +376,9 @@ const SmokeEffect = React.memo(
 // Add display name to fix linter error
 SmokeEffect.displayName = "SmokeEffect";
 
-const MainBackground: React.FC<BackgroundProps> = ({ reducedMotion }) => {
+const MainBackground: React.FC<BackgroundProps> = ({
+  reducedMotion = false,
+}) => {
   return (
     <div
       style={{

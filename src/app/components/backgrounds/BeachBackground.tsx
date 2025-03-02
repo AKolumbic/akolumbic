@@ -10,7 +10,7 @@ import { BackgroundProps } from "./types";
 
 const BeachBackground: React.FC<BackgroundProps> = ({
   colors,
-  reducedMotion,
+  reducedMotion = false,
 }) => {
   const typedColors = colors as unknown as BeachColors;
 

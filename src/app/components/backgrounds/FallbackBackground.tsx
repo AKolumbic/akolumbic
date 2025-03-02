@@ -7,7 +7,11 @@ import { BackgroundProps } from "./types";
  * A simple fallback background component that shows a gradient
  * when Three.js components fail to load
  */
-const FallbackBackground: React.FC<BackgroundProps> = ({ colors }) => {
+const FallbackBackground: React.FC<BackgroundProps> = ({
+  colors,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  reducedMotion = false,
+}) => {
   // Extract colors or use defaults
   const colorValues = Object.values(colors || {});
   const gradient =
