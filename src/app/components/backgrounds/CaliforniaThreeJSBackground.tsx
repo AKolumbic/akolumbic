@@ -23,7 +23,6 @@ const CaliforniaThreeJSBackground: React.FC<BackgroundProps> = ({
 
   // Load the Three.js component only on the client side
   useEffect(() => {
-    // @ts-expect-error - Module exists but TypeScript can't find it
     import("./ThreeJSScene").then((mod) => {
       setComponent(() => mod.default);
     });
