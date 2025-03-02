@@ -255,99 +255,128 @@ class SmokeShaderMaterial extends THREE.ShaderMaterial {
 // Add the custom shader material to R3F
 extend({ SmokeShaderMaterial });
 
-// Full-screen quad component
-const SmokeEffect = ({ reducedMotion }: { reducedMotion: boolean }) => {
-  const { viewport } = useThree();
-  const materialRef = useRef<THREE.ShaderMaterial>(null!);
-  const mousePosition = useRef<THREE.Vector2>(new THREE.Vector2(0.5, 0.5));
-  const prevMousePosition = useRef<THREE.Vector2>(new THREE.Vector2(0.5, 0.5));
-  const mouseVelocity = useRef<THREE.Vector2>(new THREE.Vector2(0.0, 0.0));
-  const timeRef = useRef<number>(0);
+const SmokeEffect = React.memo(
+  ({ reducedMotion }: { reducedMotion: boolean }) => {
+    const { viewport } = useThree();
+    const materialRef = useRef<THREE.ShaderMaterial>(null!);
+    const mousePosition = useRef<THREE.Vector2>(new THREE.Vector2(0.5, 0.5));
+    const prevMousePosition = useRef<THREE.Vector2>(
+      new THREE.Vector2(0.5, 0.5)
+    );
+    const mouseVelocity = useRef<THREE.Vector2>(new THREE.Vector2(0.0, 0.0));
+    const timeRef = useRef<number>(0);
+    const frameId = useRef<number | null>(null);
 
-  // Set up mouse tracking with velocity calculation
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      // Store previous position
-      prevMousePosition.current.copy(mousePosition.current);
+    // Set up our own animation loop outside of React's lifecycle
+    useEffect(() => {
+      let previousTime = performance.now();
 
-      // Update current position
-      mousePosition.current.x = event.clientX / window.innerWidth;
-      mousePosition.current.y = 1.0 - event.clientY / window.innerHeight;
+      // This function will run continuously with requestAnimationFrame
+      const animate = (currentTime: number) => {
+        const deltaTime = (currentTime - previousTime) / 1000; // in seconds
+        previousTime = currentTime;
 
-      // Calculate velocity (direction and speed of mouse movement)
-      mouseVelocity.current.x =
-        mousePosition.current.x - prevMousePosition.current.x;
-      mouseVelocity.current.y =
-        mousePosition.current.y - prevMousePosition.current.y;
-    };
+        if (materialRef.current) {
+          // Only increment if not in reduced motion mode
+          if (!reducedMotion) {
+            // Use actual time delta to ensure smooth animation regardless of framerate
+            timeRef.current += deltaTime;
+          }
 
-    window.addEventListener("mousemove", handleMouseMove);
+          // Update the shader uniforms
+          materialRef.current.uniforms.u_time.value = reducedMotion
+            ? 0
+            : timeRef.current;
 
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, []);
+          // Update mouse position uniform with smoother transitions
+          materialRef.current.uniforms.u_mouse.value.lerp(
+            mousePosition.current,
+            0.1
+          );
 
-  // Update shaders on every frame - force animation to run continuously
-  useFrame(() => {
-    if (materialRef.current) {
-      // Increment our own time value instead of relying on state.clock
-      // This ensures animation continues even if React's rendering pauses
-      timeRef.current += 0.016; // ~60fps increment
+          // Update resolution uniform in case of resize
+          materialRef.current.uniforms.u_resolution.value.x =
+            viewport.width * viewport.factor;
+          materialRef.current.uniforms.u_resolution.value.y =
+            viewport.height * viewport.factor;
 
-      // Update time uniform with our independent time tracker
-      materialRef.current.uniforms.u_time.value = reducedMotion
-        ? 0
-        : timeRef.current;
+          // Slowly decay mouse velocity when not moving
+          mouseVelocity.current.multiplyScalar(0.95);
 
-      // Update mouse position uniform with smoother transitions
-      materialRef.current.uniforms.u_mouse.value.lerp(
-        mousePosition.current,
-        0.1
-      );
+          // Force material update
+          materialRef.current.needsUpdate = true;
+        }
 
-      // Update resolution uniform
-      materialRef.current.uniforms.u_resolution.value.x =
-        viewport.width * viewport.factor;
-      materialRef.current.uniforms.u_resolution.value.y =
-        viewport.height * viewport.factor;
+        // Continue the animation loop
+        frameId.current = requestAnimationFrame(animate);
+      };
 
-      // Slowly decay mouse velocity when not moving
-      mouseVelocity.current.multiplyScalar(0.95);
-    }
-  });
+      // Start the animation loop
+      frameId.current = requestAnimationFrame(animate);
 
-  return (
-    // @ts-expect-error - extending materials in r3f causes TS issues
-    <smokeShaderMaterial
-      ref={materialRef}
-      vertexShader={vertexShader}
-      fragmentShader={fragmentShader}
-      uniforms={{
-        u_time: { value: 0.0 },
-        u_mouse: { value: new THREE.Vector2(0.5, 0.5) },
-        u_resolution: {
-          value: new THREE.Vector2(viewport.width, viewport.height),
-        },
-      }}
-      transparent={false}
-      depthTest={false}
-      depthWrite={false}
-    />
-  );
-};
+      // Clean up when component unmounts
+      return () => {
+        if (frameId.current !== null) {
+          cancelAnimationFrame(frameId.current);
+        }
+      };
+    }, [reducedMotion, viewport]);
+
+    // Set up mouse tracking with velocity calculation
+    useEffect(() => {
+      const handleMouseMove = (event: MouseEvent) => {
+        // Store previous position
+        prevMousePosition.current.copy(mousePosition.current);
+
+        // Update current position
+        mousePosition.current.x = event.clientX / window.innerWidth;
+        mousePosition.current.y = 1.0 - event.clientY / window.innerHeight;
+
+        // Calculate velocity (direction and speed of mouse movement)
+        mouseVelocity.current.x =
+          mousePosition.current.x - prevMousePosition.current.x;
+        mouseVelocity.current.y =
+          mousePosition.current.y - prevMousePosition.current.y;
+      };
+
+      window.addEventListener("mousemove", handleMouseMove);
+
+      return () => {
+        window.removeEventListener("mousemove", handleMouseMove);
+      };
+    }, []);
+
+    // UseFrame is still needed for r3f to know this is an animated component
+    // But we'll do minimal work here since our main animation is handled separately
+    useFrame(() => {
+      // This is intentionally empty, as our animation is handled in the useEffect
+    });
+
+    return (
+      // @ts-expect-error - extending materials in r3f causes TS issues
+      <smokeShaderMaterial
+        ref={materialRef}
+        vertexShader={vertexShader}
+        fragmentShader={fragmentShader}
+        uniforms={{
+          u_time: { value: 0.0 },
+          u_mouse: { value: new THREE.Vector2(0.5, 0.5) },
+          u_resolution: {
+            value: new THREE.Vector2(viewport.width, viewport.height),
+          },
+        }}
+        transparent={false}
+        depthTest={false}
+        depthWrite={false}
+      />
+    );
+  }
+);
+
+// Add display name to fix linter error
+SmokeEffect.displayName = "SmokeEffect";
 
 const MainBackground: React.FC<BackgroundProps> = ({ reducedMotion }) => {
-  // Add ref to track component mount status
-  const isComponentMounted = useRef(true);
-
-  // Ensure animation continues running even when other components mount
-  useEffect(() => {
-    return () => {
-      isComponentMounted.current = false;
-    };
-  }, []);
-
   return (
     <div
       style={{
@@ -373,8 +402,14 @@ const MainBackground: React.FC<BackgroundProps> = ({ reducedMotion }) => {
         performance={{ min: 0.5 }}
         dpr={[1, 2]}
         onCreated={({ gl }) => {
-          // Ensure WebGL context doesn't get lost
+          // Set a clear color for the WebGL context
           gl.setClearColor(new THREE.Color("#020206"));
+
+          // Prevent context loss if possible
+          gl.getContext().canvas.addEventListener("webglcontextlost", (e) => {
+            e.preventDefault();
+            console.warn("WebGL context lost, trying to restore");
+          });
         }}
       >
         <mesh frustumCulled={false}>

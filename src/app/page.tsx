@@ -7,7 +7,6 @@ import {
   useTransform,
   useSpring,
   useAnimation,
-  AnimatePresence,
 } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import HeroSection from "./sections/HeroSection";
@@ -249,59 +248,61 @@ export default function HomePage(): JSX.Element {
         <ThemeSelector currentTheme={theme} onThemeChange={setTheme} />
       )}
 
-      <AnimatePresence mode="wait">
-        <ScrollProgress
-          activeSection={activeSection}
-          isVisible={showNavigation}
-        />
+      <ScrollProgress
+        activeSection={activeSection}
+        isVisible={showNavigation}
+      />
 
-        <motion.div
-          id="hero-section"
-          ref={heroRef}
-          initial="hidden"
-          animate={heroControls}
-          variants={sectionVariants}
-          style={{
-            y: heroParallax,
-            opacity: heroOpacity,
-          }}
-        >
-          <HeroSection />
-        </motion.div>
+      <motion.div
+        id="hero-section"
+        key="hero-section"
+        ref={heroRef}
+        initial="hidden"
+        animate={heroControls}
+        variants={sectionVariants}
+        style={{
+          y: heroParallax,
+          opacity: heroOpacity,
+        }}
+      >
+        <HeroSection />
+      </motion.div>
 
-        <motion.div
-          id="about-section"
-          ref={aboutRef}
-          initial="hidden"
-          animate={aboutControls}
-          variants={sectionVariants}
-          style={{ y: aboutParallax }}
-        >
-          <AboutMe />
-        </motion.div>
+      <motion.div
+        id="about-section"
+        key="about-section"
+        ref={aboutRef}
+        initial="hidden"
+        animate={aboutControls}
+        variants={sectionVariants}
+        style={{ y: aboutParallax }}
+      >
+        <AboutMe />
+      </motion.div>
 
-        <motion.div
-          id="portfolio-section"
-          ref={portfolioRef}
-          initial="hidden"
-          animate={portfolioControls}
-          variants={sectionVariants}
-          style={{ y: portfolioParallax }}
-        >
-          <Portfolio />
-        </motion.div>
+      <motion.div
+        id="portfolio-section"
+        key="portfolio-section"
+        ref={portfolioRef}
+        initial="hidden"
+        animate={portfolioControls}
+        variants={sectionVariants}
+        style={{ y: portfolioParallax }}
+      >
+        <Portfolio />
+      </motion.div>
 
-        <motion.div
-          id="contact-section"
-          ref={contactRef}
-          initial="hidden"
-          animate={contactControls}
-          variants={sectionVariants}
-          style={{ y: contactParallax }}
-        >
-          <Contact />
-        </motion.div>
-      </AnimatePresence>
+      <motion.div
+        id="contact-section"
+        key="contact-section"
+        ref={contactRef}
+        initial="hidden"
+        animate={contactControls}
+        variants={sectionVariants}
+        style={{ y: contactParallax }}
+      >
+        <Contact />
+      </motion.div>
     </>
   );
 }
