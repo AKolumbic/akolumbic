@@ -22,9 +22,31 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
   activeSection = "hero",
   theme = "main",
 }) => {
-  // Add logging for debugging
+  // Add enhanced logging for debugging
   useEffect(() => {
-    console.log(`Background updated: ${theme} theme, ${activeSection} section`);
+    // Debug background initialization
+    console.log(
+      `Background initialized: ${theme} theme, ${activeSection} section`
+    );
+
+    // Check and log WebGL support
+    try {
+      const canvas = document.createElement("canvas");
+      const hasWebGL = !!(
+        window.WebGLRenderingContext &&
+        (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
+      );
+      console.log(`WebGL support: ${hasWebGL ? "yes" : "no"}`);
+
+      // Additional browser environment info
+      console.log(`User Agent: ${navigator.userAgent}`);
+      console.log(
+        `Window dimensions: ${window.innerWidth}x${window.innerHeight}`
+      );
+      console.log(`Device pixel ratio: ${window.devicePixelRatio}`);
+    } catch (e) {
+      console.warn("Error checking WebGL support:", e);
+    }
   }, [theme, activeSection]);
 
   // Get the appropriate colors based on theme and section

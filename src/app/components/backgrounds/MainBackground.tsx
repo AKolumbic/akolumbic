@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, extend, useThree } from "@react-three/fiber";
 import { BackgroundProps } from "./types";
@@ -255,6 +255,20 @@ class SmokeShaderMaterial extends THREE.ShaderMaterial {
 // Add the custom shader material to R3F
 extend({ SmokeShaderMaterial });
 
+// Helper function to detect WebGL support
+const detectWebGLSupport = () => {
+  try {
+    const canvas = document.createElement("canvas");
+    return !!(
+      window.WebGLRenderingContext &&
+      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
+    );
+  } catch (e) {
+    console.warn("WebGL not supported:", e);
+    return false;
+  }
+};
+
 const SmokeEffect = React.memo(
   ({ reducedMotion }: { reducedMotion: boolean }) => {
     const { viewport } = useThree();
@@ -379,6 +393,50 @@ SmokeEffect.displayName = "SmokeEffect";
 const MainBackground: React.FC<BackgroundProps> = ({
   reducedMotion = false,
 }) => {
+  // State to track if WebGL is supported
+  const [webGLSupported, setWebGLSupported] = useState<boolean | null>(null);
+  const [renderError, setRenderError] = useState<boolean>(false);
+
+  // Check WebGL support on client side only
+  useEffect(() => {
+    setWebGLSupported(detectWebGLSupport());
+  }, []);
+
+  // Render a fallback if WebGL is not supported or there was a render error
+  if (webGLSupported === false || renderError) {
+    console.warn(
+      "WebGL not supported or render error occurred, showing fallback background"
+    );
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: "linear-gradient(to bottom, #020206, #0D1B2A, #1B263B)",
+        }}
+      />
+    );
+  }
+
+  // If we're still detecting WebGL support, show a loading state
+  if (webGLSupported === null) {
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: "#020206",
+        }}
+      />
+    );
+  }
+
   return (
     <div
       style={{
@@ -412,6 +470,18 @@ const MainBackground: React.FC<BackgroundProps> = ({
             e.preventDefault();
             console.warn("WebGL context lost, trying to restore");
           });
+
+          // Add listener for context restoration
+          gl.getContext().canvas.addEventListener(
+            "webglcontextrestored",
+            () => {
+              console.log("WebGL context restored");
+            }
+          );
+        }}
+        onError={(error) => {
+          console.error("Canvas render error:", error);
+          setRenderError(true);
         }}
       >
         <mesh frustumCulled={false}>
