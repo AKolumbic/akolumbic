@@ -11,6 +11,19 @@ export const ThemeContainer = styled(motion.div)`
   align-items: flex-end;
   transform: translateZ(0);
   will-change: transform;
+
+  /* Add a visually-hidden class for accessibility */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
 `;
 
 export const ThemeToggle = styled(motion.button)`
@@ -72,7 +85,7 @@ export const ThemeButton = styled(motion.button)<{
     position: absolute;
     inset: 0;
     background: ${(props) =>
-      props.$active ? "rgba(255, 255, 255, 0.1)" : "transparent"};
+      props.$active ? "rgba(255, 255, 255, 0.15)" : "transparent"};
     border-radius: inherit;
     transition: background 0.3s ease;
   }
@@ -82,14 +95,23 @@ export const ThemeButton = styled(motion.button)<{
   }
 
   &::after {
-    content: "";
+    content: ${(props) => (props.$active ? "'✓'" : "''")};
     position: absolute;
     right: 12px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: ${(props) =>
-      props.$active ? "#fff" : "rgba(255, 255, 255, 0.5)"};
+    width: auto;
+    height: auto;
+    font-size: 14px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.3s ease;
+    opacity: ${(props) => (props.$active ? "1" : "0")};
   }
+
+  /* Add a left border for active theme */
+  border-left: ${(props) =>
+    props.$active ? "3px solid #fff" : "3px solid transparent"};
+  padding-left: ${(props) => (props.$active ? "13px" : "16px")};
+  font-weight: ${(props) => (props.$active ? "600" : "500")};
 `;

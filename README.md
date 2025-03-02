@@ -6,12 +6,11 @@ I’m a senior front-end developer with TypeScript, React, Next.js, and modern U
 
 🛠️ Tech Stack
 My projects and work often involve:
-	•	Frontend: React (v19), Next.js (v15), TypeScript
-	•	Styling: Styled Components, TailwindCSS
-	•	Animation & UI Enhancements: Framer Motion, React Intersection Observer
-	•	Testing & Automation: Playwright, ESLint
-	•	Build & Deployment: Vercel (for production hosting)
-
+• Frontend: React (v19), Next.js (v15), TypeScript
+• Styling: Styled Components, TailwindCSS
+• Animation & UI Enhancements: Framer Motion, React Intersection Observer
+• Testing & Automation: Playwright, ESLint
+• Build & Deployment: Vercel (for production hosting)
 
 📬 Contact
 If you have any questions, feedback, or collaboration ideas, feel free to reach out!

@@ -19,6 +19,20 @@ const themeGradients = {
   sunset: "linear-gradient(135deg, #1a237e 0%, #7e57c2 50%, #ff5252 100%)",
 };
 
+// Function to get display name of theme with proper capitalization
+const getThemeDisplayName = (theme: ThemeType): string => {
+  switch (theme) {
+    case "main":
+      return "Main";
+    case "beach":
+      return "Beach";
+    case "sunset":
+      return "Sunset";
+    default:
+      return theme;
+  }
+};
+
 const ThemeSelector: React.FC<ThemeSelectorProps> = ({
   currentTheme,
   onThemeChange,
@@ -31,6 +45,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
+        title={`Theme: ${getThemeDisplayName(currentTheme)}`}
       >
         <svg
           width="20"
@@ -65,7 +80,10 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               whileHover={{ x: 2 }}
               whileTap={{ scale: 0.98 }}
             >
-              Main
+              Main{" "}
+              {currentTheme === "main" && (
+                <span className="visually-hidden">(Current)</span>
+              )}
             </ThemeButton>
             <ThemeButton
               $active={currentTheme === "beach"}
@@ -77,7 +95,10 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               whileHover={{ x: 2 }}
               whileTap={{ scale: 0.98 }}
             >
-              Beach
+              Beach{" "}
+              {currentTheme === "beach" && (
+                <span className="visually-hidden">(Current)</span>
+              )}
             </ThemeButton>
             <ThemeButton
               $active={currentTheme === "sunset"}
@@ -89,7 +110,10 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               whileHover={{ x: 2 }}
               whileTap={{ scale: 0.98 }}
             >
-              Sunset
+              Sunset{" "}
+              {currentTheme === "sunset" && (
+                <span className="visually-hidden">(Current)</span>
+              )}
             </ThemeButton>
           </ThemePanel>
         )}
