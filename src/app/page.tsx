@@ -18,6 +18,7 @@ import ThemeSelector from "./components/ThemeSelector";
 import { ThemeType } from "./types/theme.types";
 import ScrollProgress from "./components/ScrollProgress";
 import useDelayedIntersectionObserver from "./hooks/useDelayedIntersectionObserver";
+import MobileView from "./components/MobileView";
 
 // Enhanced animation variants for smoother transitions
 const sectionVariants = {
@@ -169,7 +170,20 @@ export default function HomePage(): JSX.Element {
       window.history.scrollRestoration = "manual";
     }
     window.scrollTo(0, 0);
-  }, []);
+
+    // On mobile, prevent scroll completely
+    if (isMobile && typeof document !== "undefined") {
+      document.body.style.overflow = "hidden";
+    } else if (typeof document !== "undefined") {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      if (typeof document !== "undefined") {
+        document.body.style.overflow = "";
+      }
+    };
+  }, [isMobile]);
 
   // Enhanced intersection observers with improved settings
   const { ref: heroRef, inView: heroInView } = useInView({
@@ -241,12 +255,16 @@ export default function HomePage(): JSX.Element {
     contactControls,
   ]);
 
+  // If on mobile, render the dedicated MobileView component
+  if (isMobile) {
+    return <MobileView theme={theme} />;
+  }
+
+  // Otherwise render the desktop layout
   return (
     <>
       <SafeGradientBackground activeSection={activeSection} theme={theme} />
-      {!isMobile && (
-        <ThemeSelector currentTheme={theme} onThemeChange={setTheme} />
-      )}
+      <ThemeSelector currentTheme={theme} onThemeChange={setTheme} />
 
       <ScrollProgress
         activeSection={activeSection}

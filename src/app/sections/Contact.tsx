@@ -9,7 +9,7 @@ import {
   FaTwitter,
   FaEnvelope,
 } from "react-icons/fa";
-import { GiDiceTwentyFacesTwenty, GiDeathStar } from "react-icons/gi";
+// import { GiDiceTwentyFacesTwenty, GiDeathStar } from "react-icons/gi";
 import {
   Footer,
   IconContainer,
@@ -20,15 +20,28 @@ import {
 
 export default function Contact() {
   const [isClient, setIsClient] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
+
+    // Check if mobile on mount and on resize
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
   }, []);
 
   if (!isClient) return null;
 
   return (
-    <Footer>
+    <Footer className={isMobile ? "mobile-footer" : ""}>
       <IconContainer>
         <IconWrapper>
           <IconLink
@@ -102,7 +115,7 @@ export default function Contact() {
           </IconLink>
         </IconWrapper>
 
-        <IconWrapper>
+        {/* <IconWrapper>
           <IconLink
             href="https://drosshole.com"
             target="_blank"
@@ -112,9 +125,9 @@ export default function Contact() {
           >
             <GiDeathStar />
           </IconLink>
-        </IconWrapper>
+        </IconWrapper> */}
 
-        <IconWrapper>
+        {/* <IconWrapper>
           <IconLink
             href="https://falstera.com"
             target="_blank"
@@ -124,7 +137,7 @@ export default function Contact() {
           >
             <GiDiceTwentyFacesTwenty />
           </IconLink>
-        </IconWrapper>
+        </IconWrapper> */}
       </IconContainer>
 
       <Copyright>© 2025 Andrew Kolumbic. All rights reserved.</Copyright>

@@ -15,6 +15,7 @@ const playfair = Playfair_Display({
 export const metadata = {
   title: "Andrew Kolumbic",
   description: "Portfolio for Andrew Kolumbic",
+  viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -26,6 +27,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           href="https://fonts.googleapis.com/css2?family=Michroma&display=swap"
           rel="stylesheet"
         />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
       </Head>
       <body
         style={{
@@ -34,6 +39,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           backgroundColor: "#000",
           color: "#fff",
           fontFamily: "sans-serif",
+          paddingBottom: "env(safe-area-inset-bottom, 0)",
         }}
       >
         {children}

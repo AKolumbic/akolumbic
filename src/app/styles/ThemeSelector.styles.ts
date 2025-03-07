@@ -12,6 +12,13 @@ export const ThemeContainer = styled(motion.div)`
   transform: translateZ(0);
   will-change: transform;
 
+  /* Adjust for our MobileView component which positions it absolutely */
+  .mobile-view & {
+    position: relative;
+    top: 0;
+    right: 0;
+  }
+
   /* Add a visually-hidden class for accessibility */
   .visually-hidden {
     position: absolute;
@@ -23,6 +30,11 @@ export const ThemeContainer = styled(motion.div)`
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border-width: 0;
+  }
+
+  @media (max-width: 768px) {
+    top: 15px;
+    right: 15px;
   }
 `;
 
@@ -44,6 +56,16 @@ export const ThemeToggle = styled(motion.button)`
     background: rgba(0, 0, 0, 0.8);
     transform: scale(1.05);
   }
+
+  @media (max-width: 768px) {
+    width: 36px;
+    height: 36px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
 `;
 
 export const ThemePanel = styled(motion.div)`
@@ -57,6 +79,12 @@ export const ThemePanel = styled(motion.div)`
   flex-direction: column;
   gap: 8px;
   min-width: 160px;
+
+  @media (max-width: 768px) {
+    min-width: 140px;
+    right: 0;
+    position: absolute;
+  }
 `;
 
 export const ThemeButton = styled(motion.button)<{

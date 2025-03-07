@@ -144,8 +144,8 @@ const HeroSection: React.FC = () => {
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: 1, opacity: 1 }}
           transition={{
-            delay: isMobile ? 0.15 : nameAnimationComplete + 0.25, // Reduced from 0.3 and 0.5 to 0.15 and 0.25
-            duration: isMobile ? 0.2 : 0.4, // Reduced from 0.4 and 0.8 to 0.2 and 0.4
+            delay: isMobile ? 0.15 : nameAnimationComplete + 0.25,
+            duration: isMobile ? 0.2 : 0.4,
             ease: "easeOut",
           }}
         />
@@ -154,16 +154,16 @@ const HeroSection: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{
-            delay: isMobile ? 0.2 : nameAnimationComplete + 0.65, // Reduced from 0.4 and 1.3 to 0.2 and 0.65
-            duration: 0.4, // Reduced from 0.8 to 0.4
+            delay: isMobile ? 0.2 : nameAnimationComplete + 0.65,
+            duration: 0.4,
           }}
         >
           <SubtextLine
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              opacity: { duration: 0.4 }, // Reduced from 0.8 to 0.4
-              y: { duration: 0.4 }, // Reduced from 0.8 to 0.4
+              opacity: { duration: 0.4 },
+              y: { duration: 0.4 },
             }}
           >
             Software Engineer - San Pedro, CA

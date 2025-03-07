@@ -1,6 +1,20 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
+export const Section = styled.section`
+  display: block;
+  width: 100%;
+
+  &.mobile-hero {
+    min-height: calc(
+      100vh - 85px
+    ); /* Account for the Contact footer height on mobile */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+`;
+
 export const HeroContainer = styled(motion.section)`
   min-height: 100vh;
   display: flex;
@@ -15,7 +29,14 @@ export const HeroContainer = styled(motion.section)`
   will-change: transform;
 
   @media (max-width: 768px) {
-    background-color: #000;
+    /* Ensure no bottom margin or padding that could create a line */
+    background-color: transparent;
+    min-height: calc(100vh - 120px);
+    padding-bottom: 0;
+    margin-bottom: 0;
+    /* Remove any border that might create a visible line */
+    border-bottom: none;
+    box-shadow: none;
   }
 `;
 
