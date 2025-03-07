@@ -39,14 +39,14 @@ const ContactContainer = styled.div`
   width: 100%;
   /* Ensure no border or line at the top */
   border-top: none;
-  /* Ensure the container has enough space for the copyright */
-  padding-bottom: max(env(safe-area-inset-bottom, 1rem), 1.5rem);
   /* Minimum height to ensure visibility */
   min-height: 120px;
   /* Add margins for extra safety */
   margin-bottom: env(safe-area-inset-bottom, 1rem);
   /* Ensure we don't overflow */
   overflow: visible;
+  position: fixed;
+  bottom: 0;
 `;
 
 // Mobile positioned theme selector
