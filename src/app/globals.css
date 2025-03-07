@@ -5,6 +5,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* Define safe inset variable with fallback */
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 1rem);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -47,4 +49,35 @@ body {
   padding: 0;
   background-color: #000; /* Ensures no extra space */
   color: #fff;
+  min-height: 100%;
+  height: 100%;
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  html,
+  body {
+    overflow-x: hidden;
+    position: relative;
+    /* Ensure bottom padding to prevent copyright from being cut off */
+    padding-bottom: var(--safe-area-inset-bottom);
+    /* Make sure the viewport takes safe areas into account */
+    min-height: -webkit-fill-available;
+    height: -webkit-fill-available;
+  }
+
+  /* Fix Safari issues with viewport */
+  @supports (-webkit-touch-callout: none) {
+    html,
+    body {
+      min-height: -webkit-fill-available;
+      height: -webkit-fill-available;
+    }
+  }
+
+  /* Remove any border or lines between elements */
+  *:not([class^="Icon"]) {
+    border: none !important;
+    box-shadow: none !important;
+  }
 }

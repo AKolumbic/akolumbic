@@ -20,15 +20,28 @@ import {
 
 export default function Contact() {
   const [isClient, setIsClient] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
+
+    // Check if mobile on mount and on resize
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
   }, []);
 
   if (!isClient) return null;
 
   return (
-    <Footer>
+    <Footer className={isMobile ? "mobile-footer" : ""}>
       <IconContainer>
         <IconWrapper>
           <IconLink
@@ -102,29 +115,34 @@ export default function Contact() {
           </IconLink>
         </IconWrapper>
 
-        <IconWrapper>
-          <IconLink
-            href="https://drosshole.com"
-            target="_blank"
-            aria-label="Drosshole"
-            whileHover={{ scale: 1.2 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          >
-            <GiDeathStar />
-          </IconLink>
-        </IconWrapper>
+        {/* Only render Drosshole and Falstera links on desktop */}
+        {!isMobile && (
+          <>
+            <IconWrapper>
+              <IconLink
+                href="https://drosshole.com"
+                target="_blank"
+                aria-label="Drosshole"
+                whileHover={{ scale: 1.2 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <GiDeathStar />
+              </IconLink>
+            </IconWrapper>
 
-        <IconWrapper>
-          <IconLink
-            href="https://falstera.com"
-            target="_blank"
-            aria-label="Falstera"
-            whileHover={{ scale: 1.2 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          >
-            <GiDiceTwentyFacesTwenty />
-          </IconLink>
-        </IconWrapper>
+            <IconWrapper>
+              <IconLink
+                href="https://falstera.com"
+                target="_blank"
+                aria-label="Falstera"
+                whileHover={{ scale: 1.2 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <GiDiceTwentyFacesTwenty />
+              </IconLink>
+            </IconWrapper>
+          </>
+        )}
       </IconContainer>
 
       <Copyright>© 2025 Andrew Kolumbic. All rights reserved.</Copyright>
