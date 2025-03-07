@@ -53,24 +53,7 @@ Themes can be switched via the theme selector component in the top right corner.
 
 - **Scroll Indicator Behavior**: When using the scroll progress indicator to navigate to the About section, the scroll may position the quote ("Do or do not, there is no try") at different vertical positions depending on which section you're navigating from. This is an edge case related to duplicate element IDs and the way intersection observers handle scroll positioning.
 
-## Development
-
-### Running Locally
-
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-```
-
-### Build for Production
-
-```bash
-npm run build
-npm run start
-```
+- **Key Expertise Hover/Tooltip Behavior**: Tooltips do not display correctly
 
 ### Deployment
 
