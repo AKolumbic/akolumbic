@@ -7,23 +7,39 @@ import { themeColors } from "../data/themeColors";
 import { getBackgroundComponent } from "./backgrounds/BackgroundRegistry";
 
 const useSystemTheme = (): ThemeType => {
-  const [systemTheme, setSystemTheme] = useState<ThemeType>("nightsky");
+  const [systemTheme, setSystemTheme] = useState<ThemeType>(() => {
+    // Initialize with a check if we're in the browser
+    if (typeof window !== "undefined") {
+      return window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "nightsky"
+        : "beach";
+    }
+    return "nightsky"; // Default to nightsky if not in browser
+  });
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     // Check if system prefers dark mode
     const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const updateTheme = (e: MediaQueryListEvent | MediaQueryList) => {
+      console.log("System theme changed:", e.matches ? "dark" : "light");
       setSystemTheme(e.matches ? "nightsky" : "beach");
     };
 
     // Set initial theme
     updateTheme(darkModeQuery);
 
-    // Listen for system theme changes
-    darkModeQuery.addEventListener("change", updateTheme);
-
-    return () => darkModeQuery.removeEventListener("change", updateTheme);
+    // Use the appropriate event listener based on browser support
+    if (darkModeQuery.addEventListener) {
+      darkModeQuery.addEventListener("change", updateTheme);
+      return () => darkModeQuery.removeEventListener("change", updateTheme);
+    } else {
+      // Fallback for older browsers
+      darkModeQuery.addListener(updateTheme);
+      return () => darkModeQuery.removeListener(updateTheme);
+    }
   }, []);
 
   return systemTheme;

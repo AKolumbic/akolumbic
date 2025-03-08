@@ -55,6 +55,10 @@ Themes can be switched via the theme selector component in the top right corner.
 
 - **Key Expertise Hover/Tooltip Behavior**: Tooltips do not display correctly
 
+## Credits
+
+- Black Hole shader effect by [@XorDev](https://twitter.com/XorDev)'s work, specifically [this post](https://twitter.com/XorDev/status/1897669357934608590)
+
 ### Deployment
 
 The application is configured for deployment on Vercel with optimized settings in `vercel.json` and `next.config.js`.
