@@ -64,6 +64,22 @@ export const sideProjects: SideProject[] = [
     link: "https://github.com/AKolumbic/vue-calc",
     image: "/vue.svg",
   },
+
+  // {
+  //   title: "D&D Stuff",
+  //   description: "D&D-themed React practice.",
+  //   tech: ["React", "TypeScript"],
+  //   link: "https://github.com/AKolumbic/dndStuff",
+  //   image: "/d&d.png",
+  // },
+  {
+    title: "STAR WING",
+    description:
+      "A 3D spaceship shooter built with Three.js that blends classic arcade action with roguelike progression, featuring retro pixel-art and neon cyberpunk aesthetics.",
+    tech: ["Three.js", "TypeScript", "WebGL"],
+    link: "https://star-wing-drosshole.vercel.app/",
+    image: "/star-wing.png",
+  },
   {
     title: "BATMAN: Streets of Gotham",
     description:
@@ -78,19 +94,5 @@ export const sideProjects: SideProject[] = [
     tech: ["TypeScript"],
     link: "https://github.com/AKolumbic/twitchbot",
     image: "/twitch.png",
-  },
-  // {
-  //   title: "D&D Stuff",
-  //   description: "D&D-themed React practice.",
-  //   tech: ["React", "TypeScript"],
-  //   link: "https://github.com/AKolumbic/dndStuff",
-  //   image: "/d&d.png",
-  // },
-  {
-    title: "Warcraft Stuff",
-    description: "Warcraft-themed coding experiments.",
-    tech: ["TypeScript"],
-    link: "https://github.com/AKolumbic/warcraft",
-    image: "/wow.png",
   },
 ];
