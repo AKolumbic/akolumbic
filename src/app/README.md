@@ -43,7 +43,7 @@ This Next.js application is built with a modular architecture featuring:
 
 The application implements a theme system with three options:
 
-- **Main**: Default theme with a deep space gradient
+- **Night Sky**: Default theme with a deep space gradient
 - **Beach**: Ocean-inspired colors and animations
 - **Sunset**: Warm sunset-inspired color palette
 
@@ -54,6 +54,10 @@ Themes can be switched via the theme selector component in the top right corner.
 - **Scroll Indicator Behavior**: When using the scroll progress indicator to navigate to the About section, the scroll may position the quote ("Do or do not, there is no try") at different vertical positions depending on which section you're navigating from. This is an edge case related to duplicate element IDs and the way intersection observers handle scroll positioning.
 
 - **Key Expertise Hover/Tooltip Behavior**: Tooltips do not display correctly
+
+## Credits
+
+- Black Hole shader effect by [@XorDev](https://twitter.com/XorDev)'s work, specifically [this post](https://twitter.com/XorDev/status/1897669357934608590)
 
 ### Deployment
 

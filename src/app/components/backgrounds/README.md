@@ -1,6 +1,6 @@
 # Background Components
 
-This directory contains modular background components that can be used with the main `GradientBackground` component.
+This directory contains modular background components that can be used with the `GradientBackground` component.
 
 ## Architecture
 
@@ -8,7 +8,12 @@ The background system uses a registry pattern to make it easy to add new backgro
 
 - `types.ts`: Contains the common interface for background components
 - `BackgroundRegistry.tsx`: Maintains a registry of all available background components
-- Individual background components (e.g., `MainBackground.tsx`, `BeachBackground.tsx`, etc.)
+- Individual background components (e.g., `NightSkyBackground.tsx`, `BeachBackground.tsx`, etc.)
+
+## Components
+
+- `BackgroundRegistry.tsx`: Maintains a registry of all available background components
+- Individual background components (e.g., `NightSkyBackground.tsx`, `BeachBackground.tsx`, etc.)
 
 ## How to Add a New Background Type
 
@@ -52,7 +57,7 @@ newTheme: {
 4. Update the `ThemeType` type to include your new theme
 
 ```typescript
-export type ThemeType = "main" | "beach" | "sunset" | "newTheme";
+export type ThemeType = "nightsky" | "beach" | "sunset" | "blackhole";
 ```
 
 5. Create a new background component in the `backgrounds` directory
