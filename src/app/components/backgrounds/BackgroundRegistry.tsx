@@ -2,9 +2,10 @@ import React from "react";
 import { ThemeType } from "../../types/gradient.types";
 import { BackgroundProps } from "./types";
 import {
-  MainBackground,
+  NightSkyBackground,
   BeachBackground,
   SunsetBackground,
+  BlackHoleBackground,
 } from "./ClientBackgrounds";
 
 // Interface for registry entries
@@ -14,8 +15,9 @@ interface BackgroundRegistryEntry {
 
 // Background registry - can be extended with new backgrounds
 const backgrounds: Record<ThemeType, BackgroundRegistryEntry> = {
-  main: { component: MainBackground },
+  nightsky: { component: NightSkyBackground },
   beach: { component: BeachBackground },
+  blackhole: { component: BlackHoleBackground },
   sunset: { component: SunsetBackground },
 };
 
@@ -31,7 +33,7 @@ export const getBackgroundComponent = (
     console.warn(
       `Background for theme "${theme}" not found, falling back to main theme`
     );
-    return backgrounds.main.component;
+    return backgrounds.nightsky.component;
   }
 
   return backgrounds[theme].component;

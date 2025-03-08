@@ -6,7 +6,7 @@ import {
   ThemePanel,
   ThemeButton,
 } from "../styles/ThemeSelector.styles";
-import { ThemeType } from "../types/theme.types";
+import { ThemeType } from "../types/gradient.types";
 
 interface ThemeSelectorProps {
   currentTheme: ThemeType;
@@ -14,20 +14,23 @@ interface ThemeSelectorProps {
 }
 
 const themeGradients = {
-  main: "linear-gradient(135deg, #1A1A1A 0%, #0D1B2A 50%, #1B263B 100%)",
+  nightsky: "linear-gradient(135deg, #1A1A1A 0%, #0D1B2A 50%, #1B263B 100%)",
   beach: "linear-gradient(135deg, #01688D 0%, #0197B1 50%, #81BBA0 100%)",
   sunset: "linear-gradient(135deg, #1a237e 0%, #7e57c2 50%, #ff5252 100%)",
+  blackhole: "linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #333333 100%)",
 };
 
 // Function to get display name of theme with proper capitalization
 const getThemeDisplayName = (theme: ThemeType): string => {
   switch (theme) {
-    case "main":
-      return "Main";
+    case "nightsky":
+      return "Night Sky";
     case "beach":
       return "Beach";
     case "sunset":
       return "Sunset";
+    case "blackhole":
+      return "Black Hole";
     default:
       return theme;
   }
@@ -71,17 +74,17 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
             transition={{ duration: 0.2 }}
           >
             <ThemeButton
-              $active={currentTheme === "main"}
-              $gradient={themeGradients.main}
+              $active={currentTheme === "nightsky"}
+              $gradient={themeGradients.nightsky}
               onClick={() => {
-                onThemeChange("main");
+                onThemeChange("nightsky");
                 setIsOpen(false);
               }}
               whileHover={{ x: 2 }}
               whileTap={{ scale: 0.98 }}
             >
-              Main{" "}
-              {currentTheme === "main" && (
+              Night Sky{" "}
+              {currentTheme === "nightsky" && (
                 <span className="visually-hidden">(Current)</span>
               )}
             </ThemeButton>
@@ -97,6 +100,21 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
             >
               Beach{" "}
               {currentTheme === "beach" && (
+                <span className="visually-hidden">(Current)</span>
+              )}
+            </ThemeButton>
+            <ThemeButton
+              $active={currentTheme === "blackhole"}
+              $gradient={themeGradients.blackhole}
+              onClick={() => {
+                onThemeChange("blackhole");
+                setIsOpen(false);
+              }}
+              whileHover={{ x: 2 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Black Hole{" "}
+              {currentTheme === "blackhole" && (
                 <span className="visually-hidden">(Current)</span>
               )}
             </ThemeButton>

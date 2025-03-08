@@ -20,7 +20,7 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
   zIndex = 0,
   reducedMotion = false,
   activeSection = "hero",
-  theme = "main",
+  theme = "nightsky",
 }) => {
   // Add enhanced logging for debugging
   useEffect(() => {
@@ -51,12 +51,20 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
 
   // Get the appropriate colors based on theme and section
   const currentColors = (() => {
+    if (!themeColors[theme]) {
+      console.warn(
+        `Theme "${theme}" not found, falling back to nightsky theme`
+      );
+      return themeColors.nightsky[activeSection];
+    }
+
     // Special case for themes with only 'all' property
-    if (theme === "sunset") {
+    if ("all" in themeColors[theme]) {
       return themeColors[theme].all;
     }
-    // Normal case for main and beach themes
-    return themeColors[theme as "main" | "beach"][activeSection];
+
+    // Normal case for nightsky and beach themes
+    return themeColors[theme][activeSection];
   })();
 
   // Get the appropriate background component for the current theme

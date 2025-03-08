@@ -1,4 +1,4 @@
-export interface MainColors {
+export interface NightSkyColors {
   sunset: string;
   ocean: string;
   sky: string;
@@ -22,15 +22,22 @@ export interface SunsetColors {
   yellow: string;
 }
 
+export interface BlackHoleColors {
+  background: string;
+}
+
 export interface ThemeColors {
-  main: {
-    [key in "hero" | "about" | "portfolio"]: MainColors;
+  nightsky: {
+    [key in "hero" | "about" | "portfolio"]: NightSkyColors;
   };
   beach: {
     [key in "hero" | "about" | "portfolio"]: BeachColors;
   };
   sunset: {
     all: SunsetColors;
+  };
+  blackhole: {
+    all: BlackHoleColors;
   };
 }
 
@@ -47,4 +54,4 @@ export interface GradientBackgroundProps {
   theme?: ThemeType;
 }
 
-export type ThemeType = "main" | "beach" | "sunset";
+export type ThemeType = "nightsky" | "beach" | "sunset" | "blackhole";
