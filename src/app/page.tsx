@@ -59,7 +59,7 @@ export default function HomePage(): JSX.Element {
   const [activeSection, setActiveSection] = useState<
     "hero" | "about" | "portfolio"
   >("hero");
-  const [theme, setTheme] = useState<ThemeType>("main");
+  const [theme, setTheme] = useState<ThemeType>("nightsky");
 
   // New state for tracking if user has scrolled
   const [hasScrolled, setHasScrolled] = useState(false);

@@ -31,7 +31,7 @@ export const getBackgroundComponent = (
 ): React.ComponentType<BackgroundProps> => {
   if (!backgrounds[theme]) {
     console.warn(
-      `Background for theme "${theme}" not found, falling back to main theme`
+      `Background for theme "${theme}" not found, falling back to Night Sky theme`
     );
     return backgrounds.nightsky.component;
   }

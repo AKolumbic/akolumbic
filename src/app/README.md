@@ -43,7 +43,7 @@ This Next.js application is built with a modular architecture featuring:
 
 The application implements a theme system with three options:
 
-- **Main**: Default theme with a deep space gradient
+- **Night Sky**: Default theme with a deep space gradient
 - **Beach**: Ocean-inspired colors and animations
 - **Sunset**: Warm sunset-inspired color palette
 
