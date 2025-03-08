@@ -1,7 +1,35 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import styled from "styled-components";
 import { BackgroundProps } from "./types";
+
+const StarField = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+`;
+
+const Star = styled.div`
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: twinkle linear infinite;
+
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 0.1;
+      transform: scale(0.7);
+    }
+    50% {
+      opacity: 0.9;
+      transform: scale(1.1);
+    }
+  }
+`;
 
 // Interactive starry background that highlights stars when the mouse is nearby
 const StarryBackground: React.FC<{ reducedMotion: boolean }> = ({
@@ -36,37 +64,42 @@ const StarryBackground: React.FC<{ reducedMotion: boolean }> = ({
     setStars(newStars);
   }, []);
 
-  // Track mouse movements
   useEffect(() => {
     if (reducedMotion) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      isMouseMoving.current = true;
+      if (!backgroundRef.current) return;
 
-      // Throttle updates to improve performance
+      const rect = backgroundRef.current.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+      // Throttle updates to every 16ms (approximately 60fps)
       const now = Date.now();
-      if (now - lastUpdate.current < 30) return; // ~30fps
-      lastUpdate.current = now;
-
-      const rect = backgroundRef.current?.getBoundingClientRect();
-      if (rect) {
-        setMousePos({
-          x: ((e.clientX - rect.left) / rect.width) * 100,
-          y: ((e.clientY - rect.top) / rect.height) * 100,
-        });
+      if (now - lastUpdate.current >= 16) {
+        setMousePos({ x, y });
+        lastUpdate.current = now;
       }
+
+      // Set isMouseMoving to true and clear any existing timeout
+      isMouseMoving.current = true;
     };
 
     const handleMouseLeave = () => {
       isMouseMoving.current = false;
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseleave", handleMouseLeave);
+    const background = backgroundRef.current;
+    if (background) {
+      background.addEventListener("mousemove", handleMouseMove);
+      background.addEventListener("mouseleave", handleMouseLeave);
+    }
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseleave", handleMouseLeave);
+      if (background) {
+        background.removeEventListener("mousemove", handleMouseMove);
+        background.removeEventListener("mouseleave", handleMouseLeave);
+      }
     };
   }, [reducedMotion]);
 
@@ -86,8 +119,7 @@ const StarryBackground: React.FC<{ reducedMotion: boolean }> = ({
         overflow: "hidden",
       }}
     >
-      {/* Fancy stars with mouse interaction */}
-      <div className="starField">
+      <StarField>
         {stars.map((star) => {
           // Calculate distance from mouse to this star (Euclidean distance)
           const dx = star.x - mousePos.x;
@@ -109,9 +141,8 @@ const StarryBackground: React.FC<{ reducedMotion: boolean }> = ({
           const boostedSize = star.size * (1 + mouseEffect * 0.5);
 
           return (
-            <div
+            <Star
               key={star.id}
-              className="star"
               style={{
                 left: `${star.x}%`,
                 top: `${star.y}%`,
@@ -119,69 +150,34 @@ const StarryBackground: React.FC<{ reducedMotion: boolean }> = ({
                 height: `${boostedSize}px`,
                 opacity: boostedBrightness,
                 animationDuration: `${star.twinkleSpeed}s`,
-                // Increase glow effect by 5% and make it smoother
                 boxShadow:
                   mouseEffect > 0.25
                     ? `0 0 ${3 + mouseEffect * 5.25}px rgba(255, 255, 255, ${
                         mouseEffect * 0.735
                       })`
                     : "none",
-                // Highlight color varies slightly based on position
                 backgroundColor:
                   mouseEffect > 0.5
                     ? `hsl(${210 + (star.id % 60)}, 80%, ${
                         70 + mouseEffect * 30
                       }%)`
                     : "white",
-                // Make transitions smoother for a more refined effect
                 transition:
                   "opacity 0.3s ease-out, width 0.3s ease-out, height 0.3s ease-out, box-shadow 0.3s ease-out, background-color 0.3s ease-out",
               }}
             />
           );
         })}
-      </div>
-
-      <style jsx>{`
-        .starField {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          top: 0;
-          left: 0;
-        }
-
-        .star {
-          position: absolute;
-          border-radius: 50%;
-          transform: translate(-50%, -50%);
-          animation: twinkle linear infinite;
-        }
-
-        @keyframes twinkle {
-          0%,
-          100% {
-            opacity: 0.1;
-            transform: scale(0.7);
-          }
-          50% {
-            opacity: 0.9;
-            transform: scale(1.1);
-          }
-        }
-      `}</style>
+      </StarField>
     </div>
   );
 };
 
 // Main background component with improved star interaction
-const MainBackground: React.FC<BackgroundProps> = ({
+const NightSkyBackground: React.FC<BackgroundProps> = ({
   reducedMotion = false,
 }) => {
   return <StarryBackground reducedMotion={reducedMotion} />;
 };
 
-// Add display name for React DevTools and error reporting
-MainBackground.displayName = "MainBackground";
-
-export default MainBackground;
+export default NightSkyBackground;

@@ -1,1 +1,1 @@
-export type ThemeType = "main" | "beach" | "sunset";
+export type ThemeType = "nightsky" | "beach" | "sunset" | "blackhole";

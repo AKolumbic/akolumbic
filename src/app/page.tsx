@@ -59,7 +59,15 @@ export default function HomePage(): JSX.Element {
   const [activeSection, setActiveSection] = useState<
     "hero" | "about" | "portfolio"
   >("hero");
-  const [theme, setTheme] = useState<ThemeType>("main");
+  const [theme, setTheme] = useState<ThemeType>(() => {
+    // Initialize with system preference if in browser
+    if (typeof window !== "undefined") {
+      return window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "nightsky"
+        : "beach";
+    }
+    return "nightsky";
+  });
 
   // New state for tracking if user has scrolled
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -185,6 +193,38 @@ export default function HomePage(): JSX.Element {
     };
   }, [isMobile]);
 
+  // Effect to update theme based on system changes
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const updateTheme = (e: MediaQueryListEvent | MediaQueryList) => {
+      if (!document.cookie.includes("userSelectedTheme")) {
+        setTheme(e.matches ? "nightsky" : "beach");
+      }
+    };
+
+    // Set initial theme if user hasn't selected one
+    if (!document.cookie.includes("userSelectedTheme")) {
+      updateTheme(darkModeQuery);
+    }
+
+    if (darkModeQuery.addEventListener) {
+      darkModeQuery.addEventListener("change", updateTheme);
+      return () => darkModeQuery.removeEventListener("change", updateTheme);
+    } else {
+      darkModeQuery.addListener(updateTheme);
+      return () => darkModeQuery.removeListener(updateTheme);
+    }
+  }, []);
+
+  // Update ThemeSelector to set a cookie when user manually changes theme
+  const handleThemeChange = (newTheme: ThemeType) => {
+    setTheme(newTheme);
+    document.cookie = `userSelectedTheme=${newTheme}; path=/; max-age=31536000`; // 1 year expiry
+  };
+
   // Enhanced intersection observers with improved settings
   const { ref: heroRef, inView: heroInView } = useInView({
     threshold: 0.3,
@@ -264,7 +304,7 @@ export default function HomePage(): JSX.Element {
   return (
     <>
       <SafeGradientBackground activeSection={activeSection} theme={theme} />
-      <ThemeSelector currentTheme={theme} onThemeChange={setTheme} />
+      <ThemeSelector currentTheme={theme} onThemeChange={handleThemeChange} />
 
       <ScrollProgress
         activeSection={activeSection}

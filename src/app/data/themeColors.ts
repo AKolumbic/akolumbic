@@ -1,7 +1,7 @@
 import { ThemeColors } from "../types/gradient.types";
 
 export const themeColors: ThemeColors = {
-  main: {
+  nightsky: {
     hero: {
       sunset: "#1A1A1A",
       ocean: "#0D1B2A",
@@ -52,6 +52,11 @@ export const themeColors: ThemeColors = {
       red: "#ff5252",
       orange: "#ff9800",
       yellow: "#ffd740",
+    },
+  },
+  blackhole: {
+    all: {
+      background: "#000000",
     },
   },
 };

@@ -20,10 +20,10 @@ const LoadingBackground: React.FC = () => (
 );
 
 // Dynamic imports for backgrounds
-const DynamicMainBackground = dynamic<BackgroundProps>(
+const DynamicNightSkyBackground = dynamic<BackgroundProps>(
   () =>
-    import("./MainBackground").catch((error) => {
-      console.error("Failed to load MainBackground:", error);
+    import("./NightSkyBackground").catch((error) => {
+      console.error("Failed to load NightSkyBackground:", error);
       return Promise.resolve(() => (
         <FallbackBackground
           colors={{ sunset: "#1A1A1A", ocean: "#0D1B2A", sky: "#1B263B" }}
@@ -66,9 +66,23 @@ const DynamicSunsetBackground = dynamic<BackgroundProps>(
   }
 );
 
+const DynamicBlackHoleBackground = dynamic<BackgroundProps>(
+  () =>
+    import("./BlackHoleBackground").catch((error) => {
+      console.error("Failed to load BlackHoleBackground:", error);
+      return Promise.resolve(() => (
+        <FallbackBackground colors={{ background: "#000000" }} />
+      ));
+    }),
+  {
+    ssr: false,
+    loading: () => <LoadingBackground />,
+  }
+);
+
 // Simple component exports
-export const MainBackground: React.FC<BackgroundProps> = (props) => (
-  <DynamicMainBackground {...props} />
+export const NightSkyBackground: React.FC<BackgroundProps> = (props) => (
+  <DynamicNightSkyBackground {...props} />
 );
 
 export const BeachBackground: React.FC<BackgroundProps> = (props) => (
@@ -77,4 +91,8 @@ export const BeachBackground: React.FC<BackgroundProps> = (props) => (
 
 export const SunsetBackground: React.FC<BackgroundProps> = (props) => (
   <DynamicSunsetBackground {...props} />
+);
+
+export const BlackHoleBackground: React.FC<BackgroundProps> = (props) => (
+  <DynamicBlackHoleBackground {...props} />
 );
