@@ -49,21 +49,6 @@ export const sideProjects: SideProject[] = [
     link: "https://github.com/AKolumbic/akolumbic",
     image: "/ak.png",
   },
-  {
-    title: "Angular/Python Stock App",
-    description:
-      "A full-stack stock app built with Angular for the front end and Python for the back end.",
-    tech: ["Angular", "Python", "MongoDB"],
-    link: "https://github.com/AKolumbic/asmp",
-    image: "/angular.png",
-  },
-  {
-    title: "Vue Calculator",
-    description: "A calculator built with Vue.js.",
-    tech: ["Vue.js", "JavaScript"],
-    link: "https://github.com/AKolumbic/vue-calc",
-    image: "/vue.svg",
-  },
 
   // {
   //   title: "D&D Stuff",
@@ -80,6 +65,30 @@ export const sideProjects: SideProject[] = [
     link: "https://star-wing-drosshole.vercel.app/",
     image: "/star-wing.png",
   },
+
+  {
+    title: "Twitchbot",
+    description:
+      "A modernized bot for my Twitch channel with OpenAI integration and a comprehensive testing suite.",
+    tech: ["TypeScript"],
+    link: "https://github.com/AKolumbic/twitchbot",
+    image: "/twitch.png",
+  },
+  {
+    title: "Angular/Python Stock App",
+    description:
+      "A full-stack stock app built with Angular for the front end and Python for the back end.",
+    tech: ["Angular", "Python", "MongoDB"],
+    link: "https://github.com/AKolumbic/asmp",
+    image: "/angular.png",
+  },
+  {
+    title: "Vue Calculator",
+    description: "A calculator built with Vue.js.",
+    tech: ["Vue.js", "JavaScript"],
+    link: "https://github.com/AKolumbic/vue-calc",
+    image: "/vue.svg",
+  },
   {
     title: "BATMAN: Streets of Gotham",
     description:
@@ -87,12 +96,5 @@ export const sideProjects: SideProject[] = [
     tech: ["Phaser 3", "TypeScript", "Rollup"],
     link: "https://github.com/AKolumbic/BATMAN-Streets-of-Gotham",
     image: "/batman.jpg",
-  },
-  {
-    title: "Twitchbot",
-    description: "A bot for my Twitch channel.",
-    tech: ["TypeScript"],
-    link: "https://github.com/AKolumbic/twitchbot",
-    image: "/twitch.png",
   },
 ];
