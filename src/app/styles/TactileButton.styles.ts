@@ -96,7 +96,9 @@ export const ButtonInner = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    will-change: transform;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-shadow: rgba(0, 0, 0, 0.1) 0 0 0.1em;
   }
 
