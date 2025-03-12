@@ -186,15 +186,29 @@ const AboutMe: React.FC = () => {
               every project with the precision and dedication it demands.
             </p>
             <p>
+              My experience leading teams and collaborating closely with
+              stakeholders has honed my skills in delivering solutions that
+              blend accessibility, efficiency, and innovation. Whether it&apos;s
+              guiding development teams to streamline onboarding processes or
+              creating intuitive apps used by thousands of users, I strive to
+              deliver software solutions that are both elegant and impactful.
+            </p>
+
+            <p>
               I believe in efficiency, clarity, and continuous improvement. I
               stay ahead of the curve by leveraging cutting-edge tools and
               AI-driven development like <strong>Cursor</strong> and{" "}
               <strong>ChatGPT</strong>, not as crutches, but as force
-              multipliers to refine and accelerate workflows.
+              multipliers to refine and accelerate workflows. I am a tech
+              evangalist when it comes to vibe coding and believe that being
+              able to effectively use AI to code is the key to success in the
+              future of the tech industry.
             </p>
             <p>
-              I approach every challenge with a focus on execution, ensuring
-              that ideas don&apos;t just stay ideas—they become reality.
+              I tackle each challenge with relentless determination,
+              transforming complex ideas into clear, actionable solutions. My
+              commitment is not just to deliver code, but to build software that
+              resonates, inspires, and genuinely makes an impact.
             </p>
 
             {/* Resume Download Button */}
