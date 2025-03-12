@@ -18,9 +18,9 @@ export interface Skill {
 
 export const skills: Skill[] = [
   {
-    title: "TypeScript, JavaScript (ES6+), Python",
+    title: "ProgrammingLanguages",
     description:
-      "Modern programming languages for web and application development. TypeScript adds static typing to JavaScript, while Python offers versatility for various applications.",
+      "Proficient in TypeScript, JavaScript (ES6+), CSS, HTML, and Python for modern web and application development.",
     links: [
       { name: "TypeScript", url: "https://www.typescriptlang.org/" },
       {
@@ -31,70 +31,117 @@ export const skills: Skill[] = [
     ],
   },
   {
-    title: "React, Angular, Vue, Next.js",
+    title: "Front-End Frameworks & Libraries",
     description:
-      "Popular front-end frameworks for building interactive user interfaces and single-page applications with component-based architecture.",
+      "Expert with Next.js, React, Angular, and Vue for building modern, interactive user interfaces and single-page applications.",
     links: [
+      { name: "Next.js", url: "https://nextjs.org/" },
       { name: "React", url: "https://reactjs.org/" },
       { name: "Angular", url: "https://angular.io/" },
       { name: "Vue", url: "https://vuejs.org/" },
-      { name: "Next.js", url: "https://nextjs.org/" },
     ],
   },
   {
-    title: "Node.js, Express.js, FastAPI, MongoDB",
+    title: "Styling/VFX",
     description:
-      "Backend technologies for creating scalable web services. Node.js runs JavaScript server-side, FastAPI is a modern Python framework, and MongoDB is a NoSQL database.",
+      "Create visually stunning interfaces with Tailwind CSS, Styled Components, Material Design, Three.js, and Motion libraries.",
     links: [
-      { name: "Node.js", url: "https://nodejs.org/" },
-      { name: "Express.js", url: "https://expressjs.com/" },
-      { name: "FastAPI", url: "https://fastapi.tiangolo.com/" },
-      { name: "MongoDB", url: "https://www.mongodb.com/" },
+      { name: "Tailwind CSS", url: "https://tailwindcss.com/" },
+      { name: "Styled Components", url: "https://styled-components.com/" },
+      { name: "Material Design", url: "https://material.io/design" },
+      { name: "Three.js", url: "https://threejs.org/" },
+      { name: "Framer Motion", url: "https://www.framer.com/motion/" },
     ],
   },
   {
-    title: "React Native, Ionic Framework",
+    title: "Mobile Development",
     description:
-      "Cross-platform mobile app development frameworks allowing you to build native mobile applications using web technologies.",
+      "Build cross-platform mobile applications using React Native and Ionic Framework, delivering native experiences with web technologies.",
     links: [
       { name: "React Native", url: "https://reactnative.dev/" },
       { name: "Ionic Framework", url: "https://ionicframework.com/" },
     ],
   },
   {
-    title: "Jest, Mocha, Karma, Playwright",
+    title: "Back-End Knowledge",
     description:
-      "Testing frameworks and tools for automated testing of applications, ensuring code quality and preventing regressions.",
+      "Develop robust server-side applications with Node.js, Express.js, Django, MongoDB, and Supabase for full-stack solutions.",
+    links: [
+      { name: "Node.js", url: "https://nodejs.org/" },
+      { name: "Express.js", url: "https://expressjs.com/" },
+      { name: "Django", url: "https://www.djangoproject.com/" },
+      { name: "MongoDB", url: "https://www.mongodb.com/" },
+      { name: "Supabase", url: "https://supabase.com/" },
+    ],
+  },
+  {
+    title: "Analytics & Collaboration Tools",
+    description:
+      "Skilled with Mixpanel, Azure DevOps, Jira, and Figma for data-driven development and seamless team collaboration.",
+    links: [
+      { name: "Mixpanel", url: "https://mixpanel.com/" },
+      {
+        name: "Azure DevOps",
+        url: "https://azure.microsoft.com/en-us/services/devops/",
+      },
+      { name: "Jira", url: "https://www.atlassian.com/software/jira" },
+      { name: "Figma", url: "https://www.figma.com/" },
+    ],
+  },
+  {
+    title: "Generative AI Tools",
+    description:
+      "Leverage cutting-edge AI tools including Cursor, Claude, ChatGPT, OpenAI API, GitHub CoPilot, and NotebookLM for enhanced productivity.",
+    links: [
+      { name: "Cursor", url: "https://cursor.sh/" },
+      { name: "Claude", url: "https://claude.ai/" },
+      { name: "ChatGPT", url: "https://chat.openai.com/" },
+      { name: "OpenAI API", url: "https://platform.openai.com/" },
+      { name: "GitHub CoPilot", url: "https://github.com/features/copilot" },
+      { name: "NotebookLM", url: "https://notebooklm.google.com/" },
+    ],
+  },
+  {
+    title: "Testing & QA",
+    description:
+      "Ensure code quality and reliability with Jest, Mocha, Jasmine, Karma, Playwright, and pytest for comprehensive testing.",
     links: [
       { name: "Jest", url: "https://jestjs.io/" },
       { name: "Mocha", url: "https://mochajs.org/" },
+      { name: "Jasmine", url: "https://jasmine.github.io/" },
       { name: "Karma", url: "https://karma-runner.github.io/" },
       { name: "Playwright", url: "https://playwright.dev/" },
+      { name: "pytest", url: "https://docs.pytest.org/" },
     ],
   },
   {
-    title: "Agile, Scrum, Kanban, DevOps, CI/CD",
+    title: "Methodologies",
     description:
-      "Modern software development methodologies and practices for efficient team collaboration, continuous delivery, and quality assurance.",
+      "Practice Agile, Scrum, Waterfall, and Kanban methodologies for efficient project management and software development.",
     links: [
       { name: "Agile", url: "https://agilemanifesto.org/" },
       { name: "Scrum", url: "https://www.scrum.org/" },
-      { name: "Kanban", url: "https://www.atlassian.com/agile/kanban" },
       {
-        name: "DevOps",
-        url: "https://aws.amazon.com/devops/what-is-devops/",
+        name: "Waterfall",
+        url: "https://www.visual-paradigm.com/guide/sdlc/waterfall-model/",
       },
+      { name: "Kanban", url: "https://www.atlassian.com/agile/kanban" },
     ],
   },
   {
-    title: "ChatGPT, Cursor, Claude, Copilot",
+    title: "Soft Skills",
     description:
-      "AI-powered development tools that enhance productivity by providing code assistance, generation, and problem-solving capabilities.",
+      "Excel in cross-functional collaboration, adaptability, and effective communication to ensure project success and team harmony.",
     links: [
-      { name: "ChatGPT", url: "https://chat.openai.com/" },
-      { name: "Cursor", url: "https://cursor.sh/" },
-      { name: "Claude", url: "https://claude.ai/" },
-      { name: "Copilot", url: "https://github.com/features/copilot" },
+      { name: "Collaboration", url: "https://www.atlassian.com/blog/teamwork" },
+      {
+        name: "Communication",
+        url: "https://www.mindtools.com/pages/article/newCS_85.htm",
+      },
+      {
+        name: "Adaptability",
+        url: "https://www.forbes.com/sites/forbescoachescouncil/2019/10/03/why-adaptability-is-the-most-important-skill-to-teach-your-children",
+      },
     ],
   },
 ];
