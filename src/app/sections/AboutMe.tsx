@@ -58,6 +58,9 @@ const AboutMe: React.FC = () => {
   // Store refs for each skill item to position tooltips
   const skillRefs = useRef<(HTMLLIElement | null)[]>([]);
 
+  // Add a ref to track the current timeout
+  const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   // Effect to initialize refs array and handle window blur
   useEffect(() => {
     skillRefs.current = skillRefs.current.slice(0, skills.length);
@@ -90,6 +93,10 @@ const AboutMe: React.FC = () => {
       // Clean up tooltip state on unmount
       setActiveTooltip(null);
       setHoveringTooltip(false);
+      // Clear any existing timeout on unmount
+      if (tooltipTimeoutRef.current) {
+        clearTimeout(tooltipTimeoutRef.current);
+      }
     };
   }, [skills.length]);
 
@@ -97,9 +104,14 @@ const AboutMe: React.FC = () => {
   const handleTooltipHover = (isHovering: boolean) => {
     setHoveringTooltip(isHovering);
     if (!isHovering) {
+      // Clear any existing timeout
+      if (tooltipTimeoutRef.current) {
+        clearTimeout(tooltipTimeoutRef.current);
+      }
       // Add a small delay before hiding the tooltip to prevent flickering
-      setTimeout(() => {
+      tooltipTimeoutRef.current = setTimeout(() => {
         setActiveTooltip(null);
+        tooltipTimeoutRef.current = null;
       }, 100);
     }
   };
@@ -107,14 +119,24 @@ const AboutMe: React.FC = () => {
   // Handler for skill item hover
   const handleSkillHover = (index: number, isHovering: boolean) => {
     if (isHovering) {
+      // Clear any existing timeout when hovering a new skill
+      if (tooltipTimeoutRef.current) {
+        clearTimeout(tooltipTimeoutRef.current);
+        tooltipTimeoutRef.current = null;
+      }
       setActiveTooltip(index);
       setHoveringTooltip(false);
     } else {
       // Only hide the tooltip if we're not hovering over it
       if (!hoveringTooltip) {
+        // Clear any existing timeout
+        if (tooltipTimeoutRef.current) {
+          clearTimeout(tooltipTimeoutRef.current);
+        }
         // Add a small delay before hiding the tooltip to prevent flickering
-        setTimeout(() => {
+        tooltipTimeoutRef.current = setTimeout(() => {
           setActiveTooltip(null);
+          tooltipTimeoutRef.current = null;
         }, 100);
       }
     }
