@@ -55,6 +55,9 @@ const AboutMe: React.FC = () => {
   // Track if we're hovering over the tooltip
   const [hoveringTooltip, setHoveringTooltip] = useState(false);
 
+  // Add a ref to track the overall hover state (either on skill item or tooltip)
+  const isHoveringAnywhereRef = useRef(false);
+
   // Store refs for each skill item to position tooltips
   const skillRefs = useRef<(HTMLLIElement | null)[]>([]);
 
@@ -69,6 +72,7 @@ const AboutMe: React.FC = () => {
     const handleWindowBlur = () => {
       setActiveTooltip(null);
       setHoveringTooltip(false);
+      isHoveringAnywhereRef.current = false;
     };
 
     // Handle mouse leave from document
@@ -81,6 +85,7 @@ const AboutMe: React.FC = () => {
       ) {
         setActiveTooltip(null);
         setHoveringTooltip(false);
+        isHoveringAnywhereRef.current = false;
       }
     };
 
@@ -93,6 +98,7 @@ const AboutMe: React.FC = () => {
       // Clean up tooltip state on unmount
       setActiveTooltip(null);
       setHoveringTooltip(false);
+      isHoveringAnywhereRef.current = false;
       // Clear any existing timeout on unmount
       if (tooltipTimeoutRef.current) {
         clearTimeout(tooltipTimeoutRef.current);
@@ -103,21 +109,29 @@ const AboutMe: React.FC = () => {
   // Handler for tooltip hover
   const handleTooltipHover = (isHovering: boolean) => {
     setHoveringTooltip(isHovering);
+    isHoveringAnywhereRef.current = isHovering;
+
     if (!isHovering) {
       // Clear any existing timeout
       if (tooltipTimeoutRef.current) {
         clearTimeout(tooltipTimeoutRef.current);
       }
-      // Add a small delay before hiding the tooltip to prevent flickering
+
+      // Add a longer delay before hiding the tooltip
       tooltipTimeoutRef.current = setTimeout(() => {
-        setActiveTooltip(null);
+        // Only hide if we're still not hovering anywhere
+        if (!isHoveringAnywhereRef.current) {
+          setActiveTooltip(null);
+        }
         tooltipTimeoutRef.current = null;
-      }, 100);
+      }, 400); // Increased delay for smoother transition
     }
   };
 
   // Handler for skill item hover
   const handleSkillHover = (index: number, isHovering: boolean) => {
+    isHoveringAnywhereRef.current = isHovering;
+
     if (isHovering) {
       // Clear any existing timeout when hovering a new skill
       if (tooltipTimeoutRef.current) {
@@ -125,20 +139,20 @@ const AboutMe: React.FC = () => {
         tooltipTimeoutRef.current = null;
       }
       setActiveTooltip(index);
-      setHoveringTooltip(false);
     } else {
-      // Only hide the tooltip if we're not hovering over it
-      if (!hoveringTooltip) {
-        // Clear any existing timeout
-        if (tooltipTimeoutRef.current) {
-          clearTimeout(tooltipTimeoutRef.current);
-        }
-        // Add a small delay before hiding the tooltip to prevent flickering
-        tooltipTimeoutRef.current = setTimeout(() => {
-          setActiveTooltip(null);
-          tooltipTimeoutRef.current = null;
-        }, 100);
+      // Clear any existing timeout
+      if (tooltipTimeoutRef.current) {
+        clearTimeout(tooltipTimeoutRef.current);
       }
+
+      // Add a longer delay before hiding the tooltip
+      tooltipTimeoutRef.current = setTimeout(() => {
+        // Only hide if we're still not hovering anywhere
+        if (!isHoveringAnywhereRef.current && !hoveringTooltip) {
+          setActiveTooltip(null);
+        }
+        tooltipTimeoutRef.current = null;
+      }, 400); // Increased delay for smoother transition
     }
   };
 
@@ -257,6 +271,7 @@ const AboutMe: React.FC = () => {
                       (skillRefs.current[activeTooltip]?.offsetWidth || 0) - 100
                     }px`,
                     pointerEvents: "auto", // Make tooltip interactive
+                    zIndex: 100, // Ensure tooltip stays on top
                   }}
                 >
                   <TooltipContent>
