@@ -55,8 +55,8 @@ export const ButtonInner = styled.div`
   padding: 1em 1.5em;
   background-image: linear-gradient(
     135deg,
-    rgba(80, 80, 100, 0.95),
-    rgba(50, 50, 70, 0.95)
+    rgba(27, 38, 59, 0.95),
+    rgba(13, 27, 42, 0.95)
   );
   transition: box-shadow 300ms ease, clip-path 250ms ease,
     background-image 250ms ease, transform 250ms ease;
@@ -91,7 +91,7 @@ export const ButtonInner = styled.div`
     font-family: "SF Pro Display", "Inter", sans-serif;
     letter-spacing: -0.05em;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.95);
     transition: transform 250ms ease;
     display: flex;
     align-items: center;
