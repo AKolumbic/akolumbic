@@ -5,6 +5,7 @@ import Head from "next/head";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Playfair_Display } from "next/font/google";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -42,7 +43,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           paddingBottom: "env(safe-area-inset-bottom, 0)",
         }}
       >
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
         <Analytics />
         <SpeedInsights />
       </body>

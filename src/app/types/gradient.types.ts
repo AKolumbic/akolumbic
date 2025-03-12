@@ -1,3 +1,5 @@
+import { ThemeType } from "./theme.types";
+
 export interface NightSkyColors {
   sunset: string;
   ocean: string;
@@ -53,5 +55,3 @@ export interface GradientBackgroundProps {
   /** Current theme */
   theme?: ThemeType;
 }
-
-export type ThemeType = "nightsky" | "beach" | "sunset" | "blackhole";
