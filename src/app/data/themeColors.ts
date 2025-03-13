@@ -73,6 +73,13 @@ export const themeColors: ThemeColors = {
       accent: "#FF5500", // Brighter highlight
     },
   },
+  deepocean: {
+    all: {
+      primary: "#1E81B0", // Ocean Blue
+      background: "#0A1128", // Deep Sea Blue
+      accent: "#8CE8FF", // Bioluminescent Blue
+    },
+  },
   /*
   aurora: {
     all: {

@@ -8,6 +8,7 @@ import {
   BlackHoleBackground,
   DigitalRainBackground,
   Hal9000Background,
+  DeepOceanBackground,
   // AuroraBackground - temporarily disabled
 } from "./ClientBackgrounds";
 
@@ -27,6 +28,7 @@ const backgrounds: Record<
   blackhole: { component: BlackHoleBackground },
   digitalrain: { component: DigitalRainBackground },
   hal9000: { component: Hal9000Background },
+  deepocean: { component: DeepOceanBackground },
   // aurora: { component: AuroraBackground }, - temporarily disabled
 };
 
@@ -38,7 +40,10 @@ const backgrounds: Record<
 export const getBackgroundComponent = (
   theme: ThemeType
 ): React.ComponentType<BackgroundProps> => {
-  return backgrounds[theme as Exclude<ThemeType, "aurora">].component;
+  return (
+    backgrounds[theme as Exclude<ThemeType, "aurora">]?.component ||
+    NightSkyBackground
+  );
 };
 
 /**

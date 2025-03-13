@@ -49,6 +49,12 @@ export interface AuroraColors {
 }
 */
 
+export interface DeepOceanColors {
+  primary: string; // Ocean Blue
+  background: string; // Deep Sea Blue
+  accent: string; // Bioluminescent Blue
+}
+
 export interface ThemeColors {
   nightsky: {
     [key in "hero" | "about" | "portfolio"]: NightSkyColors;
@@ -67,6 +73,9 @@ export interface ThemeColors {
   };
   hal9000: {
     all: Hal9000Colors;
+  };
+  deepocean: {
+    all: DeepOceanColors;
   };
   /* Temporarily disabled
   aurora: {

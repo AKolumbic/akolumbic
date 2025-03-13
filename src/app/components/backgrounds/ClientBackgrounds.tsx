@@ -175,3 +175,27 @@ export const AuroraBackground: React.FC<BackgroundProps> = (props) => (
   <DynamicAuroraBackground {...props} />
 );
 */
+
+const DynamicDeepOceanBackground = dynamic<BackgroundProps>(
+  () =>
+    import("./DeepOceanBackground").catch((error) => {
+      console.error("Failed to load DeepOceanBackground:", error);
+      return Promise.resolve(() => (
+        <FallbackBackground
+          colors={{
+            primary: "#1E81B0",
+            background: "#0A1128",
+            accent: "#8CE8FF",
+          }}
+        />
+      ));
+    }),
+  {
+    ssr: false,
+    loading: () => <LoadingBackground />,
+  }
+);
+
+export const DeepOceanBackground: React.FC<BackgroundProps> = (props) => (
+  <DynamicDeepOceanBackground {...props} />
+);

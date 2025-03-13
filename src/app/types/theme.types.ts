@@ -4,7 +4,8 @@ export type ThemeType =
   | "sunset"
   | "blackhole"
   | "digitalrain"
-  | "hal9000";
+  | "hal9000"
+  | "deepocean";
 /* | "aurora" */
 
 // Typography definitions
