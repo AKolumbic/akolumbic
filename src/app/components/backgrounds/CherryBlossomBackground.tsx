@@ -57,7 +57,7 @@ interface PetalData {
 
 const generatePetals = (count: number): PetalData[] => {
   return Array.from({ length: count }, (_, index) => {
-    const duration = 100 + Math.random() * 200;
+    const duration = 10 + Math.random() * 20;
     return {
       id: index,
       left: Math.random() * 100,

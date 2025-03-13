@@ -952,11 +952,11 @@ export const cherryblossomTheme: Theme = {
 // Export all themes
 export const themes: Record<ThemeType, Theme> = {
   nightsky: nightSkyTheme,
-  beach: beachTheme,
-  sunset: sunsetTheme,
-  blackhole: blackholeTheme,
   digitalrain: digitalRainTheme,
   hal9000: hal9000Theme,
+  blackhole: blackholeTheme,
+  sunset: sunsetTheme,
+  beach: beachTheme,
   deepocean: deepOceanTheme,
   cherryblossom: cherryblossomTheme,
   // aurora: auroraTheme, - temporarily disabled
