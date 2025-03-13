@@ -13,10 +13,35 @@ const BackgroundContainer = styled.div`
 
 const Petal = styled(motion.div)`
   position: absolute;
-  background: #ffafcc; /* Soft Pink */
-  border-radius: 50%;
+  border-radius: 65% 35% 50% 50% / 55% 45% 55% 45%;
   opacity: 0.8;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+
+  /* Create a subtle gradient to give depth */
+  background: radial-gradient(
+    ellipse at 30% 40%,
+    #fff 0%,
+    #ffcce0 40%,
+    #ffafcc 70%,
+    #ffa4c1 100%
+  );
+
+  /* Use a pseudo-element to create the subtle indentation at the tip of petal */
+  &:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 35%;
+    height: 35%;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 255, 255, 0.8) 0%,
+      rgba(255, 255, 255, 0) 70%
+    );
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+  }
 `;
 
 interface PetalData {
@@ -27,19 +52,21 @@ interface PetalData {
   duration: number;
   size: number;
   startY: number;
+  rotation: number;
 }
 
 const generatePetals = (count: number): PetalData[] => {
   return Array.from({ length: count }, (_, index) => {
-    const duration = 5 + Math.random() * 10;
+    const duration = 100 + Math.random() * 200;
     return {
       id: index,
       left: Math.random() * 100,
       drift: Math.random() * 40 - 20,
       delay: -Math.random() * duration,
       duration,
-      size: 10 + Math.random() * 10,
+      size: 8 + Math.random() * 12, // Subtle variance in petal size
       startY: Math.random() * 100,
+      rotation: Math.random() * 360, // Random initial rotation
     };
   });
 };
@@ -50,7 +77,7 @@ export const CherryBlossomBackground: React.FC<
   const [petals, setPetals] = useState<PetalData[]>([]);
 
   useEffect(() => {
-    setPetals(generatePetals(40));
+    setPetals(generatePetals(60));
   }, []);
 
   return (
@@ -62,6 +89,7 @@ export const CherryBlossomBackground: React.FC<
             left: `${petal.left}%`,
             width: petal.size,
             height: petal.size,
+            transform: `rotate(${petal.rotation}deg)`,
           }}
           initial={{ top: petal.startY + "%", opacity: 0, rotate: 0 }}
           animate={{
