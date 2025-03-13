@@ -203,7 +203,7 @@ export const DeepOceanBackground: React.FC<BackgroundProps> = (props) => (
 // Added Cherry Blossom Background
 const DynamicCherryBlossomBackground = dynamic<BackgroundProps>(
   () =>
-    import("./CherryBlossomBackground.tsx").catch((error) => {
+    import("./CherryBlossomBackground").catch((error) => {
       console.error("Failed to load CherryBlossomBackground:", error);
       return Promise.resolve(() => (
         <FallbackBackground
