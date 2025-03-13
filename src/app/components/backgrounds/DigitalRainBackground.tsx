@@ -75,32 +75,54 @@ const DigitalRainBackground: React.FC<BackgroundProps> = ({
       opacity: number;
       maxLength: number;
       characters: { char: string; opacity: number }[];
+      charUpdateFrequency: number;
+      charUpdateCounter: number;
 
       constructor(x: number, fontSize: number) {
         this.x = x;
         this.y = Math.random() * -100; // Start above the canvas
-        this.speed = 1 + Math.random() * 3;
+
+        // Significantly slower base speed
+        this.speed = 0.3 + Math.random() * 0.7;
+
         this.fontSize = fontSize;
-        this.opacity = 0.1 + Math.random() * 0.7;
-        this.maxLength = 10 + Math.floor(Math.random() * 20); // Length of the trail
+        this.opacity = 0.1 + Math.random() * 0.6;
+        this.maxLength = 10 + Math.floor(Math.random() * 15); // Length of the trail
         this.characters = [];
 
-        // Slower animation if reduced motion is enabled
+        // Control how often characters change
+        this.charUpdateFrequency = Math.random() * 0.05 + 0.01; // Lower value = less frequent changes
+        this.charUpdateCounter = 0;
+
+        // Much slower animation if reduced motion is enabled
         if (reducedMotion) {
-          this.speed *= 0.5;
+          this.speed *= 0.3;
+          this.charUpdateFrequency *= 0.5;
         }
       }
 
       update(canvasHeight: number) {
-        // Move the raindrop
+        // Move the raindrop very slowly
         this.y += this.speed;
 
-        // Add new character at the head of the raindrop
-        if (Math.random() > 0.9) {
-          const randomChar = chars.charAt(
-            Math.floor(Math.random() * chars.length)
-          );
-          this.characters.unshift({ char: randomChar, opacity: this.opacity });
+        // Update the character counter
+        this.charUpdateCounter += 0.01;
+
+        // Add new character at the head of the raindrop at controlled frequency
+        if (this.charUpdateCounter >= this.charUpdateFrequency) {
+          // Reset counter
+          this.charUpdateCounter = 0;
+
+          // Only add a new character sometimes (for a more gentle effect)
+          if (Math.random() > 0.7) {
+            const randomChar = chars.charAt(
+              Math.floor(Math.random() * chars.length)
+            );
+            this.characters.unshift({
+              char: randomChar,
+              opacity: this.opacity,
+            });
+          }
         }
 
         // Limit length of the trail
@@ -159,12 +181,11 @@ const DigitalRainBackground: React.FC<BackgroundProps> = ({
       const fontSize = 14;
       const columns = Math.floor(canvas.width / fontSize);
 
-      // Create raindrops at different x positions
+      // Create raindrops at different x positions, but fewer overall
       for (let i = 0; i < columns; i++) {
-        const x = i * fontSize;
-        // Create multiple raindrops per column with different starting positions
-        const drops = Math.floor(Math.random() * 2) + 1;
-        for (let j = 0; j < drops; j++) {
+        // Only create a raindrop for some columns (for a sparser effect)
+        if (Math.random() > 0.4) {
+          const x = i * fontSize;
           rainDrops.push(new RainDrop(x, fontSize));
         }
       }
@@ -179,7 +200,7 @@ const DigitalRainBackground: React.FC<BackgroundProps> = ({
     // Animation loop
     let animationId: number;
     const animate = () => {
-      // Clear canvas with semi-transparent background for trail effect
+      // Clear canvas with more opaque background for longer trails
       ctx.fillStyle = rainColors.background;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
