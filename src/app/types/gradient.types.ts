@@ -1,3 +1,6 @@
+import { ThemeType } from "./theme.types";
+export type { ThemeType };
+
 export interface NightSkyColors {
   sunset: string;
   ocean: string;
@@ -26,6 +29,38 @@ export interface BlackHoleColors {
   background: string;
 }
 
+export interface DigitalRainColors {
+  primary: string; // Neon Green
+  background: string; // Dark Green/Black
+  accent: string; // Bright Lime
+}
+
+export interface Hal9000Colors {
+  eye: string; // Red eye
+  background: string; // Black background
+  accent: string; // Highlight
+}
+
+/* Temporarily disabled
+export interface AuroraColors {
+  background: string; // Dark blue/black night sky
+  aurora: string; // Primary aurora glow color
+  accent: string; // Secondary glow/highlight color
+}
+*/
+
+export interface DeepOceanColors {
+  primary: string; // Ocean Blue
+  background: string; // Deep Sea Blue
+  accent: string; // Bioluminescent Blue
+}
+
+export interface CherryBlossomColors {
+  primary: string; // Soft Pink
+  background: string; // Light Cream/White
+  accent: string; // Deep Cherry
+}
+
 export interface ThemeColors {
   nightsky: {
     [key in "hero" | "about" | "portfolio"]: NightSkyColors;
@@ -39,6 +74,23 @@ export interface ThemeColors {
   blackhole: {
     all: BlackHoleColors;
   };
+  digitalrain: {
+    all: DigitalRainColors;
+  };
+  hal9000: {
+    all: Hal9000Colors;
+  };
+  deepocean: {
+    all: DeepOceanColors;
+  };
+  cherryblossom: {
+    all: CherryBlossomColors;
+  };
+  /* Temporarily disabled
+  aurora: {
+    all: AuroraColors;
+  };
+  */
 }
 
 export interface GradientBackgroundProps {
@@ -53,5 +105,3 @@ export interface GradientBackgroundProps {
   /** Current theme */
   theme?: ThemeType;
 }
-
-export type ThemeType = "nightsky" | "beach" | "sunset" | "blackhole";
