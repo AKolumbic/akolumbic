@@ -55,6 +55,12 @@ export interface DeepOceanColors {
   accent: string; // Bioluminescent Blue
 }
 
+export interface CherryBlossomColors {
+  primary: string; // Soft Pink
+  background: string; // Light Cream/White
+  accent: string; // Deep Cherry
+}
+
 export interface ThemeColors {
   nightsky: {
     [key in "hero" | "about" | "portfolio"]: NightSkyColors;
@@ -76,6 +82,9 @@ export interface ThemeColors {
   };
   deepocean: {
     all: DeepOceanColors;
+  };
+  cherryblossom: {
+    all: CherryBlossomColors;
   };
   /* Temporarily disabled
   aurora: {

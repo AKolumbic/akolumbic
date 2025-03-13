@@ -9,6 +9,7 @@ import {
   DigitalRainBackground,
   Hal9000Background,
   DeepOceanBackground,
+  CherryBlossomBackground,
   // AuroraBackground - temporarily disabled
 } from "./ClientBackgrounds";
 
@@ -29,6 +30,7 @@ const backgrounds: Record<
   digitalrain: { component: DigitalRainBackground },
   hal9000: { component: Hal9000Background },
   deepocean: { component: DeepOceanBackground },
+  cherryblossom: { component: CherryBlossomBackground },
   // aurora: { component: AuroraBackground }, - temporarily disabled
 };
 
@@ -37,14 +39,8 @@ const backgrounds: Record<
  * @param theme The theme to get the background for
  * @returns The background component for the theme
  */
-export const getBackgroundComponent = (
-  theme: ThemeType
-): React.ComponentType<BackgroundProps> => {
-  return (
-    backgrounds[theme as Exclude<ThemeType, "aurora">]?.component ||
-    NightSkyBackground
-  );
-};
+export const getBackgroundComponent = (theme: ThemeType) =>
+  backgrounds[theme]?.component || NightSkyBackground;
 
 /**
  * Register a new background component

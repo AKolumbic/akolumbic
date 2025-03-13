@@ -80,6 +80,13 @@ export const themeColors: ThemeColors = {
       accent: "#8CE8FF", // Bioluminescent Blue
     },
   },
+  cherryblossom: {
+    all: {
+      primary: "#FFAFCC", // Soft Pink
+      background: "#FDF7F4", // Light Cream/White
+      accent: "#A4133C", // Deep Cherry
+    },
+  },
   /*
   aurora: {
     all: {

@@ -832,6 +832,123 @@ export const auroraTheme: Theme = {
 };
 */
 
+// Cherry Blossom Theme
+export const cherryblossomTheme: Theme = {
+  type: "cherryblossom",
+  name: "Cherry Blossom",
+
+  colors: {
+    background: {
+      main: "linear-gradient(135deg, #FDF7F4 0%, #FFAFCC 50%, #A4133C 100%)",
+      secondary: "#FDF7F4",
+      tertiary: "#FFAFCC",
+    },
+    text: {
+      primary: "#A4133C",
+      secondary: "#FFAFCC",
+      tertiary: "#FDF7F4",
+      accent: "#FFAFCC",
+      inverse: "#000000",
+    },
+    accent: {
+      primary: "#A4133C",
+      secondary: "#FFAFCC",
+      tertiary: "#FDF7F4",
+      highlight: "#A4133C",
+    },
+    ui: {
+      border: "#FDF7F4",
+      divider: "#FFAFCC",
+      shadow: "rgba(0, 0, 0, 0.1)",
+      hover: "rgba(164, 19, 60, 0.1)",
+      focus: "rgba(164, 19, 60, 0.2)",
+      disabled: "rgba(0, 0, 0, 0.2)",
+    },
+    semantic: {
+      success: "#22C55E",
+      error: "#EF4444",
+      warning: "#F59E0B",
+      info: "#3B82F6",
+    },
+  },
+
+  typography: {
+    fontFamily: {
+      primary: '"Poppins", "SF Pro Display", sans-serif',
+      secondary:
+        '"Inter", "SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif',
+    },
+    fontSizes: {
+      xs: "0.75rem",
+      sm: "0.875rem",
+      md: "1rem",
+      lg: "1.125rem",
+      xl: "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "2rem",
+    },
+    fontWeights: {
+      normal: 400,
+      medium: 500,
+      semibold: 600,
+      bold: 700,
+    },
+    lineHeights: {
+      tight: "1.25",
+      normal: "1.5",
+      relaxed: "1.75",
+    },
+  },
+
+  gradients: {
+    main: "linear-gradient(135deg, #FDF7F4 0%, #FFAFCC 50%, #A4133C 100%)",
+    card: "linear-gradient(135deg, #FDF7F4 0%, #FFAFCC 100%)",
+    button: "linear-gradient(135deg, #A4133C 0%, #FFAFCC 100%)",
+    hover: "linear-gradient(135deg, #A4133C 0%, #FFAFCC 100%)",
+  },
+
+  components: {
+    button: {
+      primary: {
+        background: "linear-gradient(135deg, #A4133C 0%, #FFAFCC 100%)",
+        color: "#FFFFFF",
+        border: "none",
+        hover: "linear-gradient(135deg, #A4133C 0%, #FFAFCC 100%)",
+      },
+      secondary: {
+        background: "transparent",
+        color: "#A4133C",
+        border: "1px solid #A4133C",
+        hover: "rgba(164, 19, 60, 0.1)",
+      },
+    },
+    card: {
+      background: "#FDF7F4",
+      border: "1px solid #FFAFCC",
+      shadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    },
+    input: {
+      background: "#FFAFCC",
+      border: "1px solid #A4133C",
+      color: "#000000",
+      focus: "1px solid #A4133C",
+    },
+  },
+
+  animation: {
+    duration: {
+      fast: "0.15s",
+      normal: "0.3s",
+      slow: "0.5s",
+    },
+    easing: {
+      default: "cubic-bezier(0.4, 0, 0.2, 1)",
+      smooth: "cubic-bezier(0.22, 1, 0.36, 1)",
+      bouncy: "cubic-bezier(0.2, 0.8, 0.2, 1.2)",
+    },
+  },
+};
+
 // Export all themes
 export const themes: Record<ThemeType, Theme> = {
   nightsky: nightSkyTheme,
@@ -841,6 +958,7 @@ export const themes: Record<ThemeType, Theme> = {
   digitalrain: digitalRainTheme,
   hal9000: hal9000Theme,
   deepocean: deepOceanTheme,
+  cherryblossom: cherryblossomTheme,
   // aurora: auroraTheme, - temporarily disabled
 };
 
