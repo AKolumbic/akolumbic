@@ -703,7 +703,19 @@ export const hal9000Theme: Theme = {
   },
 };
 
-// Export all themes in a single object for easy access
+/* Aurora theme - temporarily disabled
+export const auroraTheme: Theme = {
+  type: "aurora",
+  name: "Aurora Borealis",
+  colors: {
+    // All the aurora theme colors
+    // ... existing aurora theme colors ...
+  },
+  // ... rest of aurora theme definition ...
+};
+*/
+
+// Export all themes
 export const themes: Record<ThemeType, Theme> = {
   nightsky: nightSkyTheme,
   beach: beachTheme,
@@ -711,6 +723,7 @@ export const themes: Record<ThemeType, Theme> = {
   blackhole: blackholeTheme,
   digitalrain: digitalRainTheme,
   hal9000: hal9000Theme,
+  // aurora: auroraTheme, - temporarily disabled
 };
 
 // Helper to get theme display name

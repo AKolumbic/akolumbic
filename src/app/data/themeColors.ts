@@ -73,4 +73,13 @@ export const themeColors: ThemeColors = {
       accent: "#FF5500", // Brighter highlight
     },
   },
+  /*
+  aurora: {
+    all: {
+      background: "#020510",
+      aurora: "#3366FF",
+      accent: "#00CCFF",
+    },
+  },
+  */
 };

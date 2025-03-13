@@ -17,6 +17,7 @@ const fragmentShaderSource = `
 
   uniform float u_time;
   uniform vec2 u_resolution;
+  uniform vec2 u_lookDir;
 
   // Random function for noise generation
   float random(vec2 st) {
@@ -60,15 +61,17 @@ const fragmentShaderSource = `
     return normalize(vec3(uv, z));
   }
 
-  // Vertical oval pupil shape for Sauron-like effect
+  // Vertical oval pupil shape for Sauron-like effect with look direction parameter
   float pupilMask(vec2 uv, float time) {
     // Animate pupil dilation
     float dilation = 0.6 + 0.1 * sin(time * 0.5);
     float pupilWidth = 0.2 * dilation;
     float pupilHeight = 0.7 * dilation;
     
+    // Apply the look direction offset
+    vec2 pupilUV = uv - u_lookDir * 0.3;
+    
     // Calculate distance to center, scaled by oval dimensions
-    vec2 pupilUV = uv;
     pupilUV.x /= pupilWidth;
     pupilUV.y /= pupilHeight;
     float pupilDist = length(pupilUV);
@@ -132,7 +135,7 @@ const fragmentShaderSource = `
     // Reduced specular power and made it more confined to the center
     float spec = pow(max(dot(normal, halfDir), 0.0), 64.0) * 0.3 * (1.0 - smoothstep(0.0, 0.7, breatheR));
     
-    // Create the vertical pupil
+    // Create the vertical pupil using look direction
     float pupil = pupilMask(breatheUV, u_time);
     float pupilEdge = pupilMask(breatheUV * 0.9, u_time) - pupilMask(breatheUV, u_time);
     
@@ -174,6 +177,18 @@ const Hal9000Background: React.FC<BackgroundProps> = ({
   const animationFrameRef = useRef<number>();
   const startTimeRef = useRef<number>(Date.now());
   const isAnimating = useRef(true);
+
+  // Eye movement state
+  const lookDirRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const targetLookDirRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const lastLookChangeRef = useRef<number>(0);
+  const lookStateRef = useRef<"idle" | "looking" | "returning">("idle");
+
+  // Mouse tracking
+  const mousePositionRef = useRef<{ x: number; y: number }>({ x: 0.5, y: 0.5 });
+  const isMouseMovingRef = useRef<boolean>(false);
+  const lastMouseMoveTimeRef = useRef<number>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -254,12 +269,13 @@ const Hal9000Background: React.FC<BackgroundProps> = ({
     const positionLocation = gl.getAttribLocation(program, "position");
     const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
     const timeLocation = gl.getUniformLocation(program, "u_time");
+    const lookDirLocation = gl.getUniformLocation(program, "u_lookDir");
 
     if (positionLocation === -1) {
       console.error("Failed to get position attribute location");
       return;
     }
-    if (!resolutionLocation || !timeLocation) {
+    if (!resolutionLocation || !timeLocation || !lookDirLocation) {
       console.error("Failed to get uniform locations");
       return;
     }
@@ -285,6 +301,32 @@ const Hal9000Background: React.FC<BackgroundProps> = ({
       gl.uniform2f(resolutionLocation, width, height);
     };
 
+    // Handle mouse movement
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+
+      // Get container bounds
+      const rect = containerRef.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      // Calculate normalized mouse position relative to container center (-1 to 1)
+      const normalizedX = ((e.clientX - centerX) / (rect.width / 2)) * 0.8;
+      const normalizedY = ((e.clientY - centerY) / (rect.height / 2)) * 0.8;
+
+      // Clamp values to ensure they stay within reasonable bounds
+      mousePositionRef.current = {
+        x: Math.max(-0.8, Math.min(0.8, normalizedX)),
+        y: Math.max(-0.8, Math.min(0.8, normalizedY)),
+      };
+
+      // Update mouse movement state
+      isMouseMovingRef.current = true;
+      lastMouseMoveTimeRef.current = Date.now() / 1000;
+    };
+
+    // Add mouse event listener
+    window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("resize", resize);
     resize();
 
@@ -299,10 +341,165 @@ const Hal9000Background: React.FC<BackgroundProps> = ({
       const timeScale = reducedMotion ? 0.1 : 1.0;
       const time = ((Date.now() - startTimeRef.current) / 1000) * timeScale;
 
+      // Handle eye movement based on mouse
+      updateEyeMovement(time);
+
+      // Pass uniforms to shader
       gl.uniform1f(timeLocation, time);
+      gl.uniform2f(lookDirLocation, lookDirRef.current.x, lookDirRef.current.y);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
       animationFrameRef.current = requestAnimationFrame(render);
+    };
+
+    // Function to update eye movement based on mouse position
+    const updateEyeMovement = (time: number) => {
+      const movementSpeed = 3.0; // How fast the eye moves
+      const mouseTimeout = 1.5; // Seconds after which we consider mouse "stopped"
+
+      // Check if the mouse has been idle
+      const mouseMoveDelta = time - lastMouseMoveTimeRef.current;
+
+      if (isMouseMovingRef.current && mouseMoveDelta < mouseTimeout) {
+        // Mouse is active - track it
+        targetLookDirRef.current = {
+          x: mousePositionRef.current.x,
+          y: mousePositionRef.current.y,
+        };
+
+        // Occasional slight random offset for more natural movement
+        if (Math.random() < 0.01) {
+          targetLookDirRef.current = {
+            x: targetLookDirRef.current.x + (Math.random() * 0.2 - 0.1),
+            y: targetLookDirRef.current.y + (Math.random() * 0.2 - 0.1),
+          };
+        }
+
+        // Ensure target stays within bounds
+        targetLookDirRef.current = {
+          x: Math.max(-0.7, Math.min(0.7, targetLookDirRef.current.x)),
+          y: Math.max(-0.7, Math.min(0.7, targetLookDirRef.current.y)),
+        };
+
+        // Reset look state
+        lookStateRef.current = "idle";
+        lastLookChangeRef.current = time;
+      } else {
+        // Mouse has been idle - occasionally perform random movements
+        isMouseMovingRef.current = false;
+
+        // Every 4-8 seconds, make a slight random movement if we're not already
+        if (
+          lookStateRef.current === "idle" &&
+          time - lastLookChangeRef.current > 4 + Math.random() * 4
+        ) {
+          // 40% chance to glance around
+          if (Math.random() < 0.4) {
+            const currentPos = lookDirRef.current;
+            // Make smaller random movements from current position
+            targetLookDirRef.current = {
+              x: Math.max(
+                -0.6,
+                Math.min(0.6, currentPos.x + (Math.random() * 0.3 - 0.15))
+              ),
+              y: Math.max(
+                -0.6,
+                Math.min(0.6, currentPos.y + (Math.random() * 0.3 - 0.15))
+              ),
+            };
+            lookStateRef.current = "looking";
+            lastLookChangeRef.current = time;
+          } else {
+            // 60% chance to return to center when idle
+            if (
+              Math.abs(lookDirRef.current.x) > 0.05 ||
+              Math.abs(lookDirRef.current.y) > 0.05
+            ) {
+              targetLookDirRef.current = { x: 0, y: 0 };
+              lookStateRef.current = "returning";
+              lastLookChangeRef.current = time;
+            } else {
+              // Reset timer but stay idle
+              lastLookChangeRef.current = time;
+            }
+          }
+        }
+
+        // Handle state transitions when not tracking mouse - ensure we don't stay in non-idle states too long
+        if (
+          lookStateRef.current === "looking" &&
+          time - lastLookChangeRef.current > 1.0
+        ) {
+          // After looking briefly, return to center
+          targetLookDirRef.current = { x: 0, y: 0 };
+          lookStateRef.current = "returning";
+          lastLookChangeRef.current = time;
+        } else if (
+          lookStateRef.current === "returning" &&
+          time - lastLookChangeRef.current > 1.0
+        ) {
+          // After returning, go back to idle
+          lookStateRef.current = "idle";
+          lastLookChangeRef.current = time;
+        } else if (time - lastLookChangeRef.current > 5.0) {
+          // Safeguard: if we've been in any state too long, force return to center
+          targetLookDirRef.current = { x: 0, y: 0 };
+          lookStateRef.current = "returning";
+          lastLookChangeRef.current = time;
+        }
+      }
+
+      // Smoothly interpolate current position toward target (same for both mouse tracking and idle behavior)
+      const currentLookDir = lookDirRef.current;
+      const targetLookDir = targetLookDirRef.current;
+
+      // Use appropriate smoothing for different states
+      let smoothingFactor;
+      if (isMouseMovingRef.current) {
+        smoothingFactor = 0.15; // Responsive for mouse movement
+      } else if (lookStateRef.current === "returning") {
+        smoothingFactor = 0.12; // Medium speed for returning to center
+      } else {
+        smoothingFactor = 0.07; // Slower for random movements
+      }
+
+      // Calculate time delta with a maximum cap to prevent large jumps
+      const delta = Math.min(0.1, time - lastLookChangeRef.current);
+
+      lookDirRef.current = {
+        x:
+          currentLookDir.x +
+          (targetLookDir.x - currentLookDir.x) *
+            smoothingFactor *
+            movementSpeed *
+            delta,
+        y:
+          currentLookDir.y +
+          (targetLookDir.y - currentLookDir.y) *
+            smoothingFactor *
+            movementSpeed *
+            delta,
+      };
+
+      // Hard limit to ensure we never exceed bounds
+      lookDirRef.current = {
+        x: Math.max(-0.7, Math.min(0.7, lookDirRef.current.x)),
+        y: Math.max(-0.7, Math.min(0.7, lookDirRef.current.y)),
+      };
+
+      // If we're very close to target, snap to it to avoid tiny movements
+      if (
+        Math.abs(currentLookDir.x - targetLookDir.x) < 0.005 &&
+        Math.abs(currentLookDir.y - targetLookDir.y) < 0.005
+      ) {
+        lookDirRef.current = { ...targetLookDir };
+      }
+
+      // Safety check: if values are NaN, reset to center
+      if (isNaN(lookDirRef.current.x) || isNaN(lookDirRef.current.y)) {
+        lookDirRef.current = { x: 0, y: 0 };
+        targetLookDirRef.current = { x: 0, y: 0 };
+      }
     };
 
     // Handle reduced motion preference
@@ -311,6 +508,7 @@ const Hal9000Background: React.FC<BackgroundProps> = ({
     // Always show a static frame for reduced motion
     if (reducedMotion) {
       gl.uniform1f(timeLocation, 0.0); // Static time
+      gl.uniform2f(lookDirLocation, 0, 0); // Look straight ahead
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     } else {
       render();
@@ -323,6 +521,7 @@ const Hal9000Background: React.FC<BackgroundProps> = ({
       }
       isAnimating.current = false;
       window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", handleMouseMove);
 
       // Clean up WebGL resources
       gl.deleteProgram(program);
@@ -334,6 +533,7 @@ const Hal9000Background: React.FC<BackgroundProps> = ({
 
   return (
     <div
+      ref={containerRef}
       style={{
         position: "absolute",
         top: 0,

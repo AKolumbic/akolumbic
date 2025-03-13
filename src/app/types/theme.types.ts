@@ -5,6 +5,7 @@ export type ThemeType =
   | "blackhole"
   | "digitalrain"
   | "hal9000";
+/* | "aurora" */
 
 // Typography definitions
 export interface Typography {

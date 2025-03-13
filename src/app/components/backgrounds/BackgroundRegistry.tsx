@@ -1,5 +1,5 @@
 import React from "react";
-import { ThemeType } from "../../types/gradient.types";
+import { ThemeType } from "../../types/theme.types";
 import { BackgroundProps } from "./types";
 import {
   NightSkyBackground,
@@ -8,21 +8,26 @@ import {
   BlackHoleBackground,
   DigitalRainBackground,
   Hal9000Background,
+  // AuroraBackground - temporarily disabled
 } from "./ClientBackgrounds";
 
 // Interface for registry entries
-interface BackgroundRegistryEntry {
+export interface BackgroundRegistryEntry {
   component: React.ComponentType<BackgroundProps>;
 }
 
 // Background registry - can be extended with new backgrounds
-const backgrounds: Record<ThemeType, BackgroundRegistryEntry> = {
+const backgrounds: Record<
+  Exclude<ThemeType, "aurora">,
+  BackgroundRegistryEntry
+> = {
   nightsky: { component: NightSkyBackground },
   beach: { component: BeachBackground },
-  blackhole: { component: BlackHoleBackground },
   sunset: { component: SunsetBackground },
+  blackhole: { component: BlackHoleBackground },
   digitalrain: { component: DigitalRainBackground },
   hal9000: { component: Hal9000Background },
+  // aurora: { component: AuroraBackground }, - temporarily disabled
 };
 
 /**
@@ -33,14 +38,18 @@ const backgrounds: Record<ThemeType, BackgroundRegistryEntry> = {
 export const getBackgroundComponent = (
   theme: ThemeType
 ): React.ComponentType<BackgroundProps> => {
-  if (!backgrounds[theme]) {
+  // Handle aurora theme by falling back to nightsky
+  if (
+    theme === "aurora" ||
+    !backgrounds[theme as Exclude<ThemeType, "aurora">]
+  ) {
     console.warn(
       `Background for theme "${theme}" not found, falling back to Night Sky theme`
     );
     return backgrounds.nightsky.component;
   }
 
-  return backgrounds[theme].component;
+  return backgrounds[theme as Exclude<ThemeType, "aurora">].component;
 };
 
 /**
@@ -48,9 +57,13 @@ export const getBackgroundComponent = (
  * @param theme The theme identifier
  * @param component The background component
  */
-export const registerBackgroundComponent = (
+export const registerBackground = (
   theme: ThemeType,
   component: React.ComponentType<BackgroundProps>
 ): void => {
-  backgrounds[theme] = { component };
+  if (theme === "aurora") {
+    console.warn("Aurora theme is temporarily disabled");
+    return;
+  }
+  backgrounds[theme as Exclude<ThemeType, "aurora">] = { component };
 };

@@ -122,6 +122,29 @@ const DynamicHal9000Background = dynamic<BackgroundProps>(
   }
 );
 
+// Aurora Background
+/*
+const DynamicAuroraBackground = dynamic<BackgroundProps>(
+  () =>
+    import("./AuroraBackground").catch((error) => {
+      console.error("Failed to load AuroraBackground:", error);
+      return Promise.resolve(() => (
+        <FallbackBackground
+          colors={{
+            background: "#020510",
+            aurora: "#3366FF",
+            accent: "#00CCFF",
+          }}
+        />
+      ));
+    }),
+  {
+    ssr: false,
+    loading: () => <LoadingBackground />,
+  }
+);
+*/
+
 // Simple component exports
 export const NightSkyBackground: React.FC<BackgroundProps> = (props) => (
   <DynamicNightSkyBackground {...props} />
@@ -146,3 +169,9 @@ export const DigitalRainBackground: React.FC<BackgroundProps> = (props) => (
 export const Hal9000Background: React.FC<BackgroundProps> = (props) => (
   <DynamicHal9000Background {...props} />
 );
+
+/*
+export const AuroraBackground: React.FC<BackgroundProps> = (props) => (
+  <DynamicAuroraBackground {...props} />
+);
+*/

@@ -41,6 +41,14 @@ export interface Hal9000Colors {
   accent: string; // Highlight
 }
 
+/* Temporarily disabled
+export interface AuroraColors {
+  background: string; // Dark blue/black night sky
+  aurora: string; // Primary aurora glow color
+  accent: string; // Secondary glow/highlight color
+}
+*/
+
 export interface ThemeColors {
   nightsky: {
     [key in "hero" | "about" | "portfolio"]: NightSkyColors;
@@ -60,6 +68,11 @@ export interface ThemeColors {
   hal9000: {
     all: Hal9000Colors;
   };
+  /* Temporarily disabled
+  aurora: {
+    all: AuroraColors;
+  };
+  */
 }
 
 export interface GradientBackgroundProps {
