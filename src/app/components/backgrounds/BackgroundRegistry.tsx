@@ -38,17 +38,6 @@ const backgrounds: Record<
 export const getBackgroundComponent = (
   theme: ThemeType
 ): React.ComponentType<BackgroundProps> => {
-  // Handle aurora theme by falling back to nightsky
-  if (
-    theme === "aurora" ||
-    !backgrounds[theme as Exclude<ThemeType, "aurora">]
-  ) {
-    console.warn(
-      `Background for theme "${theme}" not found, falling back to Night Sky theme`
-    );
-    return backgrounds.nightsky.component;
-  }
-
   return backgrounds[theme as Exclude<ThemeType, "aurora">].component;
 };
 
@@ -61,9 +50,5 @@ export const registerBackground = (
   theme: ThemeType,
   component: React.ComponentType<BackgroundProps>
 ): void => {
-  if (theme === "aurora") {
-    console.warn("Aurora theme is temporarily disabled");
-    return;
-  }
   backgrounds[theme as Exclude<ThemeType, "aurora">] = { component };
 };
