@@ -19,6 +19,7 @@ import ScrollProgress from "./components/ScrollProgress";
 import useDelayedIntersectionObserver from "./hooks/useDelayedIntersectionObserver";
 import MobileView from "./components/MobileView";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import ResumeDownloadFAB from "./components/ResumeDownloadFAB";
 
 // Enhanced animation variants for smoother transitions
 const sectionVariants = {
@@ -269,6 +270,7 @@ export default function HomePage(): JSX.Element {
       <main className="main">
         <SafeGradientBackground activeSection={activeSection} />
         <ThemeSelector />
+        <ResumeDownloadFAB />
 
         <ScrollProgress
           activeSection={activeSection}

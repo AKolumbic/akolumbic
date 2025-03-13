@@ -1,4 +1,5 @@
 import { ThemeType } from "./theme.types";
+export type { ThemeType };
 
 export interface NightSkyColors {
   sunset: string;

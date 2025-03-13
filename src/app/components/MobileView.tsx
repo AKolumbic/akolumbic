@@ -6,6 +6,7 @@ import HeroSection from "../sections/HeroSection";
 import Contact from "../sections/Contact";
 import SafeGradientBackground from "./SafeGradientBackground";
 import ThemeSelector from "./ThemeSelector";
+import ResumeDownloadFAB from "./ResumeDownloadFAB";
 import styled from "styled-components";
 
 // Styled components for mobile layout
@@ -85,6 +86,8 @@ const MobileView: React.FC = () => {
       <MobileThemeSelector>
         <ThemeSelector />
       </MobileThemeSelector>
+
+      <ResumeDownloadFAB />
 
       <HeroContainer>
         <motion.div

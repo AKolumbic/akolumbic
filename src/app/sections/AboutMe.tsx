@@ -11,7 +11,6 @@ import {
   SkillItem,
   ContentWrapper,
   SectionTitle,
-  ResumeButtonContainer,
   Tooltip,
   TooltipContent,
   ExternalLink,
@@ -21,8 +20,7 @@ import {
   aboutItemVariants,
 } from "../data/variantsData";
 import { skills } from "../data/skillsData";
-import TactileButton from "../components/tactile-button/tactile-button.component";
-import { FiDownload, FiExternalLink } from "react-icons/fi";
+import { FiExternalLink } from "react-icons/fi";
 
 /**
  * AboutMe Component
@@ -210,20 +208,6 @@ const AboutMe: React.FC = () => {
               commitment is not just to deliver code, but to build software that
               resonates, inspires, and genuinely makes an impact.
             </p>
-
-            {/* Resume Download Button */}
-            <ResumeButtonContainer
-              variants={aboutItemVariants}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <TactileButton
-                href="/Andrew Kolumbic - Resume.docx"
-                download="Andrew Kolumbic - Resume.docx"
-              >
-                <FiDownload style={{ marginRight: "8px" }} /> Download Resume
-              </TactileButton>
-            </ResumeButtonContainer>
           </BioColumn>
 
           {/* Right Column - Skills */}
