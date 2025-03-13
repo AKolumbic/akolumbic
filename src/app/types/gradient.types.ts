@@ -35,6 +35,12 @@ export interface DigitalRainColors {
   accent: string; // Bright Lime
 }
 
+export interface Hal9000Colors {
+  eye: string; // Red eye
+  background: string; // Black background
+  accent: string; // Highlight
+}
+
 export interface ThemeColors {
   nightsky: {
     [key in "hero" | "about" | "portfolio"]: NightSkyColors;
@@ -50,6 +56,9 @@ export interface ThemeColors {
   };
   digitalrain: {
     all: DigitalRainColors;
+  };
+  hal9000: {
+    all: Hal9000Colors;
   };
 }
 

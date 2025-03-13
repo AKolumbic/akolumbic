@@ -3,7 +3,8 @@ export type ThemeType =
   | "beach"
   | "sunset"
   | "blackhole"
-  | "digitalrain";
+  | "digitalrain"
+  | "hal9000";
 
 // Typography definitions
 export interface Typography {

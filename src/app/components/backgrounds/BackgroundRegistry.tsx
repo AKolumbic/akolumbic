@@ -7,6 +7,7 @@ import {
   SunsetBackground,
   BlackHoleBackground,
   DigitalRainBackground,
+  Hal9000Background,
 } from "./ClientBackgrounds";
 
 // Interface for registry entries
@@ -21,6 +22,7 @@ const backgrounds: Record<ThemeType, BackgroundRegistryEntry> = {
   blackhole: { component: BlackHoleBackground },
   sunset: { component: SunsetBackground },
   digitalrain: { component: DigitalRainBackground },
+  hal9000: { component: Hal9000Background },
 };
 
 /**

@@ -66,4 +66,11 @@ export const themeColors: ThemeColors = {
       accent: "#00CC33", // Bright Lime
     },
   },
+  hal9000: {
+    all: {
+      eye: "#FF3300", // Red-orange eye
+      background: "#220000", // Dark red background
+      accent: "#FF5500", // Brighter highlight
+    },
+  },
 };

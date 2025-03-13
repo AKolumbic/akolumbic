@@ -587,6 +587,122 @@ export const digitalRainTheme: Theme = {
   },
 };
 
+export const hal9000Theme: Theme = {
+  type: "hal9000",
+  name: "HAL-Sauron",
+
+  colors: {
+    background: {
+      main: "linear-gradient(135deg, #300000 0%, #220000 50%, #400000 100%)",
+      secondary: "#1A0000",
+      tertiary: "#2A0000",
+    },
+    text: {
+      primary: "#FFFFFF",
+      secondary: "#FFCCCC",
+      tertiary: "#FF9999",
+      accent: "#FF3300",
+      inverse: "#000000",
+    },
+    accent: {
+      primary: "#FF3300",
+      secondary: "#FF5500",
+      tertiary: "#FF7700",
+      highlight: "#FFAA00",
+    },
+    ui: {
+      border: "#600000",
+      divider: "#400000",
+      shadow: "rgba(80, 0, 0, 0.5)",
+      hover: "rgba(255, 51, 0, 0.2)",
+      focus: "rgba(255, 51, 0, 0.4)",
+      disabled: "rgba(153, 51, 51, 0.5)",
+    },
+    semantic: {
+      success: "#00C853",
+      error: "#FF3D00",
+      warning: "#FF9000",
+      info: "#29B6F6",
+    },
+  },
+
+  typography: {
+    fontFamily: {
+      primary: '"Space Mono", "SF Pro Display", monospace',
+      secondary: '"IBM Plex Mono", "SF Pro Text", monospace',
+    },
+    fontSizes: {
+      xs: "0.75rem",
+      sm: "0.875rem",
+      md: "1rem",
+      lg: "1.125rem",
+      xl: "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "2rem",
+    },
+    fontWeights: {
+      normal: 400,
+      medium: 500,
+      semibold: 600,
+      bold: 700,
+    },
+    lineHeights: {
+      tight: "1.25",
+      normal: "1.5",
+      relaxed: "1.75",
+    },
+  },
+
+  gradients: {
+    main: "linear-gradient(135deg, #300000 0%, #220000 50%, #400000 100%)",
+    card: "linear-gradient(135deg, #1A0000 0%, #2A0000 100%)",
+    button: "linear-gradient(135deg, #990000 0%, #FF3300 100%)",
+    hover: "linear-gradient(135deg, #FF3300 0%, #FF7700 100%)",
+  },
+
+  components: {
+    button: {
+      primary: {
+        background: "linear-gradient(135deg, #990000 0%, #FF3300 100%)",
+        color: "#FFFFFF",
+        border: "1px solid #FF3300",
+        hover: "linear-gradient(135deg, #FF3300 0%, #FF7700 100%)",
+      },
+      secondary: {
+        background: "transparent",
+        color: "#FF3300",
+        border: "1px solid #FF3300",
+        hover: "rgba(255, 51, 0, 0.1)",
+      },
+    },
+    card: {
+      background: "rgba(26, 0, 0, 0.8)",
+      border: "1px solid #600000",
+      shadow:
+        "0 4px 6px rgba(255, 51, 0, 0.1), 0 1px 3px rgba(255, 51, 0, 0.08)",
+    },
+    input: {
+      background: "rgba(20, 0, 0, 0.8)",
+      border: "1px solid #600000",
+      color: "#FF3300",
+      focus: "1px solid #FF5500",
+    },
+  },
+
+  animation: {
+    duration: {
+      fast: "150ms",
+      normal: "300ms",
+      slow: "500ms",
+    },
+    easing: {
+      default: "cubic-bezier(0.4, 0, 0.2, 1)",
+      smooth: "cubic-bezier(0.65, 0, 0.35, 1)",
+      bouncy: "cubic-bezier(0.2, 0.9, 0.3, 1.5)",
+    },
+  },
+};
+
 // Export all themes in a single object for easy access
 export const themes: Record<ThemeType, Theme> = {
   nightsky: nightSkyTheme,
@@ -594,6 +710,7 @@ export const themes: Record<ThemeType, Theme> = {
   sunset: sunsetTheme,
   blackhole: blackholeTheme,
   digitalrain: digitalRainTheme,
+  hal9000: hal9000Theme,
 };
 
 // Helper to get theme display name
