@@ -85,6 +85,9 @@ const DigitalRainBackground: React.FC<BackgroundProps> = ({
         // Significantly slower base speed
         this.speed = 0.3 + Math.random() * 0.7;
 
+        // Initialize the text property with a random character
+        this.text = chars.charAt(Math.floor(Math.random() * chars.length));
+
         this.fontSize = fontSize;
         this.opacity = 0.1 + Math.random() * 0.6;
         this.maxLength = 10 + Math.floor(Math.random() * 15); // Length of the trail
