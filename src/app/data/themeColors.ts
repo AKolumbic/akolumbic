@@ -48,8 +48,8 @@ export const themeColors: ThemeColors = {
     all: {
       night: "#000000",
       deepBlue: "#1a237e",
-      purple: "#7e57c2",
-      red: "#ff5252",
+      purple: "#7B1FA2",
+      red: "#C2185B",
       orange: "#ff9800",
       yellow: "#ffd740",
     },
@@ -57,6 +57,13 @@ export const themeColors: ThemeColors = {
   blackhole: {
     all: {
       background: "#000000",
+    },
+  },
+  digitalrain: {
+    all: {
+      primary: "#00FF41", // Neon Green
+      background: "#011401", // Dark Green/Black
+      accent: "#00CC33", // Bright Lime
     },
   },
 };

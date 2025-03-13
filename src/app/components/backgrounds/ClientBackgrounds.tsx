@@ -80,6 +80,27 @@ const DynamicBlackHoleBackground = dynamic<BackgroundProps>(
   }
 );
 
+// Dynamic Digital Rain Background
+const DynamicDigitalRainBackground = dynamic<BackgroundProps>(
+  () =>
+    import("./DigitalRainBackground").catch((error) => {
+      console.error("Failed to load DigitalRainBackground:", error);
+      return Promise.resolve(() => (
+        <FallbackBackground
+          colors={{
+            primary: "#00FF41",
+            background: "#011401",
+            accent: "#00CC33",
+          }}
+        />
+      ));
+    }),
+  {
+    ssr: false,
+    loading: () => <LoadingBackground />,
+  }
+);
+
 // Simple component exports
 export const NightSkyBackground: React.FC<BackgroundProps> = (props) => (
   <DynamicNightSkyBackground {...props} />
@@ -95,4 +116,8 @@ export const SunsetBackground: React.FC<BackgroundProps> = (props) => (
 
 export const BlackHoleBackground: React.FC<BackgroundProps> = (props) => (
   <DynamicBlackHoleBackground {...props} />
+);
+
+export const DigitalRainBackground: React.FC<BackgroundProps> = (props) => (
+  <DynamicDigitalRainBackground {...props} />
 );

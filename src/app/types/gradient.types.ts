@@ -29,6 +29,12 @@ export interface BlackHoleColors {
   background: string;
 }
 
+export interface DigitalRainColors {
+  primary: string; // Neon Green
+  background: string; // Dark Green/Black
+  accent: string; // Bright Lime
+}
+
 export interface ThemeColors {
   nightsky: {
     [key in "hero" | "about" | "portfolio"]: NightSkyColors;
@@ -41,6 +47,9 @@ export interface ThemeColors {
   };
   blackhole: {
     all: BlackHoleColors;
+  };
+  digitalrain: {
+    all: DigitalRainColors;
   };
 }
 

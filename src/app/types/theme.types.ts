@@ -1,4 +1,9 @@
-export type ThemeType = "nightsky" | "beach" | "sunset" | "blackhole";
+export type ThemeType =
+  | "nightsky"
+  | "beach"
+  | "sunset"
+  | "blackhole"
+  | "digitalrain";
 
 // Typography definitions
 export interface Typography {

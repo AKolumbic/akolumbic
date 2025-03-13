@@ -470,12 +470,130 @@ export const blackholeTheme: Theme = {
   },
 };
 
+// Digital Rain Theme (Matrix-inspired)
+export const digitalRainTheme: Theme = {
+  type: "digitalrain",
+  name: "Digital Rain",
+
+  colors: {
+    background: {
+      main: "#011401", // Dark Green/Black
+      secondary: "#021902", // Slightly lighter shade
+      tertiary: "#032703", // Even lighter shade
+    },
+    text: {
+      primary: "#00FF41", // Neon Green
+      secondary: "#00E136", // Slightly darker
+      tertiary: "#00B52C", // Even darker
+      accent: "#00CC33", // Bright Lime
+      inverse: "#000000", // Black
+    },
+    accent: {
+      primary: "#00FF41", // Neon Green
+      secondary: "#00CC33", // Bright Lime
+      tertiary: "#00AA28", // Darker lime
+      highlight: "#39FF14", // Brighter neon green
+    },
+    ui: {
+      border: "#005F17", // Dark green
+      divider: "#004010", // Darker green
+      shadow: "rgba(0, 255, 65, 0.3)", // Neon green shadow
+      hover: "rgba(0, 255, 65, 0.2)", // Neon green hover
+      focus: "rgba(0, 255, 65, 0.4)", // Neon green focus
+      disabled: "rgba(0, 100, 27, 0.4)", // Dark green disabled
+    },
+    semantic: {
+      success: "#00FF41", // Neon Green
+      error: "#FF3F3F", // Red
+      warning: "#FFCC00", // Yellow
+      info: "#00FFFF", // Cyan
+    },
+  },
+
+  typography: {
+    fontFamily: {
+      primary: '"Courier New", monospace',
+      secondary: '"Consolas", monospace',
+    },
+    fontSizes: {
+      xs: "0.75rem",
+      sm: "0.875rem",
+      md: "1rem",
+      lg: "1.125rem",
+      xl: "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+    },
+    fontWeights: {
+      normal: 400,
+      medium: 500,
+      semibold: 600,
+      bold: 700,
+    },
+    lineHeights: {
+      tight: "1.2",
+      normal: "1.5",
+      relaxed: "1.75",
+    },
+  },
+
+  gradients: {
+    main: "linear-gradient(135deg, #011401 0%, #001200 50%, #021902 100%)",
+    card: "linear-gradient(135deg, #011401 0%, #042404 100%)",
+    button: "linear-gradient(135deg, #00CC33 0%, #00FF41 100%)",
+    hover: "linear-gradient(135deg, #00FF41 0%, #39FF14 100%)",
+  },
+
+  components: {
+    button: {
+      primary: {
+        background: "linear-gradient(135deg, #00CC33 0%, #00FF41 100%)",
+        color: "#000000",
+        border: "1px solid #00FF41",
+        hover: "linear-gradient(135deg, #00FF41 0%, #39FF14 100%)",
+      },
+      secondary: {
+        background: "transparent",
+        color: "#00FF41",
+        border: "1px solid #00FF41",
+        hover: "rgba(0, 255, 65, 0.1)",
+      },
+    },
+    card: {
+      background: "rgba(1, 20, 1, 0.8)",
+      border: "1px solid #00FF41",
+      shadow:
+        "0 4px 6px rgba(0, 255, 65, 0.1), 0 1px 3px rgba(0, 255, 65, 0.08)",
+    },
+    input: {
+      background: "rgba(1, 10, 1, 0.8)",
+      border: "1px solid #00CC33",
+      color: "#00FF41",
+      focus: "1px solid #39FF14",
+    },
+  },
+
+  animation: {
+    duration: {
+      fast: "150ms",
+      normal: "300ms",
+      slow: "500ms",
+    },
+    easing: {
+      default: "cubic-bezier(0.4, 0, 0.2, 1)",
+      smooth: "cubic-bezier(0.65, 0, 0.35, 1)",
+      bouncy: "cubic-bezier(0.2, 0.9, 0.3, 1.5)",
+    },
+  },
+};
+
 // Export all themes in a single object for easy access
 export const themes: Record<ThemeType, Theme> = {
   nightsky: nightSkyTheme,
   beach: beachTheme,
   sunset: sunsetTheme,
   blackhole: blackholeTheme,
+  digitalrain: digitalRainTheme,
 };
 
 // Helper to get theme display name
