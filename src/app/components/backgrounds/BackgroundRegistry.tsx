@@ -9,7 +9,7 @@ import {
   DigitalRainBackground,
   Hal9000Background,
   DeepOceanBackground,
-  CherryBlossomBackground,
+  // CherryBlossomBackground removed
   // AuroraBackground - temporarily disabled
 } from "./ClientBackgrounds";
 
@@ -30,7 +30,7 @@ const backgrounds: Record<
   digitalrain: { component: DigitalRainBackground },
   hal9000: { component: Hal9000Background },
   deepocean: { component: DeepOceanBackground },
-  cherryblossom: { component: CherryBlossomBackground },
+  // cherryblossom removed
   // aurora: { component: AuroraBackground }, - temporarily disabled
 };
 
