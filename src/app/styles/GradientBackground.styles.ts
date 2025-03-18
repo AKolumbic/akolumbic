@@ -52,7 +52,7 @@ export const Wave = styled(motion.div)<{ $color: string; $delay: number }>`
   height: 100%;
   background: ${(props) => props.$color};
   opacity: 0.12;
-  border-radius: 43%;
+  border-radius: 42% 48% 46% 44%;
   transform: translateZ(0);
   backface-visibility: hidden;
   perspective: 1000;
@@ -60,11 +60,25 @@ export const Wave = styled(motion.div)<{ $color: string; $delay: number }>`
   animation: wave ${(props) => 20 + props.$delay}s infinite linear;
 
   @keyframes wave {
-    from {
-      transform: rotate(0deg) translateZ(0);
+    0% {
+      transform: rotate(0deg) translateY(0%) scaleY(1) translateZ(0);
+      border-radius: 42% 48% 46% 44%;
     }
-    to {
-      transform: rotate(360deg) translateZ(0);
+    25% {
+      transform: rotate(90deg) translateY(1%) scaleY(1.02) translateZ(0);
+      border-radius: 44% 42% 49% 45%;
+    }
+    50% {
+      transform: rotate(180deg) translateY(0%) scaleY(1) translateZ(0);
+      border-radius: 46% 45% 42% 47%;
+    }
+    75% {
+      transform: rotate(270deg) translateY(-1%) scaleY(0.98) translateZ(0);
+      border-radius: 45% 47% 44% 43%;
+    }
+    100% {
+      transform: rotate(360deg) translateY(0%) scaleY(1) translateZ(0);
+      border-radius: 42% 48% 46% 44%;
     }
   }
 `;

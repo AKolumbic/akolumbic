@@ -5,8 +5,7 @@ export type ThemeType =
   | "blackhole"
   | "digitalrain"
   | "hal9000"
-  | "deepocean"
-  | "cherryblossom";
+  | "deepocean";
 /* | "aurora" */
 
 // Typography definitions

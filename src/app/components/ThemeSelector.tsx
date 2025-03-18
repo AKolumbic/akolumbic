@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import {
   ThemeContainer,
@@ -15,9 +15,33 @@ interface ThemeSelectorProps {
   onThemeChange?: (theme: ThemeType) => void;
 }
 
+// Define the themes to hide from the selector UI
+const hiddenThemes = ["hal9000", "deepocean"];
+
+// Define the specific order for themes
+const themeOrder: ThemeType[] = [
+  "nightsky",
+  "beach",
+  "sunset",
+  "blackhole",
+  "digitalrain",
+];
+
 const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onThemeChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { themeType, setTheme } = useTheme();
+
+  // If the user is using a hidden theme, switch to nightsky when the component mounts
+  useEffect(() => {
+    if (hiddenThemes.includes(themeType)) {
+      setTheme("nightsky");
+
+      // Also call the onThemeChange callback if provided
+      if (onThemeChange) {
+        onThemeChange("nightsky");
+      }
+    }
+  }, [themeType, setTheme, onThemeChange]);
 
   // Handle theme change with both context and optional callback
   const handleThemeChange = (theme: ThemeType) => {
@@ -60,21 +84,24 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onThemeChange }) => {
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
           >
-            {Object.entries(themes).map(([key, theme]) => (
-              <ThemeButton
-                key={key}
-                $active={themeType === key}
-                $gradient={theme.gradients.main}
-                onClick={() => handleThemeChange(key as ThemeType)}
-                whileHover={{ x: 2 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                {theme.name}{" "}
-                {themeType === key && (
-                  <span className="visually-hidden">(Current)</span>
-                )}
-              </ThemeButton>
-            ))}
+            {themeOrder.map((themeKey) => {
+              const theme = themes[themeKey];
+              return (
+                <ThemeButton
+                  key={themeKey}
+                  $active={themeType === themeKey}
+                  $gradient={theme.gradients.main}
+                  onClick={() => handleThemeChange(themeKey)}
+                  whileHover={{ x: 2 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {theme.name}{" "}
+                  {themeType === themeKey && (
+                    <span className="visually-hidden">(Current)</span>
+                  )}
+                </ThemeButton>
+              );
+            })}
           </ThemePanel>
         )}
       </AnimatePresence>
