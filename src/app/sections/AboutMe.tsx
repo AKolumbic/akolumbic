@@ -11,7 +11,6 @@ import {
   SkillItem,
   ContentWrapper,
   SectionTitle,
-  ResumeButtonContainer,
   Tooltip,
   TooltipContent,
   ExternalLink,
@@ -21,8 +20,7 @@ import {
   aboutItemVariants,
 } from "../data/variantsData";
 import { skills } from "../data/skillsData";
-import TactileButton from "../components/tactile-button/tactile-button.component";
-import { FiDownload, FiExternalLink } from "react-icons/fi";
+import { FiExternalLink } from "react-icons/fi";
 
 /**
  * AboutMe Component
@@ -55,8 +53,14 @@ const AboutMe: React.FC = () => {
   // Track if we're hovering over the tooltip
   const [hoveringTooltip, setHoveringTooltip] = useState(false);
 
+  // Add a ref to track the overall hover state (either on skill item or tooltip)
+  const isHoveringAnywhereRef = useRef(false);
+
   // Store refs for each skill item to position tooltips
   const skillRefs = useRef<(HTMLLIElement | null)[]>([]);
+
+  // Add a ref to track the current timeout
+  const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Effect to initialize refs array and handle window blur
   useEffect(() => {
@@ -66,6 +70,7 @@ const AboutMe: React.FC = () => {
     const handleWindowBlur = () => {
       setActiveTooltip(null);
       setHoveringTooltip(false);
+      isHoveringAnywhereRef.current = false;
     };
 
     // Handle mouse leave from document
@@ -78,6 +83,7 @@ const AboutMe: React.FC = () => {
       ) {
         setActiveTooltip(null);
         setHoveringTooltip(false);
+        isHoveringAnywhereRef.current = false;
       }
     };
 
@@ -90,33 +96,61 @@ const AboutMe: React.FC = () => {
       // Clean up tooltip state on unmount
       setActiveTooltip(null);
       setHoveringTooltip(false);
+      isHoveringAnywhereRef.current = false;
+      // Clear any existing timeout on unmount
+      if (tooltipTimeoutRef.current) {
+        clearTimeout(tooltipTimeoutRef.current);
+      }
     };
   }, [skills.length]);
 
   // Handler for tooltip hover
   const handleTooltipHover = (isHovering: boolean) => {
     setHoveringTooltip(isHovering);
+    isHoveringAnywhereRef.current = isHovering;
+
     if (!isHovering) {
-      // Add a small delay before hiding the tooltip to prevent flickering
-      setTimeout(() => {
-        setActiveTooltip(null);
-      }, 100);
+      // Clear any existing timeout
+      if (tooltipTimeoutRef.current) {
+        clearTimeout(tooltipTimeoutRef.current);
+      }
+
+      // Add a longer delay before hiding the tooltip
+      tooltipTimeoutRef.current = setTimeout(() => {
+        // Only hide if we're still not hovering anywhere
+        if (!isHoveringAnywhereRef.current) {
+          setActiveTooltip(null);
+        }
+        tooltipTimeoutRef.current = null;
+      }, 400); // Increased delay for smoother transition
     }
   };
 
   // Handler for skill item hover
   const handleSkillHover = (index: number, isHovering: boolean) => {
+    isHoveringAnywhereRef.current = isHovering;
+
     if (isHovering) {
-      setActiveTooltip(index);
-      setHoveringTooltip(false);
-    } else {
-      // Only hide the tooltip if we're not hovering over it
-      if (!hoveringTooltip) {
-        // Add a small delay before hiding the tooltip to prevent flickering
-        setTimeout(() => {
-          setActiveTooltip(null);
-        }, 100);
+      // Clear any existing timeout when hovering a new skill
+      if (tooltipTimeoutRef.current) {
+        clearTimeout(tooltipTimeoutRef.current);
+        tooltipTimeoutRef.current = null;
       }
+      setActiveTooltip(index);
+    } else {
+      // Clear any existing timeout
+      if (tooltipTimeoutRef.current) {
+        clearTimeout(tooltipTimeoutRef.current);
+      }
+
+      // Add a longer delay before hiding the tooltip
+      tooltipTimeoutRef.current = setTimeout(() => {
+        // Only hide if we're still not hovering anywhere
+        if (!isHoveringAnywhereRef.current && !hoveringTooltip) {
+          setActiveTooltip(null);
+        }
+        tooltipTimeoutRef.current = null;
+      }, 400); // Increased delay for smoother transition
     }
   };
 
@@ -150,30 +184,30 @@ const AboutMe: React.FC = () => {
               every project with the precision and dedication it demands.
             </p>
             <p>
+              My experience leading teams and collaborating closely with
+              stakeholders has honed my skills in delivering solutions that
+              blend accessibility, efficiency, and innovation. Whether it&apos;s
+              guiding development teams to streamline onboarding processes or
+              creating intuitive apps used by thousands of users, I strive to
+              deliver software solutions that are both elegant and impactful.
+            </p>
+
+            <p>
               I believe in efficiency, clarity, and continuous improvement. I
               stay ahead of the curve by leveraging cutting-edge tools and
               AI-driven development like <strong>Cursor</strong> and{" "}
               <strong>ChatGPT</strong>, not as crutches, but as force
-              multipliers to refine and accelerate workflows.
+              multipliers to refine and accelerate workflows. I am a tech
+              evangalist when it comes to vibe coding and believe that being
+              able to effectively use AI to code is the key to success in the
+              future of the tech industry.
             </p>
             <p>
-              I approach every challenge with a focus on execution, ensuring
-              that ideas don&apos;t just stay ideas—they become reality.
+              I tackle each challenge with relentless determination,
+              transforming complex ideas into clear, actionable solutions. My
+              commitment is not just to deliver code, but to build software that
+              resonates, inspires, and genuinely makes an impact.
             </p>
-
-            {/* Resume Download Button */}
-            <ResumeButtonContainer
-              variants={aboutItemVariants}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <TactileButton
-                href="/Andrew Kolumbic - Resume.docx"
-                download="Andrew Kolumbic - Resume.docx"
-              >
-                <FiDownload style={{ marginRight: "8px" }} /> Download Resume
-              </TactileButton>
-            </ResumeButtonContainer>
           </BioColumn>
 
           {/* Right Column - Skills */}
@@ -235,6 +269,7 @@ const AboutMe: React.FC = () => {
                       (skillRefs.current[activeTooltip]?.offsetWidth || 0) - 100
                     }px`,
                     pointerEvents: "auto", // Make tooltip interactive
+                    zIndex: 100, // Ensure tooltip stays on top
                   }}
                 >
                   <TooltipContent>

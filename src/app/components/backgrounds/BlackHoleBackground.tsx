@@ -18,10 +18,10 @@ const fragmentShaderSource = `
   void main() {
     // Normalize coordinates
     vec2 p = (gl_FragCoord.xy * 2.0 - r) / r.y / 0.7;
-    vec2 d = vec2(-1.0, 1.0);
+    vec2 d = vec2(0.0, 1.0); // Changed from (-1.0, 1.0) to (0.0, 1.0) to align horizontally
     
-    // Create base pattern
-    vec2 c = p * mat2(1.0, 1.0, d / (0.1 + 5.0 / dot(5.0 * p - d, 5.0 * p - d)));
+    // Create base pattern with horizontal orientation
+    vec2 c = p * mat2(1.0, 0.0, 0.0, 1.0) * mat2(1.0, 0.0, d / (0.1 + 5.0 / dot(5.0 * p - d, 5.0 * p - d)));
     vec2 v = c;
     
     // Apply time-based transformation with reduced speed (0.1 instead of 0.2)
@@ -36,10 +36,10 @@ const fragmentShaderSource = `
       v += 0.7 * sin(v.yx * i + t * 0.5) / (i + 1.0) + 0.5; // Slowed down the inner animation too
     }
     
-    // Calculate final pattern
+    // Calculate final pattern with horizontal orientation
     o = 1.0 - exp(
       -exp(c.x * vec4(0.6, -0.4, -1.0, 0.0)) / o /
-      (0.1 + 0.1 * pow(length(sin(v / 0.3) * 0.2 + c * vec2(1.0, 2.0)) - 1.0, 2.0)) /
+      (0.1 + 0.1 * pow(length(sin(v / 0.3) * 0.2 + c * vec2(1.0, 1.0)) - 1.0, 2.0)) /
       (1.0 + 7.0 * exp(0.3 * c.y - dot(c, c))) /
       (0.03 + abs(length(p) - 0.7)) * 0.2
     );

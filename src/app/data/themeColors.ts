@@ -48,8 +48,8 @@ export const themeColors: ThemeColors = {
     all: {
       night: "#000000",
       deepBlue: "#1a237e",
-      purple: "#7e57c2",
-      red: "#ff5252",
+      purple: "#7B1FA2",
+      red: "#C2185B",
       orange: "#ff9800",
       yellow: "#ffd740",
     },
@@ -59,4 +59,41 @@ export const themeColors: ThemeColors = {
       background: "#000000",
     },
   },
+  digitalrain: {
+    all: {
+      primary: "#00FF41", // Neon Green
+      background: "#011401", // Dark Green/Black
+      accent: "#00CC33", // Bright Lime
+    },
+  },
+  hal9000: {
+    all: {
+      eye: "#FF3300", // Red-orange eye
+      background: "#220000", // Dark red background
+      accent: "#FF5500", // Brighter highlight
+    },
+  },
+  deepocean: {
+    all: {
+      primary: "#1E81B0", // Ocean Blue
+      background: "#0A1128", // Deep Sea Blue
+      accent: "#8CE8FF", // Bioluminescent Blue
+    },
+  },
+  cherryblossom: {
+    all: {
+      primary: "#FFAFCC", // Soft Pink
+      background: "#FDF7F4", // Light Cream/White
+      accent: "#A4133C", // Deep Cherry
+    },
+  },
+  /*
+  aurora: {
+    all: {
+      background: "#020510",
+      aurora: "#3366FF",
+      accent: "#00CCFF",
+    },
+  },
+  */
 };

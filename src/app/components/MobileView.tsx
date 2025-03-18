@@ -4,9 +4,9 @@ import React, { useEffect } from "react";
 import { motion, useAnimation } from "framer-motion";
 import HeroSection from "../sections/HeroSection";
 import Contact from "../sections/Contact";
-import { ThemeType } from "../types/theme.types";
 import SafeGradientBackground from "./SafeGradientBackground";
 import ThemeSelector from "./ThemeSelector";
+import ResumeDownloadFAB from "./ResumeDownloadFAB";
 import styled from "styled-components";
 
 // Styled components for mobile layout
@@ -69,14 +69,9 @@ const mobileVariants = {
   },
 };
 
-interface MobileViewProps {
-  theme: ThemeType;
-}
-
-export default function MobileView({ theme: initialTheme }: MobileViewProps) {
+const MobileView: React.FC = () => {
   const heroControls = useAnimation();
   const contactControls = useAnimation();
-  const [theme, setTheme] = React.useState<ThemeType>(initialTheme);
 
   // Start animations on component mount
   useEffect(() => {
@@ -86,11 +81,13 @@ export default function MobileView({ theme: initialTheme }: MobileViewProps) {
 
   return (
     <MobileContainer className="mobile-view">
-      <SafeGradientBackground activeSection="hero" theme={theme} />
+      <SafeGradientBackground activeSection="hero" />
 
       <MobileThemeSelector>
-        <ThemeSelector currentTheme={theme} onThemeChange={setTheme} />
+        <ThemeSelector />
       </MobileThemeSelector>
+
+      <ResumeDownloadFAB />
 
       <HeroContainer>
         <motion.div
@@ -114,4 +111,6 @@ export default function MobileView({ theme: initialTheme }: MobileViewProps) {
       </ContactContainer>
     </MobileContainer>
   );
-}
+};
+
+export default MobileView;

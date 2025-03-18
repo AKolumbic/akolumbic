@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import {
   ThemeContainer,
@@ -6,41 +6,52 @@ import {
   ThemePanel,
   ThemeButton,
 } from "../styles/ThemeSelector.styles";
-import { ThemeType } from "../types/gradient.types";
+import { ThemeType } from "../types/theme.types";
+import { useTheme } from "../contexts/ThemeContext";
+import { themes, getThemeDisplayName } from "../data/themes";
 
 interface ThemeSelectorProps {
-  currentTheme: ThemeType;
-  onThemeChange: (theme: ThemeType) => void;
+  // The onThemeChange is now optional since we can use our theme context directly
+  onThemeChange?: (theme: ThemeType) => void;
 }
 
-const themeGradients = {
-  nightsky: "linear-gradient(135deg, #1A1A1A 0%, #0D1B2A 50%, #1B263B 100%)",
-  beach: "linear-gradient(135deg, #01688D 0%, #0197B1 50%, #81BBA0 100%)",
-  sunset: "linear-gradient(135deg, #1a237e 0%, #7e57c2 50%, #ff5252 100%)",
-  blackhole: "linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #333333 100%)",
-};
+// Define the themes to hide from the selector UI
+const hiddenThemes = ["hal9000", "deepocean"];
 
-// Function to get display name of theme with proper capitalization
-const getThemeDisplayName = (theme: ThemeType): string => {
-  switch (theme) {
-    case "nightsky":
-      return "Night Sky";
-    case "beach":
-      return "Beach";
-    case "sunset":
-      return "Sunset";
-    case "blackhole":
-      return "Black Hole";
-    default:
-      return theme;
-  }
-};
+// Define the specific order for themes
+const themeOrder: ThemeType[] = [
+  "nightsky",
+  "beach",
+  "sunset",
+  "blackhole",
+  "digitalrain",
+];
 
-const ThemeSelector: React.FC<ThemeSelectorProps> = ({
-  currentTheme,
-  onThemeChange,
-}) => {
+const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onThemeChange }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { themeType, setTheme } = useTheme();
+
+  // If the user is using a hidden theme, switch to nightsky when the component mounts
+  useEffect(() => {
+    if (hiddenThemes.includes(themeType)) {
+      setTheme("nightsky");
+
+      // Also call the onThemeChange callback if provided
+      if (onThemeChange) {
+        onThemeChange("nightsky");
+      }
+    }
+  }, [themeType, setTheme, onThemeChange]);
+
+  // Handle theme change with both context and optional callback
+  const handleThemeChange = (theme: ThemeType) => {
+    setTheme(theme);
+    // Also call the onThemeChange callback if provided (for backward compatibility)
+    if (onThemeChange) {
+      onThemeChange(theme);
+    }
+    setIsOpen(false);
+  };
 
   return (
     <ThemeContainer>
@@ -48,7 +59,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        title={`Theme: ${getThemeDisplayName(currentTheme)}`}
+        title={`Theme: ${getThemeDisplayName(themeType)}`}
       >
         <svg
           width="20"
@@ -73,66 +84,24 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
           >
-            <ThemeButton
-              $active={currentTheme === "nightsky"}
-              $gradient={themeGradients.nightsky}
-              onClick={() => {
-                onThemeChange("nightsky");
-                setIsOpen(false);
-              }}
-              whileHover={{ x: 2 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Night Sky{" "}
-              {currentTheme === "nightsky" && (
-                <span className="visually-hidden">(Current)</span>
-              )}
-            </ThemeButton>
-            <ThemeButton
-              $active={currentTheme === "beach"}
-              $gradient={themeGradients.beach}
-              onClick={() => {
-                onThemeChange("beach");
-                setIsOpen(false);
-              }}
-              whileHover={{ x: 2 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Beach{" "}
-              {currentTheme === "beach" && (
-                <span className="visually-hidden">(Current)</span>
-              )}
-            </ThemeButton>
-            <ThemeButton
-              $active={currentTheme === "blackhole"}
-              $gradient={themeGradients.blackhole}
-              onClick={() => {
-                onThemeChange("blackhole");
-                setIsOpen(false);
-              }}
-              whileHover={{ x: 2 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Black Hole{" "}
-              {currentTheme === "blackhole" && (
-                <span className="visually-hidden">(Current)</span>
-              )}
-            </ThemeButton>
-            <ThemeButton
-              $active={currentTheme === "sunset"}
-              $gradient={themeGradients.sunset}
-              onClick={() => {
-                onThemeChange("sunset");
-                setIsOpen(false);
-              }}
-              whileHover={{ x: 2 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Sunset{" "}
-              {currentTheme === "sunset" && (
-                <span className="visually-hidden">(Current)</span>
-              )}
-            </ThemeButton>
+            {themeOrder.map((themeKey) => {
+              const theme = themes[themeKey];
+              return (
+                <ThemeButton
+                  key={themeKey}
+                  $active={themeType === themeKey}
+                  $gradient={theme.gradients.main}
+                  onClick={() => handleThemeChange(themeKey)}
+                  whileHover={{ x: 2 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {theme.name}{" "}
+                  {themeType === themeKey && (
+                    <span className="visually-hidden">(Current)</span>
+                  )}
+                </ThemeButton>
+              );
+            })}
           </ThemePanel>
         )}
       </AnimatePresence>
