@@ -105,7 +105,7 @@ const pulseVariants = {
   },
 };
 
-const ScrollProgress: React.FC<ScrollProgressProps> = ({
+const ScrollProgress: React.FC<ScrollProgressProps> = React.memo(({
   activeSection,
   isVisible,
 }) => {
@@ -170,6 +170,8 @@ const ScrollProgress: React.FC<ScrollProgressProps> = ({
       </IndicatorWrapper>
     </ProgressContainer>
   );
-};
+});
+
+ScrollProgress.displayName = "ScrollProgress";
 
 export default ScrollProgress;

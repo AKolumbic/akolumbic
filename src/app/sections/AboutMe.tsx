@@ -35,17 +35,8 @@ import { FiExternalLink } from "react-icons/fi";
  * @returns {JSX.Element} The rendered AboutMe section.
  */
 const AboutMe: React.FC = () => {
-  // Load the SF Pro Display font dynamically
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.href = "https://fonts.cdnfonts.com/css/sf-pro-display";
-    link.rel = "stylesheet";
-    document.head.appendChild(link);
-
-    return () => {
-      document.head.removeChild(link);
-    };
-  }, []);
+  // SF Pro Display font is now loaded once in layout.tsx instead of
+  // dynamically here (prevented duplicate requests and FOUC).
 
   // State to track which tooltip is currently shown
   const [activeTooltip, setActiveTooltip] = useState<number | null>(null);

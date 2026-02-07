@@ -17,6 +17,7 @@ import SafeGradientBackground from "./components/SafeGradientBackground";
 import ThemeSelector from "./components/ThemeSelector";
 import ScrollProgress from "./components/ScrollProgress";
 import useDelayedIntersectionObserver from "./hooks/useDelayedIntersectionObserver";
+import useMediaQuery from "./hooks/useMediaQuery";
 import MobileView from "./components/MobileView";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import ResumeDownloadFAB from "./components/ResumeDownloadFAB";
@@ -55,8 +56,9 @@ const sectionVariants = {
  * @returns {JSX.Element} The rendered HomePage component.
  */
 export default function HomePage(): JSX.Element {
-  // State to check if the screen is mobile-sized
-  const [isMobile, setIsMobile] = useState(false);
+  // Use matchMedia-based hook instead of manual resize listener + debounce.
+  // matchMedia only fires when the query result changes, not on every pixel.
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const [activeSection, setActiveSection] = useState<
     "hero" | "about" | "portfolio"
   >("hero");
@@ -108,50 +110,23 @@ export default function HomePage(): JSX.Element {
   const portfolioControls = useAnimation();
   const contactControls = useAnimation();
 
-  // Debounced scroll handler with enhanced tracking
+  // Lightweight scroll listener: only tracks whether the user has ever scrolled.
+  // Removes itself after the first scroll event to avoid ongoing work.
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    const handleScroll = () => {
-      // Mark that user has scrolled
-      if (!hasScrolled) {
-        setHasScrolled(true);
-      }
+    if (hasScrolled) return;
 
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-      timeoutId = setTimeout(() => {
-        // Logic to determine active section based on scroll position
-        // is now handled by the intersection observers below
-      }, 100); // 100ms debounce
+    const handleScroll = () => {
+      setHasScrolled(true);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true, once: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      if (timeoutId) clearTimeout(timeoutId);
     };
   }, [hasScrolled]);
 
-  // Optimized resize handler
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    const handleResize = () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-      timeoutId = setTimeout(() => {
-        setIsMobile(window.innerWidth <= 768);
-      }, 100); // 100ms debounce
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize, { passive: true });
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, []);
+  // Resize handling is now done by useMediaQuery hook above.
+  // It uses matchMedia which is event-driven and more efficient.
 
   // fixes error caused by Grammarly during development.
   useEffect(() => {
@@ -213,7 +188,9 @@ export default function HomePage(): JSX.Element {
       delay: 100,
     });
 
-  // Update section animations based on visibility
+  // Per-section animation effects: each section only triggers its own
+  // animation control when its visibility changes, preventing unnecessary
+  // re-evaluation of unrelated sections during scroll.
   useEffect(() => {
     if (heroInView) {
       heroControls.start("visible");
@@ -221,39 +198,36 @@ export default function HomePage(): JSX.Element {
     } else {
       heroControls.start("exit");
     }
+  }, [heroInView, heroControls]);
 
+  useEffect(() => {
     if (aboutInView) {
       aboutControls.start("visible");
       setActiveSection("about");
     } else {
       aboutControls.start("hidden");
     }
+  }, [aboutInView, aboutControls]);
 
+  useEffect(() => {
     if (portfolioInView) {
       portfolioControls.start("visible");
       setActiveSection("portfolio");
     } else {
       portfolioControls.start("hidden");
     }
+  }, [portfolioInView, portfolioControls]);
 
+  useEffect(() => {
     if (contactInView) {
       contactControls.start("visible");
-      // Still update active section to portfolio for the contact section
-      // This ensures the background animation continues properly
+      // Keep active section as portfolio for the contact section
+      // to ensure the background animation continues properly
       setActiveSection("portfolio");
     } else {
       contactControls.start("hidden");
     }
-  }, [
-    heroInView,
-    aboutInView,
-    portfolioInView,
-    contactInView,
-    heroControls,
-    aboutControls,
-    portfolioControls,
-    contactControls,
-  ]);
+  }, [contactInView, contactControls]);
 
   // If on mobile, render the dedicated MobileView component
   if (isMobile) {

@@ -24,7 +24,6 @@ const useSystemTheme = (): ThemeType => {
     const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const updateTheme = (e: MediaQueryListEvent | MediaQueryList) => {
-      console.log("System theme changed:", e.matches ? "dark" : "light");
       setSystemTheme(e.matches ? "nightsky" : "beach");
     };
 
@@ -62,32 +61,10 @@ const GradientBackground: React.FC<GradientBackgroundProps> = ({
   const systemTheme = useSystemTheme();
   const currentTheme = theme || systemTheme;
 
-  // Add enhanced logging for debugging
-  useEffect(() => {
-    // Debug background initialization
-    console.log(
-      `Background initialized: ${currentTheme} theme, ${activeSection} section`
-    );
-
-    // Check and log WebGL support
-    try {
-      const canvas = document.createElement("canvas");
-      const hasWebGL = !!(
-        window.WebGLRenderingContext &&
-        (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
-      );
-      console.log(`WebGL support: ${hasWebGL ? "yes" : "no"}`);
-
-      // Additional browser environment info
-      console.log(`User Agent: ${navigator.userAgent}`);
-      console.log(
-        `Window dimensions: ${window.innerWidth}x${window.innerHeight}`
-      );
-      console.log(`Device pixel ratio: ${window.devicePixelRatio}`);
-    } catch (e) {
-      console.warn("Error checking WebGL support:", e);
-    }
-  }, [currentTheme, activeSection]);
+  // Debug logging removed for production performance.
+  // WebGL checks and console.log calls were firing on every section
+  // change during scroll, creating temporary canvas elements and
+  // blocking the main thread.
 
   // Get the appropriate colors based on theme and section
   const currentColors = (() => {

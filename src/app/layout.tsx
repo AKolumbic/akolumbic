@@ -28,6 +28,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           href="https://fonts.googleapis.com/css2?family=Michroma&display=swap"
           rel="stylesheet"
         />
+        {/* SF Pro Display font loaded once here instead of dynamically in
+            AboutMe and Portfolio components (which caused duplicate requests
+            and FOUC on section mount/unmount) */}
+        <link
+          href="https://fonts.cdnfonts.com/css/sf-pro-display"
+          rel="stylesheet"
+        />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, viewport-fit=cover"

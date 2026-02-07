@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, JSX } from "react";
+import React, { useState, JSX } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FloatingCard,
@@ -17,6 +17,7 @@ import {
   cardVariants,
   titleVariants,
 } from "../data/variantsData";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 /**
  * Portfolio Component
@@ -32,41 +33,12 @@ import {
  * @returns {JSX.Element} The rendered Portfolio component.
  */
 export default function Portfolio(): JSX.Element {
-  // State to determine if the current view is desktop (width >= 1024px)
-  const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
+  // Shared media query hook replaces manual resize listener
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   // State for the active tab in mobile view: either "professional" or "side"
   const [activeTab, setActiveTab] = useState<"professional" | "side">(
     "professional"
   );
-
-  // Font Loading for SF Pro Display/Text (Apple's font family)
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.href = "https://fonts.cdnfonts.com/css/sf-pro-display";
-    link.rel = "stylesheet";
-    document.head.appendChild(link);
-
-    return () => {
-      document.head.removeChild(link);
-    };
-  }, []);
-
-  /**
-   * handleResize sets the isDesktop state based on the current window width.
-   */
-  useEffect(() => {
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 1024);
-    };
-
-    handleResize(); // Immediately check on mount.
-    window.addEventListener("resize", handleResize);
-    // Cleanup event listener on unmount.
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Prevent rendering until we have determined the screen size.
-  if (isDesktop === null) return <div>Loading...</div>;
 
   return (
     <motion.section

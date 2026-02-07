@@ -13,6 +13,7 @@ import {
   GradientLetter,
   LetterWrapper,
 } from "../styles/HeroSection.styles";
+import useMediaQuery from "../hooks/useMediaQuery";
 // import TactileButton from "../components/tactile-button/tactile-button.component";
 // import { FiArrowDown } from "react-icons/fi";
 
@@ -31,23 +32,11 @@ function shuffleArray(array: number[]): number[] {
 const HeroSection: React.FC = () => {
   // Ensure component only renders on the client (fixes hydration issues)
   const [isClient, setIsClient] = useState(false);
-  // State to check if the screen is mobile-sized
-  const [isMobile, setIsMobile] = useState(false);
+  // Shared media query hook replaces manual resize listener
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    const checkScreenSize = () => {
-      const isMobileScreen = window.innerWidth <= 768;
-      setIsMobile(isMobileScreen);
-    };
-
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
-
-    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   // Define name and split into first/last
@@ -86,15 +75,9 @@ const HeroSection: React.FC = () => {
     [isMobile, randomizedOrder]
   );
 
-  // Simplified letter props without ongoing animations
-  const letterAnimationProps = () => {
-    return {
-      style: {
-        willChange: "transform",
-        transform: "translateZ(0)",
-      },
-    };
-  };
+  // Framer Motion handles GPU layer promotion automatically during
+  // animations; no need for permanent will-change or translateZ(0) hints.
+  const letterAnimationProps = () => ({});
 
   // const scrollToAbout = () => {
   //   document.getElementById("about-section")?.scrollIntoView({

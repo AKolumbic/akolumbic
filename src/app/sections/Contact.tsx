@@ -17,25 +17,15 @@ import {
   Copyright,
   IconWrapper,
 } from "../styles/Contact.styles";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 export default function Contact() {
   const [isClient, setIsClient] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  // Shared media query hook replaces manual resize listener
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
     setIsClient(true);
-
-    // Check if mobile on mount and on resize
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    return () => {
-      window.removeEventListener("resize", checkMobile);
-    };
   }, []);
 
   if (!isClient) return null;

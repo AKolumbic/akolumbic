@@ -25,16 +25,12 @@ export const HeroContainer = styled(motion.section)`
   position: relative;
   overflow: hidden;
   background-color: transparent;
-  transform: translateZ(0);
-  will-change: transform;
 
   @media (max-width: 768px) {
-    /* Ensure no bottom margin or padding that could create a line */
     background-color: transparent;
     min-height: calc(100vh - 120px);
     padding-bottom: 0;
     margin-bottom: 0;
-    /* Remove any border that might create a visible line */
     border-bottom: none;
     box-shadow: none;
   }
@@ -50,8 +46,6 @@ export const HeroContentWrapper = styled.div`
   width: 100%;
   max-width: 1200px;
   padding: 2rem;
-  transform: translateZ(0);
-  will-change: transform;
 `;
 
 /* Wrapper ensures first and last name can stack on mobile */
@@ -62,8 +56,6 @@ export const HeroTextWrapper = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
-  transform: translateZ(0);
-  will-change: transform;
   width: 100%;
   padding: 0 2rem;
 
@@ -105,8 +97,6 @@ export const GradientLetter = styled(motion.span)`
   margin: 0 -0.01em;
   position: relative;
   z-index: 2;
-  will-change: transform;
-  transform: translateZ(0);
   letter-spacing: -0.01em;
   font-family: "Franklin Gothic Heavy", "Franklin Gothic", "ITC Franklin Gothic",
     Arial, sans-serif;
@@ -125,10 +115,6 @@ export const GradientLetter = styled(motion.span)`
 export const LetterWrapper = styled(motion.div)`
   display: inline-block;
   position: relative;
-  transform-style: preserve-3d;
-  perspective: 1000px;
-  will-change: transform;
-  transform: translateZ(0);
 
   @media (max-width: 768px) {
     transform-style: flat;
@@ -141,11 +127,9 @@ export const Underline = styled(motion.div)`
   width: 80%;
   max-width: 400px;
   height: 2px;
-  background: white; // linear-gradient(to right, #ff6b6b, rgba(255, 228, 181, 0.3));
+  background: white;
   margin: 1.5rem auto;
   border-radius: 2px;
-  transform: translateZ(0);
-  will-change: transform;
 
   @media (max-width: 600px) {
     width: 60%;
@@ -162,8 +146,6 @@ export const SubtextWrapper = styled(motion.div)`
   justify-content: center;
   align-items: center;
   text-align: center;
-  transform: translateZ(0);
-  will-change: transform;
 
   @media (max-width: 600px) {
     flex-direction: column;
@@ -180,8 +162,6 @@ export const SubtextLine = styled(motion.p)`
   letter-spacing: 0.04em;
   margin: 0;
   padding: 0;
-  will-change: transform;
-  transform: translateZ(0);
 `;
 
 export const TaglineWrapper = styled(motion.p)`

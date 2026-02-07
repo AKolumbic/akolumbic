@@ -185,8 +185,10 @@ export const SkillItem = styled(motion.li)`
   border-radius: 8px;
   border-left: 3px solid rgba(100, 181, 246, 0.5);
   color: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(5px);
-  will-change: transform, background-color, border-left-color, box-shadow;
+  /* backdrop-filter removed: blur() on every list item forces the browser
+     to composite a blurred copy of the background behind each one during
+     scroll. The parent SkillsColumn already applies backdrop-filter: blur(12px),
+     so individual items don't need their own blur layer. */
   position: relative;
   cursor: pointer;
   overflow: visible;
